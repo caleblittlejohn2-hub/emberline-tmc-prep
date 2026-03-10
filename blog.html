@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TMC Prep Blog — The 2027 NBRC Exam Is Coming</title>
+<meta name="description" content="The NBRC is replacing the TMC and CSE with a unified 2027 exam. Here's what every RT student needs to know — and how to prepare right now.">
+<meta name="keywords" content="2027 NBRC exam, respiratory therapy exam changes, TMC exam 2027, RTE exam, NBRC certification 2027, RT board exam prep">
+<link rel="canonical" href="https://tmcprep.emberlineworld.com/blog">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@300;400;500&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0e1a;
+    --surface: #111827;
+    --surface2: #1a2235;
+    --border: #1e2d42;
+    --accent: #00d4ff;
+    --accent2: #00ff9d;
+    --gold: #f5c842;
+    --danger: #ff4e6a;
+    --text: #e8edf5;
+    --muted: #6b7a99;
+    --radius: 12px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Mono', monospace;
+    line-height: 1.7;
+    min-height: 100vh;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    background: rgba(10,14,26,0.95);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    padding: 0 2rem;
+    height: 60px;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .nav-logo {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 1.1rem;
+    color: var(--accent);
+    text-decoration: none;
+    letter-spacing: 0.05em;
+  }
+  .nav-logo span { color: var(--accent2); }
+  .nav-links { display: flex; gap: 1rem; align-items: center; }
+  .nav-links a {
+    font-size: 0.75rem;
+    color: var(--muted);
+    text-decoration: none;
+    letter-spacing: 0.05em;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--accent); }
+  .nav-cta {
+    background: var(--accent);
+    color: var(--bg) !important;
+    padding: 0.4rem 1rem;
+    border-radius: 6px;
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 0.75rem !important;
+  }
+  .nav-cta:hover { background: #00b8e0 !important; color: var(--bg) !important; }
+
+  /* HERO */
+  .blog-hero {
+    padding: 120px 2rem 60px;
+    max-width: 800px;
+    margin: 0 auto;
+    animation: fadeUp 0.8s ease forwards;
+  }
+
+  .blog-tag {
+    display: inline-block;
+    background: rgba(0,212,255,0.1);
+    border: 1px solid rgba(0,212,255,0.3);
+    color: var(--accent);
+    font-size: 0.65rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    padding: 0.3rem 0.8rem;
+    border-radius: 4px;
+    margin-bottom: 1.5rem;
+  }
+
+  .blog-title {
+    font-family: 'Instrument Serif', serif;
+    font-size: clamp(2rem, 5vw, 3.2rem);
+    line-height: 1.2;
+    color: var(--text);
+    margin-bottom: 1.5rem;
+    font-style: italic;
+  }
+
+  .blog-title .highlight {
+    color: var(--accent);
+    font-style: normal;
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+  }
+
+  .blog-meta {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    color: var(--muted);
+    font-size: 0.72rem;
+    letter-spacing: 0.05em;
+    padding-bottom: 2rem;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 2.5rem;
+    flex-wrap: wrap;
+  }
+
+  .blog-meta .author {
+    display: flex; align-items: center; gap: 0.5rem;
+  }
+
+  .author-badge {
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 0.7rem;
+    color: var(--bg);
+  }
+
+  .meta-divider { color: var(--border); }
+
+  /* CALLOUT BOX */
+  .callout {
+    background: rgba(0,212,255,0.06);
+    border: 1px solid rgba(0,212,255,0.2);
+    border-left: 3px solid var(--accent);
+    border-radius: var(--radius);
+    padding: 1.25rem 1.5rem;
+    margin: 2rem 0;
+    font-size: 0.85rem;
+    color: var(--text);
+  }
+
+  .callout.gold {
+    background: rgba(245,200,66,0.06);
+    border-color: rgba(245,200,66,0.2);
+    border-left-color: var(--gold);
+    color: var(--gold);
+  }
+
+  .callout.green {
+    background: rgba(0,255,157,0.06);
+    border-color: rgba(0,255,157,0.2);
+    border-left-color: var(--accent2);
+  }
+
+  /* ARTICLE BODY */
+  .article-body {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 0 2rem 4rem;
+  }
+
+  .article-body h2 {
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 1.25rem;
+    color: var(--accent);
+    letter-spacing: 0.05em;
+    margin: 3rem 0 1rem;
+    text-transform: uppercase;
+    font-size: 0.85rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .article-body h2::before {
+    content: '';
+    display: inline-block;
+    width: 24px; height: 2px;
+    background: var(--accent);
+    flex-shrink: 0;
+  }
+
+  .article-body h3 {
+    font-family: 'Instrument Serif', serif;
+    font-size: 1.4rem;
+    color: var(--text);
+    margin: 2rem 0 0.75rem;
+    font-style: italic;
+  }
+
+  .article-body p {
+    font-size: 0.88rem;
+    color: #c8d4e8;
+    margin-bottom: 1.25rem;
+    line-height: 1.8;
+  }
+
+  .article-body strong {
+    color: var(--text);
+    font-weight: 500;
+  }
+
+  /* COMPARISON TABLE */
+  .compare-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 2rem 0;
+    font-size: 0.78rem;
+  }
+
+  .compare-table th {
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 0.65rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid var(--border);
+    text-align: left;
+  }
+
+  .compare-table td {
+    padding: 0.85rem 1rem;
+    border-bottom: 1px solid rgba(30,45,66,0.5);
+    color: #c8d4e8;
+    line-height: 1.5;
+  }
+
+  .compare-table tr:hover td { background: rgba(255,255,255,0.02); }
+
+  .compare-table td:first-child {
+    color: var(--muted);
+    font-size: 0.72rem;
+    letter-spacing: 0.05em;
+    white-space: nowrap;
+  }
+
+  .tag-old {
+    background: rgba(255,78,106,0.1);
+    color: var(--danger);
+    border: 1px solid rgba(255,78,106,0.2);
+    padding: 0.2rem 0.5rem;
+    border-radius: 4px;
+    font-size: 0.65rem;
+  }
+
+  .tag-new {
+    background: rgba(0,255,157,0.1);
+    color: var(--accent2);
+    border: 1px solid rgba(0,255,157,0.2);
+    padding: 0.2rem 0.5rem;
+    border-radius: 4px;
+    font-size: 0.65rem;
+  }
+
+  /* FEATURE LIST */
+  .feature-list {
+    list-style: none;
+    margin: 1.5rem 0;
+  }
+
+  .feature-list li {
+    padding: 0.75rem 0;
+    border-bottom: 1px solid rgba(30,45,66,0.4);
+    font-size: 0.85rem;
+    color: #c8d4e8;
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    line-height: 1.6;
+  }
+
+  .feature-list li::before {
+    content: '→';
+    color: var(--accent);
+    flex-shrink: 0;
+    margin-top: 0.1rem;
+  }
+
+  /* CTA BLOCK */
+  .cta-block {
+    background: linear-gradient(135deg, rgba(0,212,255,0.08), rgba(0,255,157,0.05));
+    border: 1px solid rgba(0,212,255,0.2);
+    border-radius: 16px;
+    padding: 2.5rem;
+    text-align: center;
+    margin: 3rem 0;
+  }
+
+  .cta-block h3 {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 1.4rem;
+    color: var(--text);
+    margin-bottom: 0.75rem;
+    font-style: normal;
+  }
+
+  .cta-block p {
+    color: var(--muted);
+    font-size: 0.82rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .btn-primary {
+    display: inline-block;
+    background: var(--accent);
+    color: var(--bg);
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 0.85rem;
+    padding: 0.85rem 2rem;
+    border-radius: 8px;
+    text-decoration: none;
+    letter-spacing: 0.05em;
+    transition: background 0.2s, transform 0.1s;
+  }
+
+  .btn-primary:hover {
+    background: #00b8e0;
+    transform: translateY(-1px);
+  }
+
+  /* AUTHOR BOX */
+  .author-box {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 1.75rem;
+    margin: 3rem 0 0;
+    display: flex;
+    gap: 1.5rem;
+    align-items: flex-start;
+  }
+
+  .author-avatar {
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    width: 52px; height: 52px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 1.1rem;
+    color: var(--bg);
+    flex-shrink: 0;
+  }
+
+  .author-info h4 {
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 0.9rem;
+    color: var(--text);
+    margin-bottom: 0.25rem;
+  }
+
+  .author-info .creds {
+    color: var(--accent);
+    font-size: 0.7rem;
+    letter-spacing: 0.08em;
+    margin-bottom: 0.5rem;
+  }
+
+  .author-info p {
+    font-size: 0.78rem;
+    color: var(--muted);
+    line-height: 1.6;
+    margin-bottom: 0;
+  }
+
+  /* DIVIDER */
+  .section-divider {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 3rem 0;
+  }
+
+  /* BACK LINK */
+  .back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--muted);
+    text-decoration: none;
+    font-size: 0.75rem;
+    letter-spacing: 0.05em;
+    margin-bottom: 2rem;
+    transition: color 0.2s;
+  }
+
+  .back-link:hover { color: var(--accent); }
+
+  /* FOOTER */
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 2rem;
+    text-align: center;
+    color: var(--muted);
+    font-size: 0.7rem;
+    letter-spacing: 0.05em;
+  }
+
+  footer a { color: var(--accent); text-decoration: none; }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .article-body { animation: fadeUp 0.9s ease 0.1s both; }
+
+  /* PROGRESS BAR */
+  .read-progress {
+    position: fixed;
+    top: 60px; left: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+    z-index: 99;
+    width: 0%;
+    transition: width 0.1s;
+  }
+
+  @media (max-width: 600px) {
+    .blog-hero { padding: 90px 1.25rem 40px; }
+    .article-body { padding: 0 1.25rem 3rem; }
+    .author-box { flex-direction: column; }
+    .compare-table { font-size: 0.72rem; }
+    .nav-links .hide-mobile { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="read-progress" id="readProgress"></div>
+
+<nav>
+  <a href="https://tmcprep.emberlineworld.com" class="nav-logo">TMC<span>PREP</span></a>
+  <div class="nav-links">
+    <a href="https://tmcprep.emberlineworld.com/blog" class="hide-mobile">Blog</a>
+    <a href="https://tmcprep.emberlineworld.com" class="nav-cta">Start Free →</a>
+  </div>
+</nav>
+
+<div class="blog-hero">
+  <a href="https://tmcprep.emberlineworld.com/blog" class="back-link">← All Posts</a>
+  <div class="blog-tag">NBRC Exam Updates · March 2026</div>
+  <h1 class="blog-title">
+    The <span class="highlight">2027 NBRC Exam</span> Is Coming — Here's What Every RT Student Needs to Know
+  </h1>
+  <div class="blog-meta">
+    <div class="author">
+      <div class="author-badge">CL</div>
+      <span>Caleb Littlejohn, RRT, CRT</span>
+    </div>
+    <span class="meta-divider">·</span>
+    <span>March 10, 2026</span>
+    <span class="meta-divider">·</span>
+    <span>8 min read</span>
+    <span class="meta-divider">·</span>
+    <span style="color:var(--accent2)">✦ Featured</span>
+  </div>
+</div>
+
+<div class="article-body">
+
+  <div class="callout gold">
+    ⚡ <strong>TL;DR:</strong> The NBRC is replacing the TMC + CSE two-exam system with a single unified Respiratory Therapy Examination (RTE) launching January 2027. If you're close to testing, sit the current exam now. If you're further out, start building clinical reasoning skills today — not just exam facts.
+  </div>
+
+  <p>If you're an RT student or a working therapist, you've probably heard the rumors: the NBRC is overhauling its certification exams in 2027. This isn't a minor update. It's the most significant restructuring of respiratory therapy credentialing in decades — and if you're prepping right now, what you do in the next 12–18 months matters more than you might think.</p>
+
+  <p>Here's everything you need to know, and what it means for how you study.</p>
+
+  <h2>What's Changing in 2027</h2>
+
+  <p>The current pathway to RRT certification requires passing two separate exams: the Therapist Multiple Choice (TMC) exam and the Clinical Simulation Exam (CSE). Starting in January 2027, the NBRC is replacing this two-step process with a single unified exam — the <strong>Respiratory Therapy Examination (RTE)</strong>.</p>
+
+  <table class="compare-table">
+    <thead>
+      <tr>
+        <th>Feature</th>
+        <th><span class="tag-old">Today (TMC + CSE)</span></th>
+        <th><span class="tag-new">2027+ (RTE)</span></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Exam structure</td>
+        <td>Two separate exams</td>
+        <td>One unified exam</td>
+      </tr>
+      <tr>
+        <td>Credentialing</td>
+        <td>TMC determines CRT/RRT eligibility; CSE for RRT</td>
+        <td>One exam awards CRT/RRT based on total score</td>
+      </tr>
+      <tr>
+        <td>Question format</td>
+        <td>MCQ + clinical simulations separately</td>
+        <td>Combined breadth + clinical judgment questions</td>
+      </tr>
+      <tr>
+        <td>New content areas</td>
+        <td>Traditional clinical domains</td>
+        <td>Cultural awareness, ethics, trauma-informed care, new pharmacology</td>
+      </tr>
+      <tr>
+        <td>Emphasis</td>
+        <td>Knowledge recall</td>
+        <td>Clinical decision-making and reasoning</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p>This is a fundamentally different kind of test. The TMC rewarded knowing facts. The 2027 RTE rewards knowing how to <strong>think</strong> like a respiratory therapist.</p>
+
+  <h2>Why This Changes How You Need to Study</h2>
+
+  <p>The old approach — memorizing tables, drilling flashcards, grinding practice tests — will not be enough for 2027.</p>
+
+  <p>The new exam is built around clinical decision-making. That means:</p>
+
+  <ul class="feature-list">
+    <li><strong>Context matters.</strong> Questions present patient scenarios, not isolated facts. You need to synthesize information, not just retrieve it.</li>
+    <li><strong>Rationale over recall.</strong> You need to understand <em>why</em> an answer is correct — the pathophysiology, the clinical reasoning, the evidence base.</li>
+    <li><strong>Ethics and communication are now core.</strong> Trauma-informed care, cultural competency, and end-of-life decision-making are tested domains, not electives.</li>
+    <li><strong>Pharmacology is expanding.</strong> Newer evidence-based agents are replacing the traditional bronchodilator-heavy question bank. Expect unfamiliar drugs.</li>
+    <li><strong>Scenario complexity is higher.</strong> You may see multi-step patient deterioration scenarios requiring sequential decision-making under pressure.</li>
+  </ul>
+
+  <p>Students who start building clinical reasoning skills now — not just exam knowledge — will be ahead of everyone cramming in late 2026.</p>
+
+  <h2>What TMC Prep Is Doing About It</h2>
+
+  <p>TMC Prep was built with this shift in mind from day one. Here's how the platform prepares you for both the current TMC <em>and</em> the 2027 RTE:</p>
+
+  <div class="callout green">
+    <strong>Dr. Ventus AI Scholar</strong> doesn't just give you answers — it explains clinical reasoning the way a senior RRT would. Ask it why a patient's ABG looks the way it does. Ask it what you'd do next on a vented patient fighting the vent at 3am. Ask it to walk through a deteriorating COPD exacerbation step by step. That's the kind of thinking the 2027 exam will test.
+  </div>
+
+  <p>The <strong>Protocol Intelligence Feed</strong> keeps you connected to real-world updates from AHA, AARC, CDC, and WHO — the same guidelines the 2027 exam will draw from. You're not studying for an exam frozen in 2020. You're studying for the profession as it exists today.</p>
+
+  <p>Every question in the TMC Prep bank includes a <strong>detailed rationale</strong> — not just "the correct answer is B." Because understanding why is what the 2027 exam will demand.</p>
+
+  <p>And the <strong>Senior RT & Leadership Track</strong> covers ethics, department management, emerging technology, and legal considerations — content areas that are marginal today but will be tested domains in 2027.</p>
+
+  <h2>Should You Take the Current TMC Before 2027?</h2>
+
+  <p>Short answer: <strong>yes, if you're close.</strong></p>
+
+  <p>If you're within 12 months of being eligible to test, it is generally in your interest to sit for the current TMC/CSE pathway before the 2027 transition. The current exam is a known quantity. The 2027 RTE, while announced, still has evolving specifics — and first-year pass rates for new exam formats historically dip as students and programs adjust.</p>
+
+  <p>That said — the clinical skills you build preparing for either exam transfer completely. Strong clinical reasoning helps you pass both. Start there.</p>
+
+  <div class="callout">
+    <strong>Note:</strong> TMC Prep is not affiliated with the NBRC. Always verify the latest exam specifications directly at <a href="https://nbrc.org" target="_blank" style="color:var(--accent)">nbrc.org</a>. This post reflects the most current publicly available information as of March 2026.
+  </div>
+
+  <h2>The Bottom Line</h2>
+
+  <p>The 2027 NBRC exam isn't something to fear. It's the profession finally catching up to what respiratory therapists actually do every day — make high-stakes clinical decisions in real time, with real patients, under real pressure.</p>
+
+  <p>The students who thrive on this exam won't be the ones who memorized the most. They'll be the ones who learned to <em>think</em> like a therapist — who can read a room, interpret a gas, troubleshoot a circuit, and make a call under pressure.</p>
+
+  <p>Study like a clinician. Think like a therapist. Use tools built for this moment.</p>
+
+  <div class="cta-block">
+    <h3>TMC Prep is Free to Start</h3>
+    <p>No credit card. No waitlist. AI Scholar, protocol feed, and 30 TMC questions — right now.</p>
+    <a href="https://tmcprep.emberlineworld.com" class="btn-primary">Start Studying Free →</a>
+  </div>
+
+  <hr class="section-divider">
+
+  <div class="author-box">
+    <div class="author-avatar">CL</div>
+    <div class="author-info">
+      <h4>Caleb Littlejohn</h4>
+      <div class="creds">RRT · CRT · NBRC Certified · Texas RCP #RCP02004037 · ACLS/BLS · USAF Veteran</div>
+      <p>Caleb is a licensed respiratory therapist, former Director of Respiratory Therapy, and founder of TMC Prep under Emberline Holdings Company LLC. He has been practicing since 2012 and built TMC Prep to give every RT student and working therapist the tools he wished existed.</p>
+    </div>
+  </div>
+
+</div>
+
+<footer>
+  <p>© 2026 TMC Prep — Emberline Holdings Company LLC &nbsp;·&nbsp; <a href="https://tmcprep.emberlineworld.com">tmcprep.emberlineworld.com</a> &nbsp;·&nbsp; Not affiliated with NBRC</p>
+</footer>
+
+<script>
+  const progress = document.getElementById('readProgress');
+  window.addEventListener('scroll', () => {
+    const scrollTop = window.scrollY;
+    const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+    const pct = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+    progress.style.width = pct + '%';
+  });
+</script>
+
+</body>
+</html>
