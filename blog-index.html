@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TMC Prep Blog — Insights for Respiratory Therapists</title>
+<meta name="description" content="Clinical insights, NBRC exam updates, protocol intelligence, and career guidance for respiratory therapists at every stage.">
+<link rel="canonical" href="https://tmcprep.emberlineworld.com/blog-index.html">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@300;400;500&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0e1a;
+    --surface: #111827;
+    --surface2: #1a2235;
+    --border: #1e2d42;
+    --accent: #00d4ff;
+    --accent2: #00ff9d;
+    --gold: #f5c842;
+    --danger: #ff4e6a;
+    --text: #e8edf5;
+    --muted: #6b7a99;
+    --radius: 12px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Mono', monospace;
+    min-height: 100vh;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    background: rgba(10,14,26,0.95);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    padding: 0 2rem;
+    height: 60px;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .nav-logo {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 1.1rem;
+    color: var(--accent);
+    text-decoration: none;
+    letter-spacing: 0.05em;
+  }
+  .nav-logo span { color: var(--accent2); }
+  .nav-links { display: flex; gap: 1rem; align-items: center; }
+  .nav-links a {
+    font-size: 0.75rem;
+    color: var(--muted);
+    text-decoration: none;
+    letter-spacing: 0.05em;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover, .nav-links a.active { color: var(--accent); }
+  .nav-cta {
+    background: var(--accent);
+    color: var(--bg) !important;
+    padding: 0.4rem 1rem;
+    border-radius: 6px;
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 0.75rem !important;
+  }
+  .nav-cta:hover { background: #00b8e0 !important; }
+
+  /* HERO */
+  .blog-hero {
+    padding: 100px 2rem 50px;
+    max-width: 1100px;
+    margin: 0 auto;
+    animation: fadeUp 0.7s ease forwards;
+  }
+
+  .hero-eyebrow {
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .hero-eyebrow::before {
+    content: '';
+    display: inline-block;
+    width: 24px; height: 1px;
+    background: var(--accent);
+  }
+
+  .blog-hero h1 {
+    font-family: 'Instrument Serif', serif;
+    font-size: clamp(2.2rem, 5vw, 3.5rem);
+    font-style: italic;
+    color: var(--text);
+    line-height: 1.15;
+    margin-bottom: 1rem;
+  }
+
+  .blog-hero p {
+    color: var(--muted);
+    font-size: 0.85rem;
+    max-width: 500px;
+    line-height: 1.7;
+  }
+
+  /* FILTER TAGS */
+  .filter-bar {
+    max-width: 1100px;
+    margin: 0 auto 2.5rem;
+    padding: 0 2rem;
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    animation: fadeUp 0.7s ease 0.1s both;
+  }
+
+  .filter-tag {
+    font-size: 0.65rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 0.35rem 0.85rem;
+    border-radius: 100px;
+    border: 1px solid var(--border);
+    color: var(--muted);
+    cursor: pointer;
+    transition: all 0.2s;
+    background: none;
+    font-family: 'DM Mono', monospace;
+  }
+
+  .filter-tag:hover { border-color: var(--accent); color: var(--accent); }
+  .filter-tag.active {
+    background: rgba(0,212,255,0.1);
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+
+  /* FEATURED POST */
+  .featured-section {
+    max-width: 1100px;
+    margin: 0 auto 3rem;
+    padding: 0 2rem;
+    animation: fadeUp 0.7s ease 0.15s both;
+  }
+
+  .section-label {
+    font-size: 0.62rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 1.25rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .section-label::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  .featured-card {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    overflow: hidden;
+    text-decoration: none;
+    transition: border-color 0.2s, transform 0.2s;
+  }
+
+  .featured-card:hover {
+    border-color: var(--accent);
+    transform: translateY(-2px);
+  }
+
+  .featured-visual {
+    background: linear-gradient(135deg, #0d1829 0%, #0a1a2e 50%, #061018 100%);
+    padding: 2.5rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-height: 280px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .featured-visual::before {
+    content: '';
+    position: absolute;
+    top: -40px; right: -40px;
+    width: 200px; height: 200px;
+    background: radial-gradient(circle, rgba(0,212,255,0.12) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .featured-visual::after {
+    content: '2027';
+    position: absolute;
+    bottom: -10px; right: 1.5rem;
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 5rem;
+    color: rgba(0,212,255,0.06);
+    line-height: 1;
+    pointer-events: none;
+  }
+
+  .feat-tag {
+    display: inline-block;
+    background: rgba(0,212,255,0.1);
+    border: 1px solid rgba(0,212,255,0.25);
+    color: var(--accent);
+    font-size: 0.6rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 0.25rem 0.65rem;
+    border-radius: 4px;
+    width: fit-content;
+  }
+
+  .feat-visual-title {
+    font-family: 'Instrument Serif', serif;
+    font-size: 2rem;
+    font-style: italic;
+    color: var(--text);
+    line-height: 1.2;
+  }
+
+  .featured-content {
+    padding: 2.5rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+  .featured-content .post-title {
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 1.15rem;
+    color: var(--text);
+    line-height: 1.35;
+    margin-bottom: 1rem;
+  }
+
+  .featured-content .post-excerpt {
+    font-size: 0.8rem;
+    color: var(--muted);
+    line-height: 1.7;
+    margin-bottom: 1.5rem;
+    flex: 1;
+  }
+
+  .post-meta {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    font-size: 0.68rem;
+    color: var(--muted);
+    flex-wrap: wrap;
+  }
+
+  .post-meta .dot { color: var(--border); }
+
+  .read-more {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    color: var(--accent);
+    font-size: 0.72rem;
+    letter-spacing: 0.05em;
+    font-family: 'Syne', sans-serif;
+    font-weight: 600;
+    margin-top: 1.25rem;
+    transition: gap 0.2s;
+  }
+
+  .featured-card:hover .read-more { gap: 0.65rem; }
+
+  /* POST GRID */
+  .posts-section {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 2rem 5rem;
+    animation: fadeUp 0.7s ease 0.2s both;
+  }
+
+  .posts-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.25rem;
+  }
+
+  .post-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1.75rem;
+    text-decoration: none;
+    transition: border-color 0.2s, transform 0.2s;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .post-card:hover {
+    border-color: rgba(0,212,255,0.4);
+    transform: translateY(-2px);
+  }
+
+  .post-card.coming-soon {
+    opacity: 0.45;
+    cursor: default;
+    pointer-events: none;
+  }
+
+  .post-card-tag {
+    font-size: 0.6rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 0.22rem 0.6rem;
+    border-radius: 4px;
+    width: fit-content;
+  }
+
+  .tag-nbrc { background: rgba(0,212,255,0.1); color: var(--accent); border: 1px solid rgba(0,212,255,0.2); }
+  .tag-clinical { background: rgba(0,255,157,0.1); color: var(--accent2); border: 1px solid rgba(0,255,157,0.2); }
+  .tag-career { background: rgba(245,200,66,0.1); color: var(--gold); border: 1px solid rgba(245,200,66,0.2); }
+  .tag-leadership { background: rgba(167,139,250,0.1); color: #a78bfa; border: 1px solid rgba(167,139,250,0.2); }
+  .tag-coming { background: rgba(107,122,153,0.1); color: var(--muted); border: 1px solid var(--border); }
+
+  .post-card h3 {
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 0.92rem;
+    color: var(--text);
+    line-height: 1.4;
+  }
+
+  .post-card p {
+    font-size: 0.76rem;
+    color: var(--muted);
+    line-height: 1.65;
+    flex: 1;
+  }
+
+  .post-card .post-meta {
+    margin-top: auto;
+    padding-top: 0.75rem;
+    border-top: 1px solid var(--border);
+  }
+
+  /* NEWSLETTER */
+  .newsletter-section {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 2rem 5rem;
+  }
+
+  .newsletter-box {
+    background: linear-gradient(135deg, rgba(0,212,255,0.06), rgba(0,255,157,0.04));
+    border: 1px solid rgba(0,212,255,0.15);
+    border-radius: 16px;
+    padding: 2.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 2rem;
+    flex-wrap: wrap;
+  }
+
+  .newsletter-text h3 {
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 1.1rem;
+    color: var(--text);
+    margin-bottom: 0.4rem;
+  }
+
+  .newsletter-text p {
+    font-size: 0.78rem;
+    color: var(--muted);
+  }
+
+  .newsletter-cta {
+    display: inline-block;
+    background: var(--accent);
+    color: var(--bg);
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 0.82rem;
+    padding: 0.8rem 1.75rem;
+    border-radius: 8px;
+    text-decoration: none;
+    letter-spacing: 0.04em;
+    white-space: nowrap;
+    transition: background 0.2s;
+  }
+
+  .newsletter-cta:hover { background: #00b8e0; }
+
+  /* FOOTER */
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 2rem;
+    text-align: center;
+    color: var(--muted);
+    font-size: 0.7rem;
+    letter-spacing: 0.05em;
+  }
+  footer a { color: var(--accent); text-decoration: none; }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @media (max-width: 768px) {
+    .featured-card { grid-template-columns: 1fr; }
+    .featured-visual { min-height: 180px; }
+    .posts-grid { grid-template-columns: 1fr; }
+    .nav-links .hide-mobile { display: none; }
+    .newsletter-box { flex-direction: column; text-align: center; }
+  }
+
+  @media (min-width: 769px) and (max-width: 1024px) {
+    .posts-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="https://tmcprep.emberlineworld.com" class="nav-logo">TMC<span>PREP</span></a>
+  <div class="nav-links">
+    <a href="https://tmcprep.emberlineworld.com/blog-index.html" class="active hide-mobile">Blog</a>
+    <a href="https://tmcprep.emberlineworld.com" class="hide-mobile">Platform</a>
+    <a href="https://tmcprep.emberlineworld.com" class="nav-cta">Start Free →</a>
+  </div>
+</nav>
+
+<div class="blog-hero">
+  <div class="hero-eyebrow">TMC Prep Intelligence</div>
+  <h1>Built for the RT<br>who never stops learning.</h1>
+  <p>NBRC exam updates, clinical protocol intelligence, and career guidance — for respiratory therapists at every stage.</p>
+</div>
+
+<div class="filter-bar">
+  <button class="filter-tag active">All</button>
+  <button class="filter-tag">NBRC Exam</button>
+  <button class="filter-tag">Clinical</button>
+  <button class="filter-tag">Career</button>
+  <button class="filter-tag">Leadership</button>
+</div>
+
+<div class="featured-section">
+  <div class="section-label">Featured Post</div>
+  <a href="https://tmcprep.emberlineworld.com/blog.html" class="featured-card">
+    <div class="featured-visual">
+      <div class="feat-tag">NBRC Exam Update</div>
+      <div class="feat-visual-title">What's changing<br>for every RT</div>
+    </div>
+    <div class="featured-content">
+      <div>
+        <div class="post-title">The 2027 NBRC Exam Is Coming — Here's What Every RT Student Needs to Know</div>
+        <div class="post-excerpt">The NBRC is replacing the TMC + CSE with a single unified Respiratory Therapy Examination in January 2027. This is the most significant restructuring of RT credentialing in decades — and how you study right now matters more than you think.</div>
+      </div>
+      <div>
+        <div class="post-meta">
+          <span>Caleb Littlejohn, RRT</span>
+          <span class="dot">·</span>
+          <span>March 10, 2026</span>
+          <span class="dot">·</span>
+          <span>8 min read</span>
+        </div>
+        <div class="read-more">Read Article →</div>
+      </div>
+    </div>
+  </a>
+</div>
+
+<div class="posts-section">
+  <div class="section-label">All Posts</div>
+  <div class="posts-grid">
+
+    <!-- POST 1 - Live -->
+    <a href="https://tmcprep.emberlineworld.com/blog.html" class="post-card">
+      <div class="post-card-tag tag-nbrc">NBRC Exam</div>
+      <h3>The 2027 NBRC Exam Is Coming — Here's What Every RT Student Needs to Know</h3>
+      <p>The unified Respiratory Therapy Examination replaces the TMC and CSE. Here's what changes, what doesn't, and how to prepare now.</p>
+      <div class="post-meta">
+        <span>Mar 10, 2026</span>
+        <span class="dot">·</span>
+        <span>8 min</span>
+      </div>
+    </a>
+
+    <!-- POST 2 - Coming Soon -->
+    <div class="post-card coming-soon">
+      <div class="post-card-tag tag-clinical">Clinical</div>
+      <h3>ABG Interpretation: The Framework Every RRT Actually Uses at 3am</h3>
+      <p>Forget the textbook algorithm. Here's how veteran therapists interpret arterial blood gases under real clinical pressure.</p>
+      <div class="post-meta">
+        <div class="post-card-tag tag-coming">Coming Soon</div>
+      </div>
+    </div>
+
+    <!-- POST 3 - Coming Soon -->
+    <div class="post-card coming-soon">
+      <div class="post-card-tag tag-nbrc">NBRC Exam</div>
+      <h3>Mechanical Ventilation on the TMC: The 10 Concepts You Must Own</h3>
+      <p>Vent questions make up a significant portion of the TMC. These are the 10 non-negotiable concepts that show up repeatedly — and how to master them.</p>
+      <div class="post-meta">
+        <div class="post-card-tag tag-coming">Coming Soon</div>
+      </div>
+    </div>
+
+    <!-- POST 4 - Coming Soon -->
+    <div class="post-card coming-soon">
+      <div class="post-card-tag tag-career">Career</div>
+      <h3>From Student RT to RRT Director: What Nobody Tells You About the Climb</h3>
+      <p>A candid look at the skills, mindset shifts, and decisions that separate therapists who advance from those who plateau.</p>
+      <div class="post-meta">
+        <div class="post-card-tag tag-coming">Coming Soon</div>
+      </div>
+    </div>
+
+    <!-- POST 5 - Coming Soon -->
+    <div class="post-card coming-soon">
+      <div class="post-card-tag tag-leadership">Leadership</div>
+      <h3>How to Build an RT Department That Doesn't Burn Out Its Staff</h3>
+      <p>RT burnout is a systemic problem. Here's a framework for building department culture, staffing models, and retention strategies that actually work.</p>
+      <div class="post-meta">
+        <div class="post-card-tag tag-coming">Coming Soon</div>
+      </div>
+    </div>
+
+    <!-- POST 6 - Coming Soon -->
+    <div class="post-card coming-soon">
+      <div class="post-card-tag tag-clinical">Clinical</div>
+      <h3>The New AARC Guidelines on Ventilator Liberation: What Changed and Why</h3>
+      <p>Updated protocols from the AARC on weaning and extubation — what's different from older guidance and what it means for your daily practice.</p>
+      <div class="post-meta">
+        <div class="post-card-tag tag-coming">Coming Soon</div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div class="newsletter-section">
+  <div class="newsletter-box">
+    <div class="newsletter-text">
+      <h3>Get new posts in your inbox</h3>
+      <p>NBRC updates, clinical protocols, and career insights — delivered when it matters.</p>
+    </div>
+    <a href="https://tmcprep.emberlineworld.com" class="newsletter-cta">Join Free on TMC Prep →</a>
+  </div>
+</div>
+
+<footer>
+  <p>© 2026 TMC Prep — Emberline Holdings Company LLC &nbsp;·&nbsp; <a href="https://tmcprep.emberlineworld.com">tmcprep.emberlineworld.com</a> &nbsp;·&nbsp; Not affiliated with NBRC</p>
+</footer>
+
+</body>
+</html>
