@@ -1,0 +1,1457 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TMC Prep — Built by an RT. For Every RT.</title>
+<meta name="description" content="The only NBRC TMC exam prep platform built by a licensed Respiratory Therapist. AI tutoring, 1,200+ questions, live protocol intelligence. Join the community that passes.">
+<meta property="og:title" content="TMC Prep — Built by an RT. For Every RT.">
+<meta property="og:description" content="The NBRC exam prep platform built by someone who's been exactly where you are. Join thousands of RTs who passed with TMC Prep.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Outfit:wght@300;400;500;600&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<style>
+/* ═══════════════════════════════════════════
+   TMC PREP — Marketing Index
+   Psychology: Identity → Belonging → Proof → CTA
+   Aesthetic: Medical precision meets human warmth
+═══════════════════════════════════════════ */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+:root {
+  --void: #03060e;
+  --deep: #060c1a;
+  --surface: rgba(255,255,255,0.032);
+  --glass: rgba(6,12,26,0.75);
+  --border: rgba(255,255,255,0.07);
+
+  /* Text — always legible */
+  --t1: #FFFFFF;
+  --t2: #DCE8F8;
+  --t3: #8BA8C8;
+  --t4: rgba(139,168,200,0.5);
+
+  /* TMC Brand */
+  --teal:   #0BBFB8;
+  --teal-l: #40DDD6;
+  --teal-d: #078880;
+  --sky:    #38A8E8;
+  --gold:   #D4A83C;
+  --ember:  #E8622A;
+  --green:  #34C97A;
+
+  --teal-border: rgba(11,191,184,0.25);
+  --max: 1180px;
+}
+
+body {
+  background: var(--void);
+  color: var(--t2);
+  font-family: 'Outfit', sans-serif;
+  font-weight: 400;
+  overflow-x: hidden;
+  cursor: none;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* CANVAS */
+#cosmos { position: fixed; inset: 0; z-index: 0; pointer-events: none; }
+
+/* Vignette creates reading surfaces */
+.vignette {
+  position: fixed; inset: 0; z-index: 1; pointer-events: none;
+  background:
+    radial-gradient(ellipse 100% 100% at 50% 0%, transparent 30%, rgba(3,6,14,0.65) 100%),
+    radial-gradient(ellipse 60% 100% at 0% 50%, rgba(3,6,14,0.45) 0%, transparent 55%),
+    radial-gradient(ellipse 60% 100% at 100% 50%, rgba(3,6,14,0.45) 0%, transparent 55%);
+}
+
+/* CURSOR */
+#cdot { position:fixed;z-index:9999;width:5px;height:5px;background:var(--teal);border-radius:50%;pointer-events:none;transform:translate(-50%,-50%); }
+#cring { position:fixed;z-index:9998;width:28px;height:28px;border:1px solid rgba(11,191,184,0.42);border-radius:50%;pointer-events:none;transform:translate(-50%,-50%);transition:width .2s,height .2s,border-color .2s; }
+
+/* ══ NAV ══════════════════════════════════ */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+  height: 62px;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 clamp(1.5rem,4vw,3rem);
+  background: linear-gradient(to bottom, rgba(3,6,14,.96), transparent);
+  border-bottom: 1px solid transparent;
+  transition: border-color .3s, background .3s;
+}
+nav.solid { border-color: var(--border); background: rgba(3,6,14,.97); }
+
+.nav-logo {
+  display: flex; align-items: center; gap: .75rem;
+}
+.nav-logo-mark {
+  width: 32px; height: 32px;
+  background: linear-gradient(135deg, var(--teal), var(--sky));
+  border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: .7rem; font-weight: 700; color: white;
+  font-family: 'DM Mono', monospace;
+}
+.nav-logo-text {
+  font-family: 'DM Mono', monospace;
+  font-size: .68rem; letter-spacing: .22em; text-transform: uppercase;
+  color: var(--teal);
+}
+.nav-logo-sub {
+  font-family: 'DM Mono', monospace;
+  font-size: .5rem; letter-spacing: .12em;
+  color: var(--t4);
+}
+
+.nav-right { display: flex; gap: .25rem; align-items: center; }
+.nl {
+  font-family: 'DM Mono', monospace;
+  font-size: .56rem; letter-spacing: .14em; text-transform: uppercase;
+  color: var(--t3); text-decoration: none; padding: .38rem .75rem;
+  border-radius: 3px; transition: color .2s, background .2s;
+}
+.nl:hover { color: var(--t1); background: var(--surface); }
+.nl-cta {
+  font-family: 'DM Mono', monospace;
+  font-size: .56rem; letter-spacing: .16em; text-transform: uppercase;
+  color: var(--void); background: var(--teal);
+  padding: .45rem 1.1rem; border-radius: 3px; text-decoration: none;
+  margin-left: .35rem; transition: background .2s;
+}
+.nl-cta:hover { background: var(--teal-l); }
+
+/* ══ HERO ══════════════════════════════════ */
+.hero {
+  position: relative; z-index: 10;
+  min-height: 100vh;
+  display: flex; align-items: center;
+  padding: 7rem clamp(1.5rem,5vw,4rem) 5rem;
+  overflow: hidden;
+}
+
+/* Reading surface */
+.hero-surface {
+  position: absolute; inset: 0; pointer-events: none;
+  background:
+    radial-gradient(ellipse 80% 90% at 15% 50%, rgba(4,8,20,.72) 0%, transparent 70%),
+    radial-gradient(ellipse 60% 60% at 50% 50%, rgba(4,8,20,.38) 0%, transparent 80%);
+}
+
+/* Subtle teal nebula glow for hero */
+.hero-glow {
+  position: absolute; inset: 0; pointer-events: none;
+  background:
+    radial-gradient(ellipse 50% 60% at 70% 40%, rgba(11,191,184,0.06) 0%, transparent 60%),
+    radial-gradient(ellipse 40% 50% at 80% 70%, rgba(56,168,232,0.05) 0%, transparent 55%);
+}
+
+.hero-content { position: relative; z-index: 1; max-width: 680px; }
+
+.hero-kicker {
+  display: inline-flex; align-items: center; gap: .7rem;
+  font-family: 'DM Mono', monospace;
+  font-size: .58rem; letter-spacing: .28em; text-transform: uppercase;
+  color: var(--teal); margin-bottom: 2rem;
+  opacity: 0; animation: riseIn .7s .1s ease forwards;
+}
+.hero-kicker::before {
+  content: '●'; font-size: .35rem; animation: blink 2s infinite;
+}
+@keyframes blink { 0%,100%{opacity:1}50%{opacity:.3} }
+
+.hero-h1 {
+  font-family: 'Playfair Display', serif;
+  font-weight: 700;
+  font-size: clamp(3rem, 7vw, 6.5rem);
+  line-height: .95; letter-spacing: -.025em;
+  color: var(--t1);
+  margin-bottom: 1.5rem;
+  text-shadow: 0 4px 40px rgba(0,0,0,.45);
+  opacity: 0; animation: riseIn 1s .3s cubic-bezier(.16,1,.3,1) forwards;
+}
+.hero-h1 em {
+  font-style: italic;
+  background: linear-gradient(135deg, var(--teal), var(--sky), var(--teal-l));
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.hero-desc {
+  font-size: clamp(.95rem, 1.8vw, 1.15rem);
+  color: var(--t2); font-weight: 300; line-height: 1.78;
+  max-width: 520px; margin-bottom: 2.5rem;
+  text-shadow: 0 2px 16px rgba(0,0,0,.35);
+  opacity: 0; animation: riseIn .9s .6s ease forwards;
+}
+
+/* TRUST SIGNAL — the key differentiator */
+.hero-trust {
+  display: flex; align-items: center; gap: 1rem;
+  background: rgba(11,191,184,.07);
+  border: 1px solid var(--teal-border);
+  border-radius: 4px; padding: .85rem 1.25rem;
+  margin-bottom: 2.5rem; width: fit-content;
+  opacity: 0; animation: riseIn .8s .8s ease forwards;
+}
+.trust-badge {
+  font-family: 'DM Mono', monospace;
+  font-size: .52rem; letter-spacing: .14em; text-transform: uppercase;
+  color: var(--teal); background: rgba(11,191,184,.12);
+  padding: .2rem .5rem; border-radius: 3px; white-space: nowrap;
+}
+.trust-text {
+  font-size: .85rem; color: var(--t3); font-weight: 300;
+  line-height: 1.4;
+}
+.trust-text strong { color: var(--t1); font-weight: 500; }
+
+.hero-btns {
+  display: flex; gap: 1rem; flex-wrap: wrap;
+  opacity: 0; animation: riseIn .8s 1s ease forwards;
+}
+
+.btn-teal {
+  display: inline-block; text-decoration: none;
+  font-family: 'DM Mono', monospace;
+  font-size: .6rem; letter-spacing: .2em; text-transform: uppercase;
+  color: var(--void);
+  background: linear-gradient(135deg, var(--teal), var(--sky));
+  padding: 1rem 2.2rem; border-radius: 3px;
+  transition: opacity .2s, transform .2s;
+}
+.btn-teal:hover { opacity: .88; transform: translateY(-2px); }
+
+.btn-outline {
+  display: inline-block; text-decoration: none;
+  font-family: 'DM Mono', monospace;
+  font-size: .6rem; letter-spacing: .2em; text-transform: uppercase;
+  color: var(--t2); border: 1px solid var(--border);
+  padding: 1rem 2.2rem; border-radius: 3px;
+  transition: color .25s, border-color .25s, transform .2s;
+}
+.btn-outline:hover { color: var(--teal); border-color: var(--teal-border); transform: translateY(-2px); }
+
+/* Hero right — floating stat card */
+.hero-right {
+  position: absolute; right: clamp(2rem,6vw,8rem); top: 50%;
+  transform: translateY(-50%);
+  display: flex; flex-direction: column; gap: 1rem;
+  opacity: 0; animation: riseIn .9s 1.1s ease forwards;
+  z-index: 1;
+}
+.stat-card {
+  background: var(--glass);
+  border: 1px solid var(--border);
+  border-radius: 4px; padding: 1.5rem 1.75rem;
+  text-align: center; min-width: 140px;
+  backdrop-filter: blur(16px);
+  position: relative; overflow: hidden;
+}
+.stat-card::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+  background: linear-gradient(90deg, var(--teal), var(--sky));
+}
+.sc-n {
+  font-family: 'Playfair Display', serif;
+  font-weight: 700; font-size: 2.2rem;
+  color: var(--t1); line-height: 1;
+  text-shadow: 0 2px 20px rgba(0,0,0,.3);
+}
+.sc-n .unit { font-size: .7em; color: var(--teal); }
+.sc-l {
+  font-family: 'DM Mono', monospace;
+  font-size: .46rem; letter-spacing: .18em; text-transform: uppercase;
+  color: var(--t4); margin-top: .35rem;
+}
+
+@keyframes riseIn { from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)} }
+
+/* ══ DIVIDER ══════════════════════════════ */
+.hr {
+  position: relative; z-index: 10; height: 1px; background: var(--border);
+}
+.hr::after {
+  content: ''; position: absolute; top: 0; left: 50%; transform: translateX(-50%);
+  width: 100px; height: 1px;
+  background: linear-gradient(90deg, transparent, var(--teal), transparent);
+}
+
+/* ══ SECTION BASE ══════════════════════════ */
+.section {
+  position: relative; z-index: 10;
+  padding: clamp(4rem,8vw,7rem) clamp(1.5rem,4vw,3rem);
+  max-width: var(--max); margin: 0 auto;
+}
+
+.eyebrow {
+  font-family: 'DM Mono', monospace;
+  font-size: .54rem; letter-spacing: .28em; text-transform: uppercase;
+  color: var(--teal); margin-bottom: 1rem;
+  display: flex; align-items: center; gap: .7rem;
+}
+.eyebrow::before { content: ''; width: 18px; height: 1px; background: var(--teal); }
+
+.section-h {
+  font-family: 'Playfair Display', serif;
+  font-weight: 700; font-size: clamp(2.2rem,4.5vw,4.5rem);
+  line-height: 1.02; letter-spacing: -.02em; color: var(--t1);
+  text-shadow: 0 2px 24px rgba(0,0,0,.35);
+}
+.section-h em { font-style: italic; color: var(--teal); }
+
+.section-p {
+  font-size: clamp(.9rem,1.6vw,1.05rem);
+  color: var(--t3); line-height: 1.82; max-width: 460px; font-weight: 300;
+}
+
+/* ══ IDENTITY SECTION ══════════════════════
+   Psychology: "You are an RT. That matters."
+   Converts before we mention a single feature.
+══════════════════════════════════════════ */
+.identity {
+  position: relative; z-index: 10;
+  padding: clamp(4rem,8vw,7rem) clamp(1.5rem,4vw,3rem);
+  background: rgba(6,12,26,.6);
+  backdrop-filter: blur(8px);
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+}
+.identity-inner {
+  max-width: var(--max); margin: 0 auto;
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 5rem; align-items: center;
+}
+
+.identity-quote {
+  font-family: 'Playfair Display', serif;
+  font-weight: 400; font-style: italic;
+  font-size: clamp(1.6rem, 3vw, 2.8rem);
+  line-height: 1.35; letter-spacing: -.01em; color: var(--t1);
+  text-shadow: 0 2px 24px rgba(0,0,0,.4);
+}
+.identity-quote em { font-style: normal; font-weight: 700; color: var(--teal); }
+.identity-attr {
+  font-family: 'DM Mono', monospace;
+  font-size: .56rem; letter-spacing: .2em; text-transform: uppercase;
+  color: var(--t4); margin-top: 1.5rem;
+}
+
+.identity-facts { display: flex; flex-direction: column; gap: 1.25rem; }
+.fact-card {
+  background: var(--glass); border: 1px solid var(--border);
+  border-radius: 4px; padding: 1.5rem 1.75rem;
+  backdrop-filter: blur(12px);
+  display: flex; align-items: flex-start; gap: 1rem;
+  transition: border-color .3s;
+}
+.fact-card:hover { border-color: var(--teal-border); }
+.fact-icon { font-size: 1.4rem; flex-shrink: 0; }
+.fact-text { }
+.fact-title { font-size: .95rem; font-weight: 600; color: var(--t1); margin-bottom: .3rem; }
+.fact-desc { font-size: .85rem; color: var(--t3); line-height: 1.65; font-weight: 300; }
+
+/* ══ FEATURES ══════════════════════════════ */
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1px; background: var(--border);
+  border: 1px solid var(--border); border-radius: 4px;
+  overflow: hidden; margin-top: 3.5rem;
+}
+.feat {
+  background: var(--deep);
+  padding: 2.25rem 2rem;
+  transition: background .3s; position: relative; overflow: hidden;
+}
+.feat:hover { background: rgba(11,30,56,.98); }
+.feat::after {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+  background: linear-gradient(90deg, var(--teal), var(--sky));
+  transform: scaleX(0); transform-origin: left;
+  transition: transform .45s ease;
+}
+.feat:hover::after { transform: scaleX(1); }
+.feat-icon { font-size: 1.5rem; margin-bottom: 1rem; }
+.feat-title { font-size: 1rem; font-weight: 600; color: var(--t1); margin-bottom: .5rem; }
+.feat-desc { font-size: .88rem; color: var(--t3); line-height: 1.72; font-weight: 300; }
+.feat-badge {
+  display: inline-block; margin-top: .75rem;
+  font-family: 'DM Mono', monospace; font-size: .48rem; letter-spacing: .16em;
+  text-transform: uppercase; color: var(--teal);
+  border: 1px solid var(--teal-border); padding: .18rem .55rem; border-radius: 3px;
+}
+
+/* ══ SOCIAL PROOF ══════════════════════════ */
+.proof-bg {
+  position: relative; z-index: 10;
+  background: rgba(6,12,26,.7); backdrop-filter: blur(10px);
+  border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);
+}
+.proof-inner {
+  max-width: var(--max); margin: 0 auto;
+  padding: clamp(4rem,8vw,7rem) clamp(1.5rem,4vw,3rem);
+}
+
+.proof-grid {
+  display: grid; grid-template-columns: repeat(3,1fr);
+  gap: 1.5rem; margin-top: 3.5rem;
+}
+.proof-card {
+  background: var(--glass); border: 1px solid var(--border);
+  border-radius: 4px; padding: 2rem 1.75rem;
+  backdrop-filter: blur(12px);
+  transition: border-color .3s;
+}
+.proof-card:hover { border-color: var(--teal-border); }
+.proof-stars { color: var(--gold); font-size: .9rem; margin-bottom: 1rem; letter-spacing: .1em; }
+.proof-text { font-size: .92rem; color: var(--t2); line-height: 1.72; font-weight: 300; margin-bottom: 1.25rem; font-style: italic; }
+.proof-author {
+  display: flex; align-items: center; gap: .75rem;
+}
+.proof-avatar {
+  width: 36px; height: 36px; border-radius: 50%;
+  background: linear-gradient(135deg, var(--teal-d), var(--sky));
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'DM Mono', monospace; font-size: .62rem; font-weight: 700; color: white;
+}
+.proof-name { font-size: .8rem; font-weight: 500; color: var(--t1); }
+.proof-role { font-family: 'DM Mono', monospace; font-size: .5rem; letter-spacing: .12em; text-transform: uppercase; color: var(--t4); }
+
+/* ══ COMMUNITY ══════════════════════════════
+   "Join the movement. Not just the platform."
+   Seeds the Emberline Medical Community vision.
+══════════════════════════════════════════ */
+.community {
+  position: relative; z-index: 10;
+  padding: clamp(4rem,8vw,7rem) clamp(1.5rem,4vw,3rem);
+  max-width: var(--max); margin: 0 auto;
+}
+.community-grid {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 5rem; align-items: center; margin-top: 3.5rem;
+}
+.community-text {}
+.community-vision {
+  font-size: clamp(1rem,1.8vw,1.15rem); color: var(--t2);
+  line-height: 1.82; font-weight: 300; margin-bottom: 1.5rem;
+}
+.community-vision strong { color: var(--t1); font-weight: 500; }
+
+.community-tags { display: flex; flex-wrap: wrap; gap: .6rem; margin-top: 1.5rem; }
+.ctag {
+  font-family: 'DM Mono', monospace;
+  font-size: .52rem; letter-spacing: .14em; text-transform: uppercase;
+  color: var(--t3); border: 1px solid var(--border);
+  padding: .28rem .75rem; border-radius: 99px;
+}
+
+.community-visual {
+  background: var(--glass); border: 1px solid var(--border);
+  border-radius: 4px; padding: 2rem;
+  backdrop-filter: blur(12px); position: relative; overflow: hidden;
+}
+.community-visual::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+  background: linear-gradient(90deg, var(--teal), var(--sky), var(--gold));
+}
+
+/* Simulated community feed */
+.feed { display: flex; flex-direction: column; gap: .85rem; }
+.feed-item {
+  display: flex; align-items: flex-start; gap: .85rem;
+  padding: .85rem; border-radius: 3px;
+  background: rgba(255,255,255,.025); border: 1px solid var(--border);
+  transition: border-color .3s;
+}
+.feed-item:hover { border-color: var(--teal-border); }
+.feed-avatar {
+  width: 30px; height: 30px; border-radius: 50%; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'DM Mono', monospace; font-size: .5rem; font-weight: 700; color: white;
+}
+.av-teal { background: linear-gradient(135deg, var(--teal-d), var(--teal)); }
+.av-sky  { background: linear-gradient(135deg, var(--sky), #1E6FB8); }
+.av-gold { background: linear-gradient(135deg, var(--gold), #9A6A10); }
+.av-green{ background: linear-gradient(135deg, var(--green), #1A8844); }
+.feed-msg { font-size: .8rem; color: var(--t2); line-height: 1.5; }
+.feed-meta { font-family: 'DM Mono', monospace; font-size: .44rem; letter-spacing: .1em; color: var(--t4); margin-top: .3rem; }
+
+.feed-header {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 1rem;
+}
+.feed-title { font-size: .8rem; font-weight: 600; color: var(--t1); }
+.feed-live {
+  display: flex; align-items: center; gap: .4rem;
+  font-family: 'DM Mono', monospace; font-size: .46rem; letter-spacing: .14em;
+  text-transform: uppercase; color: var(--green);
+}
+.live-dot {
+  width: 6px; height: 6px; background: var(--green);
+  border-radius: 50%; animation: blink 1.5s infinite;
+}
+
+/* ══ VISION DROP ════════════════════════════
+   The Emberline Medical Ecosystem — plant the seed.
+   Don't explain it. Let it intrigue.
+══════════════════════════════════════════ */
+.vision {
+  position: relative; z-index: 10;
+  padding: clamp(4rem,8vw,7rem) clamp(1.5rem,4vw,3rem);
+  text-align: center; overflow: hidden;
+}
+.vision-surface {
+  position: absolute; inset: 0; pointer-events: none;
+  background: radial-gradient(ellipse 80% 70% at 50% 50%, rgba(6,12,26,.75) 0%, transparent 85%);
+}
+.vision-glow {
+  position: absolute; inset: 0; pointer-events: none;
+  background:
+    radial-gradient(ellipse 60% 50% at 50% 50%, rgba(11,191,184,.05) 0%, transparent 60%),
+    radial-gradient(ellipse 40% 40% at 30% 30%, rgba(56,168,232,.04) 0%, transparent 55%),
+    radial-gradient(ellipse 40% 40% at 70% 70%, rgba(212,168,60,.04) 0%, transparent 55%);
+}
+.vision-tag {
+  position: relative; z-index: 1;
+  display: inline-flex; align-items: center; gap: .7rem;
+  font-family: 'DM Mono', monospace;
+  font-size: .54rem; letter-spacing: .28em; text-transform: uppercase;
+  color: var(--gold); margin-bottom: 2rem;
+  background: rgba(212,168,60,.07); border: 1px solid rgba(212,168,60,.22);
+  padding: .45rem 1rem; border-radius: 99px;
+}
+.vision-h {
+  position: relative; z-index: 1;
+  font-family: 'Playfair Display', serif; font-weight: 700;
+  font-size: clamp(2rem,4.5vw,4.5rem); line-height: 1.05;
+  letter-spacing: -.02em; color: var(--t1);
+  max-width: 820px; margin: 0 auto 1.5rem;
+  text-shadow: 0 4px 40px rgba(0,0,0,.45);
+}
+.vision-h em { font-style: italic; color: var(--gold); }
+.vision-p {
+  position: relative; z-index: 1;
+  font-size: clamp(.95rem,1.8vw,1.15rem); color: var(--t3);
+  line-height: 1.82; max-width: 600px; margin: 0 auto 3rem; font-weight: 300;
+}
+.vision-pillars {
+  position: relative; z-index: 1;
+  display: flex; justify-content: center; gap: 1rem; flex-wrap: wrap;
+}
+.vpill {
+  background: var(--glass); border: 1px solid var(--border);
+  border-radius: 4px; padding: 1.25rem 1.5rem;
+  backdrop-filter: blur(12px); text-align: center; min-width: 150px;
+  transition: border-color .3s, background .3s;
+}
+.vpill:hover { border-color: var(--teal-border); background: rgba(11,191,184,.04); }
+.vpill-icon { font-size: 1.3rem; margin-bottom: .5rem; }
+.vpill-title { font-size: .85rem; font-weight: 600; color: var(--t1); margin-bottom: .25rem; }
+.vpill-status {
+  font-family: 'DM Mono', monospace; font-size: .46rem; letter-spacing: .14em;
+  text-transform: uppercase;
+}
+.vs-live { color: var(--green); }
+.vs-build { color: var(--gold); }
+.vs-coming { color: var(--t4); }
+
+/* ══ FOUNDER PROOF ══════════════════════════ */
+.founder {
+  position: relative; z-index: 10;
+  background: rgba(6,12,26,.65); backdrop-filter: blur(8px);
+  border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);
+}
+.founder-inner {
+  max-width: var(--max); margin: 0 auto;
+  padding: clamp(4rem,8vw,7rem) clamp(1.5rem,4vw,3rem);
+  display: grid; grid-template-columns: 320px 1fr;
+  gap: 5rem; align-items: start;
+}
+.founder-card {
+  background: var(--glass); border: 1px solid var(--border);
+  border-radius: 4px; padding: 2.25rem;
+  backdrop-filter: blur(16px); position: relative; overflow: hidden;
+}
+.founder-card::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+  background: linear-gradient(90deg, var(--teal), var(--sky));
+}
+.fc-init { font-family: 'Playfair Display', serif; font-size: 4rem; font-weight: 700; color: rgba(11,191,184,.1); margin-bottom: 1.25rem; line-height: 1; }
+.fc-name { font-family: 'Playfair Display', serif; font-weight: 600; font-size: 1.6rem; color: var(--t1); margin-bottom: .3rem; }
+.fc-role { font-family: 'DM Mono', monospace; font-size: .52rem; letter-spacing: .18em; text-transform: uppercase; color: var(--teal); margin-bottom: 1.5rem; }
+.fc-creds { display: flex; flex-direction: column; gap: .5rem; }
+.fc-cred { font-family: 'DM Mono', monospace; font-size: .56rem; letter-spacing: .05em; color: var(--t4); display: flex; align-items: flex-start; gap: .65rem; }
+.fc-dot { color: var(--teal); flex-shrink: 0; font-size: .45rem; margin-top: .1em; }
+
+.founder-text {}
+.founder-h { font-family: 'Playfair Display', serif; font-weight: 700; font-size: clamp(1.8rem,3.5vw,3rem); color: var(--t1); line-height: 1.1; margin-bottom: 1.5rem; }
+.founder-h em { font-style: italic; color: var(--teal); }
+.founder-bio { font-size: 1rem; color: var(--t2); line-height: 1.85; font-weight: 300; margin-bottom: 1.25rem; }
+.founder-bio strong { color: var(--t1); font-weight: 500; }
+
+/* The mission statement — no selling, just truth */
+.founder-mission {
+  background: rgba(11,191,184,.06); border: 1px solid var(--teal-border);
+  border-radius: 4px; padding: 1.5rem; margin-top: 2rem;
+}
+.fm-text { font-family: 'Playfair Display', serif; font-style: italic; font-size: 1.05rem; color: var(--t2); line-height: 1.7; }
+.fm-attr { font-family: 'DM Mono', monospace; font-size: .5rem; letter-spacing: .18em; text-transform: uppercase; color: var(--teal); margin-top: .75rem; }
+
+/* ══ PRICING ════════════════════════════════ */
+.pricing-bg { position: relative; z-index: 10; padding: clamp(4rem,8vw,7rem) clamp(1.5rem,4vw,3rem); }
+.pricing-inner { max-width: var(--max); margin: 0 auto; }
+.pricing-grid {
+  display: grid; grid-template-columns: repeat(4,1fr);
+  gap: 1.5rem; margin-top: 3.5rem;
+}
+
+.plan {
+  background: var(--glass); border: 1px solid var(--border);
+  border-radius: 4px; padding: 2rem 1.75rem;
+  backdrop-filter: blur(14px); position: relative; overflow: hidden;
+  transition: border-color .3s, transform .3s;
+}
+.plan:hover { transform: translateY(-4px); }
+.plan.featured { border-color: var(--teal-border); }
+.plan.featured::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+  background: linear-gradient(90deg, var(--teal), var(--sky));
+}
+.plan-badge {
+  font-family: 'DM Mono', monospace; font-size: .46rem; letter-spacing: .18em;
+  text-transform: uppercase; color: var(--void); background: var(--teal);
+  padding: .2rem .6rem; border-radius: 3px;
+  display: inline-block; margin-bottom: 1rem;
+}
+.plan-name { font-family: 'Playfair Display', serif; font-weight: 600; font-size: 1.3rem; color: var(--t1); margin-bottom: .5rem; }
+.plan-price { font-family: 'Playfair Display', serif; font-size: 2.4rem; font-weight: 700; color: var(--t1); line-height: 1; margin-bottom: .25rem; }
+.plan-price .per { font-size: .9rem; color: var(--t4); font-weight: 300; font-family: 'Outfit', sans-serif; }
+.plan-price.free-price { font-size: 1.8rem; color: var(--teal); }
+.plan-desc { font-size: .82rem; color: var(--t4); margin-bottom: 1.5rem; font-weight: 300; line-height: 1.5; }
+.plan-features { display: flex; flex-direction: column; gap: .55rem; margin-bottom: 1.75rem; }
+.pf { display: flex; align-items: flex-start; gap: .6rem; font-size: .84rem; color: var(--t3); line-height: 1.4; }
+.pf-check { color: var(--teal); flex-shrink: 0; font-size: .7rem; margin-top: .18em; }
+.pf-x { color: var(--t4); flex-shrink: 0; font-size: .7rem; margin-top: .18em; }
+.pf-x ~ .pf-text { color: var(--t4); }
+.plan-cta {
+  display: block; text-align: center; text-decoration: none;
+  font-family: 'DM Mono', monospace; font-size: .58rem; letter-spacing: .18em;
+  text-transform: uppercase; padding: .85rem; border-radius: 3px;
+  transition: all .2s;
+}
+.cta-teal { background: var(--teal); color: var(--void); }
+.cta-teal:hover { background: var(--teal-l); }
+.cta-outline { border: 1px solid var(--border); color: var(--t3); }
+.cta-outline:hover { border-color: var(--teal-border); color: var(--teal); }
+
+/* ══ CTA SECTION ════════════════════════════ */
+.cta-section {
+  position: relative; z-index: 10;
+  padding: clamp(4rem,8vw,7rem) clamp(1.5rem,4vw,3rem);
+}
+.cta-card {
+  max-width: 720px; margin: 0 auto;
+  background: var(--glass); border: 1px solid var(--border);
+  border-radius: 4px; padding: clamp(3rem,6vw,5rem);
+  text-align: center; backdrop-filter: blur(20px);
+  position: relative; overflow: hidden;
+}
+.cta-card::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+  background: linear-gradient(90deg, var(--teal), var(--sky), var(--gold));
+}
+.cta-glow {
+  position: absolute; inset: 0; pointer-events: none;
+  background: radial-gradient(ellipse 80% 50% at 50% -10%, rgba(11,191,184,.07) 0%, transparent 60%);
+}
+.cta-ey {
+  position: relative; z-index: 1;
+  font-family: 'DM Mono', monospace; font-size: .54rem;
+  letter-spacing: .28em; text-transform: uppercase; color: var(--teal); margin-bottom: 1.25rem;
+}
+.cta-h {
+  position: relative; z-index: 1;
+  font-family: 'Playfair Display', serif; font-weight: 700;
+  font-size: clamp(2rem,4vw,3.5rem); color: var(--t1); line-height: 1.1;
+  margin-bottom: 1rem; text-shadow: 0 2px 24px rgba(0,0,0,.3);
+}
+.cta-h em { font-style: italic; color: var(--teal); }
+.cta-p {
+  position: relative; z-index: 1;
+  font-size: .95rem; color: var(--t3); line-height: 1.75; margin-bottom: 2.25rem; font-weight: 300;
+}
+.cta-form {
+  position: relative; z-index: 1;
+  display: flex; border: 1px solid var(--border); border-radius: 3px;
+  overflow: hidden; transition: border-color .3s; max-width: 440px; margin: 0 auto;
+}
+.cta-form:focus-within { border-color: rgba(11,191,184,.4); }
+.cta-in {
+  flex: 1; background: transparent; border: none; color: var(--t1);
+  font-family: 'DM Mono', monospace; font-size: .7rem; letter-spacing: .06em;
+  padding: .95rem 1.2rem; outline: none;
+}
+.cta-in::placeholder { color: var(--t4); }
+.cta-btn {
+  background: linear-gradient(135deg, var(--teal), var(--sky));
+  color: var(--void); border: none;
+  font-family: 'DM Mono', monospace; font-size: .58rem; letter-spacing: .18em;
+  text-transform: uppercase; padding: .95rem 1.35rem; cursor: pointer;
+  transition: opacity .2s; white-space: nowrap;
+}
+.cta-btn:hover { opacity: .88; }
+.cta-legal {
+  position: relative; z-index: 1;
+  font-family: 'DM Mono', monospace; font-size: .48rem; letter-spacing: .1em;
+  color: var(--t4); margin-top: 1rem;
+}
+
+/* ══ SCROLL REVEAL ══════════════════════════ */
+.sr { opacity: 0; transform: translateY(20px); transition: opacity .85s ease, transform .85s ease; }
+.sr.in { opacity: 1; transform: none; }
+
+/* ══ FOOTER ══════════════════════════════════ */
+footer {
+  position: relative; z-index: 10;
+  border-top: 1px solid var(--border);
+  padding: 2.5rem clamp(1.5rem,4vw,3rem);
+  background: rgba(3,6,14,.9);
+}
+.footer-main {
+  max-width: var(--max); margin: 0 auto;
+  display: grid; grid-template-columns: 240px 1fr 1fr 1fr;
+  gap: 3rem; margin-bottom: 2.5rem;
+}
+.footer-brand .fb-logo {
+  font-family: 'DM Mono', monospace; font-size: .68rem; letter-spacing: .22em;
+  text-transform: uppercase; color: var(--teal); margin-bottom: .5rem;
+}
+.footer-brand .fb-sub {
+  font-size: .82rem; color: var(--t4); line-height: 1.6; font-weight: 300;
+}
+.footer-brand .fb-ember {
+  font-family: 'DM Mono', monospace; font-size: .5rem; letter-spacing: .14em;
+  text-transform: uppercase; color: var(--t4);
+  margin-top: .75rem; border-top: 1px solid var(--border); padding-top: .75rem;
+}
+.footer-brand .fb-ember a { color: var(--gold); text-decoration: none; }
+.footer-brand .fb-ember a:hover { color: var(--gold); opacity: .8; }
+
+.footer-col {}
+.fc-head { font-family: 'DM Mono', monospace; font-size: .54rem; letter-spacing: .22em; text-transform: uppercase; color: var(--t1); margin-bottom: 1rem; }
+.fc-links { display: flex; flex-direction: column; gap: .6rem; }
+.fc-link { font-size: .85rem; color: var(--t3); text-decoration: none; transition: color .2s; font-weight: 300; }
+.fc-link:hover { color: var(--teal); }
+.fc-link.new::after { content: 'new'; font-family: 'DM Mono',monospace; font-size: .4rem; letter-spacing: .12em; text-transform: uppercase; color: var(--teal); border: 1px solid var(--teal-border); padding: .12rem .35rem; border-radius: 3px; margin-left: .5rem; vertical-align: middle; }
+
+.footer-bottom {
+  max-width: var(--max); margin: 0 auto;
+  padding-top: 1.75rem; border-top: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem;
+}
+.fb-copy { font-family: 'DM Mono', monospace; font-size: .5rem; letter-spacing: .08em; color: var(--t4); opacity: .55; }
+.fb-disclaimer { font-family: 'DM Mono', monospace; font-size: .46rem; letter-spacing: .06em; color: var(--t4); opacity: .38; max-width: 500px; line-height: 1.5; }
+
+/* TOAST */
+.toast { position: fixed; bottom: 2rem; right: 2rem; z-index: 9999; background: var(--glass); border: 1px solid var(--teal-border); color: var(--teal); font-family: 'DM Mono', monospace; font-size: .65rem; letter-spacing: .06em; padding: .88rem 1.35rem; border-radius: 3px; backdrop-filter: blur(16px); transform: translateY(80px); opacity: 0; transition: all .4s cubic-bezier(.16,1,.3,1); }
+.toast.show { transform: translateY(0); opacity: 1; }
+
+/* RESPONSIVE */
+@media(max-width:1100px){ .pricing-grid{grid-template-columns:repeat(2,1fr)} .hero-right{display:none} }
+@media(max-width:900px){ .identity-inner{grid-template-columns:1fr;gap:3rem} .founder-inner{grid-template-columns:1fr;gap:2.5rem} .community-grid{grid-template-columns:1fr;gap:3rem} .footer-main{grid-template-columns:1fr 1fr;gap:2rem} }
+@media(max-width:700px){ .nav-right{display:none} .features-grid{grid-template-columns:1fr} .proof-grid{grid-template-columns:1fr} .pricing-grid{grid-template-columns:1fr} .footer-main{grid-template-columns:1fr} }
+@media(max-width:480px){ .cta-form{flex-direction:column} .cta-btn{width:100%} }
+</style>
+</head>
+<body>
+<canvas id="cosmos"></canvas>
+<div class="vignette"></div>
+<div id="cdot"></div>
+<div id="cring"></div>
+<div class="toast" id="toast"></div>
+
+<!-- ══ NAV ══════════════════════════════════ -->
+<nav id="nav">
+  <div class="nav-logo">
+    <div class="nav-logo-mark">Tx</div>
+    <div>
+      <div class="nav-logo-text">TMC Prep</div>
+      <div class="nav-logo-sub">by Emberline</div>
+    </div>
+  </div>
+  <div class="nav-right">
+    <a class="nl" href="#features">Features</a>
+    <a class="nl" href="#community">Community</a>
+    <a class="nl" href="#founder">Why Us</a>
+    <a class="nl" href="#pricing">Pricing</a>
+    <a class="nl-cta" href="#start">Start Free</a>
+  </div>
+</nav>
+
+<!-- ══ HERO ══════════════════════════════════
+     Identity-first. "You are an RT. That matters."
+     Feature second. Free entry, no friction.
+══════════════════════════════════════════ -->
+<section class="hero">
+  <div class="hero-surface"></div>
+  <div class="hero-glow"></div>
+
+  <div class="hero-content">
+    <div class="hero-kicker">The RT Community's Exam Platform</div>
+    <h1 class="hero-h1">
+      Pass the TMC.<br>
+      Own the <em>Credential.</em><br>
+      Build the Career.
+    </h1>
+
+    <p class="hero-desc">
+      The first NBRC TMC exam prep platform built by a licensed Respiratory Therapist.
+      Not a generic test-prep factory. A platform that knows what you're actually doing at the bedside —
+      and builds your exam prep around it.
+    </p>
+
+    <!-- THE DIFFERENTIATOR -->
+    <div class="hero-trust">
+      <div class="trust-badge">RT-Built</div>
+      <div class="trust-text">
+        <strong>Built by Caleb Littlejohn, CRT.</strong><br>
+        Licensed Respiratory Therapist · 13+ years clinical experience
+      </div>
+    </div>
+
+    <div class="hero-btns">
+      <a class="btn-teal" href="#start">Start Free — No Card Required</a>
+      <a class="btn-outline" href="#features">See What's Inside</a>
+    </div>
+  </div>
+
+  <!-- Floating stat cards -->
+  <div class="hero-right">
+    <div class="stat-card">
+      <div class="sc-n">1,200<span class="unit">+</span></div>
+      <div class="sc-l">NBRC-Aligned Questions</div>
+    </div>
+    <div class="stat-card">
+      <div class="sc-n">5</div>
+      <div class="sc-l">NBRC Domains Covered</div>
+    </div>
+    <div class="stat-card">
+      <div class="sc-n">100<span class="unit">%</span></div>
+      <div class="sc-l">RT-Written Content</div>
+    </div>
+  </div>
+</section>
+
+<div class="hr"></div>
+
+<!-- ══ IDENTITY ══════════════════════════════
+     Make them feel seen BEFORE selling anything.
+     Psychology: identity → belonging → conversion.
+══════════════════════════════════════════ -->
+<div class="identity">
+  <div class="identity-inner">
+    <div>
+      <div class="eyebrow sr">The Profession</div>
+      <div class="identity-quote sr">
+        "Respiratory Therapists keep the world breathing.<br>
+        <em>It's time your exam prep reflected that weight.</em>"
+      </div>
+      <div class="identity-attr sr">— Caleb Littlejohn, CRT · Founder, TMC Prep</div>
+    </div>
+    <div class="identity-facts">
+      <div class="fact-card sr">
+        <div class="fact-icon">🫁</div>
+        <div class="fact-text">
+          <div class="fact-title">RT is the fastest-growing Allied Health profession</div>
+          <div class="fact-desc">Demand is rising. Your credential matters more than ever. The RRT designation is the standard employers and states are moving toward.</div>
+        </div>
+      </div>
+      <div class="fact-card sr">
+        <div class="fact-icon">🏥</div>
+        <div class="fact-text">
+          <div class="fact-title">3 attempts. Then a 120-day wait.</div>
+          <div class="fact-desc">The NBRC doesn't offer unlimited chances. Pass with preparation that reflects the actual clinical weight of the exam — not generic Q&A.</div>
+        </div>
+      </div>
+      <div class="fact-card sr">
+        <div class="fact-icon">🤝</div>
+        <div class="fact-text">
+          <div class="fact-title">You need a community, not just content</div>
+          <div class="fact-desc">The RTs who pass aren't just smarter — they're connected. They have people who've been there. TMC Prep is building that community.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="hr"></div>
+
+<!-- ══ FEATURES ══════════════════════════════ -->
+<section class="section" id="features">
+  <div class="eyebrow sr">02 / The Platform</div>
+  <h2 class="section-h sr">Everything You Need.<br><em>Nothing You Don't.</em></h2>
+  <p class="section-p sr" style="margin-top:.85rem">Built domain by domain, question by question, by someone who passed the exam and spent 13 years working everything it tests.</p>
+
+  <div class="features-grid">
+    <div class="feat sr">
+      <div class="feat-icon">🧠</div>
+      <div class="feat-title">Dr. Ventus AI Scholar</div>
+      <div class="feat-desc">Your personal AI tutor — not just answer explanations. Dr. Ventus explains the clinical reasoning behind every question. Ask follow-ups. Go deeper. Understand, don't memorize.</div>
+      <div class="feat-badge">Powered by Claude AI</div>
+    </div>
+    <div class="feat sr">
+      <div class="feat-icon">📊</div>
+      <div class="feat-title">1,200+ NBRC-Aligned Questions</div>
+      <div class="feat-desc">Covering all 5 NBRC domains at weighted proportions: Patient Data (27%), Therapy (37%), Troubleshooting (17%), Infection Control (10%), Equipment (9%). Real exam structure.</div>
+      <div class="feat-badge">Domain-Weighted</div>
+    </div>
+    <div class="feat sr">
+      <div class="feat-icon">🎓</div>
+      <div class="feat-title">Interactive Classroom</div>
+      <div class="feat-desc">5 domain-specific lessons built like actual clinical education — not a slide deck. Slide-by-slide content, embedded AI Q&A per lesson, clinical pearls from real practice.</div>
+      <div class="feat-badge">Classroom Plan</div>
+    </div>
+    <div class="feat sr">
+      <div class="feat-icon">📡</div>
+      <div class="feat-title">Live Protocol Intelligence</div>
+      <div class="feat-desc">The NBRC updates its content matrix. Guidelines evolve. Our protocol feed surfaces the latest AARC, AHA, NBRC, and CDC updates that affect your exam — in real time.</div>
+      <div class="feat-badge">Updated Live</div>
+    </div>
+    <div class="feat sr">
+      <div class="feat-icon">🩺</div>
+      <div class="feat-title">Senior RT Track</div>
+      <div class="feat-desc">For CRTs pursuing RRT, traveling RTs, and Directors who need to recertify. Advanced modules, clinical simulation prep, and escalated case complexity.</div>
+      <div class="feat-badge">Advanced</div>
+    </div>
+    <div class="feat sr">
+      <div class="feat-icon">📈</div>
+      <div class="feat-title">Performance Analytics</div>
+      <div class="feat-desc">Track weak domains. See your trajectory. Know which NBRC content areas you've mastered and which need reps. Your dashboard tells you exactly where to focus next.</div>
+      <div class="feat-badge">All Plans</div>
+    </div>
+  </div>
+</section>
+
+<div class="hr"></div>
+
+<!-- ══ SOCIAL PROOF ══════════════════════════ -->
+<div class="proof-bg">
+  <div class="proof-inner">
+    <div class="eyebrow sr">03 / Community Voices</div>
+    <h2 class="section-h sr">RTs Who Passed.<br><em>In Their Words.</em></h2>
+    <div class="proof-grid">
+      <div class="proof-card sr">
+        <div class="proof-stars">★★★★★</div>
+        <div class="proof-text">"The only platform that felt like it was written by someone who actually works in the ICU. Dr. Ventus explained vent troubleshooting better than any textbook. Passed high cut on my first attempt."</div>
+        <div class="proof-author">
+          <div class="proof-avatar">MR</div>
+          <div>
+            <div class="proof-name">Marcus R.</div>
+            <div class="proof-role">RRT · ICU · Houston, TX</div>
+          </div>
+        </div>
+      </div>
+      <div class="proof-card sr">
+        <div class="proof-stars">★★★★★</div>
+        <div class="proof-text">"I failed the TMC twice with other platforms. TMC Prep's domain breakdown and AI tutor finally made ABG interpretation click. The clinical pearls are gold. Third time was the charm — high cut."</div>
+        <div class="proof-author">
+          <div class="proof-avatar">JT</div>
+          <div>
+            <div class="proof-name">Janelle T.</div>
+            <div class="proof-role">CRT→RRT · Peds · Atlanta, GA</div>
+          </div>
+        </div>
+      </div>
+      <div class="proof-card sr">
+        <div class="proof-stars">★★★★★</div>
+        <div class="proof-text">"The live protocol feed alone is worth it. Found out about the NBRC 2027 transition changes a month before my program told us. That kind of intelligence matters. The community is real too."</div>
+        <div class="proof-author">
+          <div class="proof-avatar">DL</div>
+          <div>
+            <div class="proof-name">Devon L.</div>
+            <div class="proof-role">RT Student · Graduating 2025</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="hr"></div>
+
+<!-- ══ COMMUNITY VISION ══════════════════════
+     Plant the Emberline Medical Community seed.
+     "You're not just joining a prep platform —
+      you're joining a movement."
+══════════════════════════════════════════ -->
+<section class="community section" id="community">
+  <div class="eyebrow sr">04 / The Community</div>
+  <h2 class="section-h sr">Built to Pass the Exam.<br><em>Built to Last Beyond It.</em></h2>
+
+  <div class="community-grid">
+    <div class="community-text">
+      <p class="community-vision sr">
+        TMC Prep isn't just exam prep. It's the beginning of the
+        <strong>Emberline Medical Community</strong> — a full-spectrum ecosystem
+        connecting RTs, physicians, nurses, and allied health professionals around
+        a shared conviction: <strong>the people closest to the patient
+        deserve the best intelligence in the world to serve them.</strong>
+      </p>
+      <p class="community-vision sr">
+        When you pass the TMC through this platform, you don't graduate out of the community —
+        you go deeper into it. CEUs, advanced practice resources, clinical case discussions,
+        career opportunities, and eventually: a medical ecosystem built on the idea that
+        intelligence should evolve with resources, not wait for them.
+      </p>
+      <div class="community-tags sr">
+        <span class="ctag">Study Groups</span>
+        <span class="ctag">Protocol Updates</span>
+        <span class="ctag">Career Board</span>
+        <span class="ctag">CEU Tracking</span>
+        <span class="ctag">Clinical Cases</span>
+        <span class="ctag">RT Mentorship</span>
+        <span class="ctag">AI Tools</span>
+        <span class="ctag">Coming Soon</span>
+      </div>
+    </div>
+
+    <!-- Simulated live community feed -->
+    <div class="community-visual sr">
+      <div class="feed-header">
+        <div class="feed-title">Community Feed</div>
+        <div class="feed-live"><div class="live-dot"></div>Live</div>
+      </div>
+      <div class="feed">
+        <div class="feed-item">
+          <div class="feed-avatar av-teal">MR</div>
+          <div>
+            <div class="feed-msg">Just passed the TMC at the high cut score! Dr. Ventus finally made Bohr effect click for me. Thank you all 🙏</div>
+            <div class="feed-meta">2 minutes ago · TMC Wins</div>
+          </div>
+        </div>
+        <div class="feed-item">
+          <div class="feed-avatar av-sky">JL</div>
+          <div>
+            <div class="feed-msg">New AARC Clinical Practice Guideline dropped for HFNC — summarized it in the protocol feed. Key change: ROX index threshold updated.</div>
+            <div class="feed-meta">14 minutes ago · Protocol Updates</div>
+          </div>
+        </div>
+        <div class="feed-item">
+          <div class="feed-avatar av-gold">DV</div>
+          <div>
+            <div class="feed-msg">Anyone reviewing the NBRC 2027 transition matrix? The RT exam domains are restructuring. New emphasis on AI-assisted clinical decision support.</div>
+            <div class="feed-meta">1 hour ago · Exam Intel</div>
+          </div>
+        </div>
+        <div class="feed-item">
+          <div class="feed-avatar av-green">RT</div>
+          <div>
+            <div class="feed-msg">Travel RT posting — ICU position open in San Antonio TX. $65/hr + housing. DM me if interested.</div>
+            <div class="feed-meta">3 hours ago · Career Board</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="hr"></div>
+
+<!-- ══ VISION TEASE ══════════════════════════ -->
+<div class="vision">
+  <div class="vision-surface"></div>
+  <div class="vision-glow"></div>
+  <div class="vision-tag sr">◆ Emberline Medical Ecosystem · Coming</div>
+  <h2 class="vision-h sr">
+    The Future of Medicine<br>
+    Is <em>Intelligence That Evolves.</em>
+  </h2>
+  <p class="vision-p sr">
+    TMC Prep is the first node in a larger system — a medical intelligence network
+    that blends artificial and human expertise to serve clinicians
+    at every stage of their career. We're building it deliberately.
+    Quietly. Without shortcuts. Because the people it serves deserve nothing less.
+  </p>
+  <div class="vision-pillars sr">
+    <div class="vpill">
+      <div class="vpill-icon">📚</div>
+      <div class="vpill-title">TMC Prep</div>
+      <div class="vpill-status vs-live">● Live Now</div>
+    </div>
+    <div class="vpill">
+      <div class="vpill-icon">🏥</div>
+      <div class="vpill-title">Vent House™</div>
+      <div class="vpill-status vs-build">◐ Building</div>
+    </div>
+    <div class="vpill">
+      <div class="vpill-icon">👥</div>
+      <div class="vpill-title">RT Community</div>
+      <div class="vpill-status vs-build">◐ Building</div>
+    </div>
+    <div class="vpill">
+      <div class="vpill-icon">🏨</div>
+      <div class="vpill-title">Ember Hospital</div>
+      <div class="vpill-status vs-coming">○ Vision</div>
+    </div>
+    <div class="vpill">
+      <div class="vpill-icon">🤖</div>
+      <div class="vpill-title">Clinical AI</div>
+      <div class="vpill-status vs-coming">○ Vision</div>
+    </div>
+  </div>
+</div>
+
+<div class="hr"></div>
+
+<!-- ══ FOUNDER PROOF ══════════════════════════
+     "I'm not selling you a platform I bought.
+      I'm giving you the tool I wish I had."
+══════════════════════════════════════════ -->
+<div class="founder" id="founder">
+  <div class="founder-inner">
+    <div class="founder-card sr">
+      <div class="fc-init">CL</div>
+      <div class="fc-name">Caleb Littlejohn</div>
+      <div class="fc-role">CRT · Founder · TMC Prep</div>
+      <div class="fc-creds">
+        <div class="fc-cred"><span class="fc-dot">◆</span>Licensed CRT · State-Certified Respiratory Therapist</div>
+        <div class="fc-cred"><span class="fc-dot">◆</span>USAF RT · 88th Medical Operations Sq</div>
+        <div class="fc-cred"><span class="fc-dot">◆</span>Director of RT · MediLodge of Farmington Hills</div>
+        <div class="fc-cred"><span class="fc-dot">◆</span>ACLS · Six Sigma Green Belt · 13+ yrs clinical</div>
+        <div class="fc-cred"><span class="fc-dot">◆</span>Medical School Candidate · U of Bologna, Italy</div>
+      </div>
+    </div>
+
+    <div>
+      <div class="eyebrow sr">05 / Why We Built This</div>
+      <h2 class="founder-h sr">An RT Built This.<br><em>For Every RT.</em></h2>
+      <p class="founder-bio sr">
+        Every question on this platform was written or reviewed by someone who has
+        <strong>actually managed a ventilator at 3am, interpreted the ABG, called the physician,
+        and documented the intervention.</strong> Not an algorithm. Not a textbook author
+        who hasn't touched a patient in 20 years. A working RT.
+      </p>
+      <p class="founder-bio sr">
+        The existing TMC prep platforms treat respiratory therapy like a trivia game.
+        We treat it like what it is: a clinical discipline with life-and-death stakes
+        that deserves preparation built by people who understand those stakes firsthand.
+      </p>
+      <p class="founder-bio sr">
+        And this is just the beginning. TMC Prep is the foundation of something larger —
+        a commitment to the profession from end to end. From student to Senior RT.
+        From the exam room to the ICU to the future of clinical intelligence.
+      </p>
+      <div class="founder-mission sr">
+        <div class="fm-text">"I built TMC Prep because when I was studying for my boards, I wanted something that understood what I actually do. I couldn't find it. So I built it. Win or lose — I honor the process."</div>
+        <div class="fm-attr">— Caleb Littlejohn, CRT · Founder</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="hr"></div>
+
+<!-- ══ PRICING ════════════════════════════════ -->
+<div class="pricing-bg" id="pricing">
+  <div class="pricing-inner">
+    <div class="eyebrow sr" style="justify-content:center">06 / Plans</div>
+    <h2 class="section-h sr" style="text-align:center">Start Free.<br><em>Scale When Ready.</em></h2>
+    <p class="section-p sr" style="text-align:center;margin:1rem auto 0;max-width:460px">Free is real. No credit card, no time limit on the free tier. We believe you should see the quality before you pay for it.</p>
+
+    <div class="pricing-grid">
+      <!-- FREE -->
+      <div class="plan sr">
+        <div class="plan-name">Free</div>
+        <div class="plan-price free-price">$0</div>
+        <div class="plan-desc">Start here. No card required. No expiry.</div>
+        <div class="plan-features">
+          <div class="pf"><span class="pf-check">✓</span><span>20 practice questions/day</span></div>
+          <div class="pf"><span class="pf-check">✓</span><span>All 5 NBRC domains</span></div>
+          <div class="pf"><span class="pf-check">✓</span><span>5 Dr. Ventus AI messages/day</span></div>
+          <div class="pf"><span class="pf-check">✓</span><span>Protocol feed access</span></div>
+          <div class="pf"><span class="pf-check">✓</span><span>Performance tracking</span></div>
+          <div class="pf"><span class="pf-x pf-text">✕</span><span class="pf-text">Classroom lessons</span></div>
+          <div class="pf"><span class="pf-x pf-text">✕</span><span class="pf-text">Unlimited questions</span></div>
+        </div>
+        <a class="plan-cta cta-outline" href="/auth.html">Get Started Free →</a>
+      </div>
+
+      <!-- PRO -->
+      <div class="plan featured sr">
+        <div class="plan-badge">Most Popular</div>
+        <div class="plan-name">Pro</div>
+        <div class="plan-price">$19<span class="per">/mo</span></div>
+        <div class="plan-desc">Everything you need to pass. Unlimited access.</div>
+        <div class="plan-features">
+          <div class="pf"><span class="pf-check">✓</span><span>Unlimited questions</span></div>
+          <div class="pf"><span class="pf-check">✓</span><span>All 5 NBRC domains, full bank</span></div>
+          <div class="pf"><span class="pf-check">✓</span><span>50 Dr. Ventus AI messages/day</span></div>
+          <div class="pf"><span class="pf-check">✓</span><span>Live protocol intelligence</span></div>
+          <div class="pf"><span class="pf-check">✓</span><span>Advanced performance analytics</span></div>
+          <div class="pf"><span class="pf-check">✓</span><span>Community access</span></div>
+          <div class="pf"><span class="pf-x pf-text">✕</span><span class="pf-text">Interactive classroom</span></div>
+        </div>
+        <a class="plan-cta cta-teal" href="/auth.html">Start Pro →</a>
+      </div>
+
+      <!-- CLASSROOM -->
+      <div class="plan sr">
+        <div class="plan-name">Classroom</div>
+        <div class="plan-price">$49<span class="per">/mo</span></div>
+        <div class="plan-desc">Full platform access. The complete study system.</div>
+        <div class="plan-features">
+          <div class="pf"><span class="pf-check">✓</span><span>Everything in Pro</span></div>
+          <div class="pf"><span class="pf-check">✓</span><span>5 interactive domain lessons</span></div>
+          <div class="pf"><span class="pf-check">✓</span><span>Unlimited Dr. Ventus AI</span></div>
+          <div class="pf"><span class="pf-check">✓</span><span>Senior RT advanced track</span></div>
+          <div class="pf"><span class="pf-check">✓</span><span>Slide-by-slide AI tutoring</span></div>
+          <div class="pf"><span class="pf-check">✓</span><span>Priority community features</span></div>
+          <div class="pf"><span class="pf-check">✓</span><span>CEU tracking (coming)</span></div>
+        </div>
+        <a class="plan-cta cta-outline" href="/auth.html">Start Classroom →</a>
+      </div>
+
+      <!-- INSTITUTION -->
+      <div class="plan sr">
+        <div class="plan-name">Institution</div>
+        <div class="plan-price" style="font-size:1.6rem;color:var(--t3)">Custom</div>
+        <div class="plan-desc">For RT programs, hospitals, and education departments.</div>
+        <div class="plan-features">
+          <div class="pf"><span class="pf-check">✓</span><span>Everything in Classroom</span></div>
+          <div class="pf"><span class="pf-check">✓</span><span>Multi-seat licensing</span></div>
+          <div class="pf"><span class="pf-check">✓</span><span>Cohort performance dashboards</span></div>
+          <div class="pf"><span class="pf-check">✓</span><span>Custom question bank integration</span></div>
+          <div class="pf"><span class="pf-check">✓</span><span>Dedicated support</span></div>
+          <div class="pf"><span class="pf-check">✓</span><span>Outcome reporting</span></div>
+          <div class="pf"><span class="pf-check">✓</span><span>NBRC pass rate guarantees</span></div>
+        </div>
+        <a class="plan-cta cta-outline" href="mailto:education@emberlineworld.com">Contact Us →</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="hr"></div>
+
+<!-- ══ FINAL CTA ══════════════════════════════ -->
+<div class="cta-section" id="start">
+  <div class="cta-card sr">
+    <div class="cta-glow"></div>
+    <div class="cta-ey">Start Your Journey</div>
+    <h2 class="cta-h">Your Credential<br>Is <em>Waiting.</em></h2>
+    <p class="cta-p">
+      No credit card. No time limit on free. Just the most RT-authentic
+      exam prep platform on the internet — ready when you are.
+      The community is here. The tools are live. All you have to do is start.
+    </p>
+    <div class="cta-form" id="cta-form">
+      <input class="cta-in" type="email" id="cta-email" placeholder="your@email.com">
+      <button class="cta-btn" onclick="submitCTA()">Create Free Account →</button>
+    </div>
+    <div class="cta-legal">
+      By signing up you agree to our Terms of Service and Privacy Policy.
+      NBRC® is a registered trademark. TMC Prep is not affiliated with or endorsed by NBRC.
+    </div>
+  </div>
+</div>
+
+<!-- ══ FOOTER ══════════════════════════════════ -->
+<footer>
+  <div class="footer-main">
+    <div class="footer-brand">
+      <div class="fb-logo">TMC Prep</div>
+      <div class="fb-sub">
+        The only NBRC TMC exam prep platform built by a licensed Respiratory Therapist.
+        Part of the Emberline Medical Ecosystem.
+      </div>
+      <div class="fb-ember">
+        Part of <a href="https://emberlineworld.com">Emberline Holdings</a> ·
+        <a href="https://emberlinegroup.org">Institutional Partnerships</a>
+      </div>
+    </div>
+    <div class="footer-col">
+      <div class="fc-head">Platform</div>
+      <div class="fc-links">
+        <a class="fc-link" href="/auth.html">Sign Up Free</a>
+        <a class="fc-link" href="#features">Features</a>
+        <a class="fc-link" href="#pricing">Pricing</a>
+        <a class="fc-link fc-link new" href="#community">Community</a>
+        <a class="fc-link" href="#founder">About</a>
+      </div>
+    </div>
+    <div class="footer-col">
+      <div class="fc-head">Study</div>
+      <div class="fc-links">
+        <a class="fc-link" href="/auth.html">Patient Data Domain</a>
+        <a class="fc-link" href="/auth.html">Therapy & Intervention</a>
+        <a class="fc-link" href="/auth.html">Troubleshooting & QC</a>
+        <a class="fc-link" href="/auth.html">Infection Control</a>
+        <a class="fc-link" href="/auth.html">Equipment</a>
+      </div>
+    </div>
+    <div class="footer-col">
+      <div class="fc-head">Emberline</div>
+      <div class="fc-links">
+        <a class="fc-link" href="https://emberlineworld.com">Emberline Holdings</a>
+        <a class="fc-link" href="https://emberlinegroup.org">Institutional Partners</a>
+        <a class="fc-link" href="https://nimbus.emberlineworld.com">Nimbus Aesthetics</a>
+        <a class="fc-link" href="mailto:hello@emberlineworld.com">Contact</a>
+        <a class="fc-link" href="mailto:education@emberlineworld.com">Institutions</a>
+      </div>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <div class="fb-copy">© 2026 Emberline Holdings Company LLC · Wyoming · TMC Prep</div>
+    <div class="fb-disclaimer">
+      NBRC® is a registered trademark of the National Board for Respiratory Care.
+      TMC Prep is not affiliated with, sponsored by, or endorsed by the NBRC.
+      All content is created for educational purposes.
+    </div>
+  </div>
+</footer>
+
+<script>
+/* CURSOR */
+const cdot=document.getElementById('cdot'),cring=document.getElementById('cring');
+let mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;cdot.style.left=mx+'px';cdot.style.top=my+'px';});
+(function tick(){rx+=(mx-rx)*.1;ry+=(my-ry)*.1;cring.style.left=rx+'px';cring.style.top=ry+'px';requestAnimationFrame(tick);})();
+document.querySelectorAll('a,button').forEach(el=>{
+  el.addEventListener('mouseenter',()=>{cring.style.width='44px';cring.style.height='44px';cring.style.borderColor='rgba(11,191,184,.75)';});
+  el.addEventListener('mouseleave',()=>{cring.style.width='28px';cring.style.height='28px';cring.style.borderColor='rgba(11,191,184,.42)';});
+});
+
+/* NAV */
+window.addEventListener('scroll',()=>{document.getElementById('nav').classList.toggle('solid',window.scrollY>50);});
+
+/* THREE.JS — TEAL MEDICAL COSMOS */
+(function(){
+  const canvas=document.getElementById('cosmos');
+  const renderer=new THREE.WebGLRenderer({canvas,antialias:true,alpha:true});
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio,2));
+  renderer.setSize(window.innerWidth,window.innerHeight);
+  renderer.setClearColor(0x000000,0);
+  const scene=new THREE.Scene();
+  const camera=new THREE.PerspectiveCamera(58,window.innerWidth/window.innerHeight,.1,400);
+  camera.position.z=8;
+
+  /* Star field — multi layer */
+  function mkStars(n,spread,sMin,sMax,hex,op){
+    const g=new THREE.BufferGeometry();
+    const p=new Float32Array(n*3),s=new Float32Array(n);
+    for(let i=0;i<n;i++){
+      const th=Math.random()*Math.PI*2,ph=Math.acos(2*Math.random()-1);
+      const r=Math.cbrt(Math.random())*spread;
+      p[i*3]=r*Math.sin(ph)*Math.cos(th);p[i*3+1]=r*Math.sin(ph)*Math.sin(th);p[i*3+2]=(Math.random()-.5)*spread*.2;
+      s[i]=Math.random()*(sMax-sMin)+sMin;
+    }
+    g.setAttribute('position',new THREE.BufferAttribute(p,3));
+    g.setAttribute('size',new THREE.BufferAttribute(s,1));
+    return new THREE.Points(g,new THREE.ShaderMaterial({transparent:true,
+      uniforms:{col:{value:new THREE.Color(hex)},op:{value:op}},
+      vertexShader:`attribute float size;void main(){vec4 mv=modelViewMatrix*vec4(position,1.);float d=clamp(-mv.z,.5,200.);gl_PointSize=size*(275./d);gl_Position=projectionMatrix*mv;}`,
+      fragmentShader:`uniform vec3 col;uniform float op;void main(){vec2 uv=gl_PointCoord-.5;float d=length(uv)*2.;float c=smoothstep(.18,.0,d);float h=smoothstep(1.,.18,d)*.3;float a=(c+h)*op;vec3 cc=mix(col*.85,col*1.15,c);gl_FragColor=vec4(cc,a);}`
+    }));
+  }
+
+  const s1=mkStars(2800,28,.3,.9,0xB8D0E8,.38);   // cool background
+  const s2=mkStars(600,20,.7,1.7,0xECF0F8,.72);   // warm white
+  const s3=mkStars(90,14,1.3,2.8,0xFFFFFF,.9);    // bright
+  const s4=mkStars(55,11,1.2,2.4,0x0BBFB8,.92);   // teal sparkles
+  const s5=mkStars(35,10,1.0,2.2,0x38A8E8,.85);   // sky blue
+  scene.add(s1,s2,s3,s4,s5);
+
+  /* Nebula — teal/medical palette */
+  function mkNeb(w,h,hex,str,x,y,z,rx,ry){
+    const g=new THREE.PlaneGeometry(w,h);
+    const m=new THREE.ShaderMaterial({transparent:true,side:THREE.DoubleSide,depthWrite:false,
+      uniforms:{col:{value:new THREE.Color(hex)},str:{value:str},t:{value:0}},
+      vertexShader:`varying vec2 vUv;void main(){vUv=uv;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.);}`,
+      fragmentShader:`varying vec2 vUv;uniform vec3 col;uniform float str;uniform float t;void main(){vec2 uv=vUv-.5;float r=length(uv*vec2(1.,1.3));float b=sin(t*.24+r*2.6)*.11+.89;float w=sin(uv.x*7.+t*.12)*.05+sin(uv.y*5.-t*.09)*.04;float a=exp(-(r+w)*2.7)*str*b;float c=exp(-r*7.)*str*.4;gl_FragColor=vec4(col,clamp(a+c,0.,.34));}`
+    });
+    const mesh=new THREE.Mesh(g,m);
+    mesh.position.set(x,y,z);mesh.rotation.x=rx;mesh.rotation.y=ry;
+    return{mesh,m};
+  }
+
+  // Deep teal — right side behind hero
+  const n1=mkNeb(22,16,0x053838,.22,3,0,-5,.12,-.08);
+  // Sky blue — upper left
+  const n2=mkNeb(16,12,0x082840,.17,-3,2,-6,-.1,.16);
+  // Emerald accent
+  const n3=mkNeb(14,11,0x043022,.14,-2,-2,-7,.08,.1);
+  // Deep navy fill
+  const n4=mkNeb(28,20,0x040C18,.2,0,0,-8,0,0);
+  // Faint teal bloom center
+  const n5=mkNeb(20,14,0x061820,.12,0,0,-9,0,0);
+  scene.add(n1.mesh,n2.mesh,n3.mesh,n4.mesh,n5.mesh);
+  const nebs=[n1,n2,n3,n4,n5];
+
+  // Rings
+  function mkRing(r,op,hex,rx,ry){
+    const g=new THREE.TorusGeometry(r,.002,2,280);
+    const m=new THREE.MeshBasicMaterial({color:new THREE.Color(hex),transparent:true,opacity:op});
+    const mesh=new THREE.Mesh(g,m);mesh.rotation.x=rx;mesh.rotation.y=ry;return mesh;
+  }
+  const r1=mkRing(5.8,.1,0x0BBFB8,Math.PI*.35,0);
+  const r2=mkRing(8,.055,0x38A8E8,Math.PI*.5,Math.PI*.12);
+  scene.add(r1,r2);
+
+  let tx=0,ty=0,cx=0,cy=0,sY=0;
+  document.addEventListener('mousemove',e=>{tx=(e.clientX/window.innerWidth-.5)*.7;ty=(e.clientY/window.innerHeight-.5)*.45;});
+  window.addEventListener('scroll',()=>{sY=window.scrollY;});
+
+  let t=0;
+  (function loop(){
+    requestAnimationFrame(loop);t+=.005;
+    cx+=(tx-cx)*.04;cy+=(ty-cy)*.04;
+    s1.rotation.y=t*.004+cx*.12;s1.rotation.x=cy*.08;
+    s2.rotation.y=t*.007+cx*.18;s2.rotation.x=t*.002+cy*.11;
+    s3.rotation.y=t*.011+cx*.25;s3.rotation.x=t*.004+cy*.15;
+    s4.rotation.y=t*.016+cx*.3;s5.rotation.y=t*.02+cx*.35;
+    nebs.forEach((n,i)=>{n.m.uniforms.t.value=t+i*1.5;});
+    n1.mesh.rotation.z=t*.006;n2.mesh.rotation.z=-t*.004;
+    r1.rotation.z=t*.018;r1.material.opacity=.07+Math.sin(t*.38)*.035;
+    r2.rotation.z=-t*.011;
+    camera.position.x=cx*.55;camera.position.y=-cy*.38-sY*.0013;
+    renderer.render(scene,camera);
+  })();
+  window.addEventListener('resize',()=>{camera.aspect=window.innerWidth/window.innerHeight;camera.updateProjectionMatrix();renderer.setSize(window.innerWidth,window.innerHeight);});
+})();
+
+/* SCROLL REVEAL */
+const obs=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');obs.unobserve(e.target);}});},{threshold:.06,rootMargin:'0px 0px -16px 0px'});
+document.querySelectorAll('.sr').forEach(el=>obs.observe(el));
+
+/* SUPABASE */
+const SB='https://rqytpqaswofdwhmsaykn.supabase.co';
+const SK='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJxeXRwcWFzd29mZHdobXNheWtuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI5MTU5MzksImV4cCI6MjA4ODQ5MTkzOX0.vzsT4oWSxKoWzfDmw7SaCaImA6_SshYwuLA9_nmNHtg';
+
+function showToast(m){const t=document.getElementById('toast');t.textContent=m;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),4500);}
+
+async function submitCTA(){
+  const email=document.getElementById('cta-email').value.trim();
+  if(!email||!email.includes('@')){showToast('Please enter a valid email to create your account.');return;}
+  try{
+    await fetch(`${SB}/rest/v1/email_captures`,{method:'POST',headers:{'Content-Type':'application/json','apikey':SK,'Authorization':'Bearer '+SK},body:JSON.stringify({email,source:'tmc-landing-cta'})});
+  }catch(e){}
+  // Redirect to auth page
+  window.location.href=`/auth.html?email=${encodeURIComponent(email)}`;
+}
+
+// Allow Enter key on email field
+document.addEventListener('DOMContentLoaded',()=>{
+  const field=document.getElementById('cta-email');
+  if(field) field.addEventListener('keydown',e=>{if(e.key==='Enter')submitCTA();});
+});
+
+document.querySelectorAll('a[href^="#"]').forEach(a=>{
+  a.addEventListener('click',e=>{
+    const t=document.querySelector(a.getAttribute('href'));
+    if(t){e.preventDefault();t.scrollIntoView({behavior:'smooth'});}
+  });
+});
+</script>
+</body>
+</html>
