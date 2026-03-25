@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TMC Prep — Built by an RT. For Every RT.</title>
+<meta name="description" content="The only NBRC TMC exam prep platform built by a licensed Respiratory Therapist. AI tutoring, 1,200+ questions, community. Pass the TMC.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Outfit:wght@300;400;500;600&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<style>
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   TMC PREP — Marketing Landing Page
+   CORE RULE: All content visible by default.
+   Animations are CSS-only enhancement — never gatekeepers.
+   No JS-dependent visibility. No scroll reveal hiding.
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+:root{
+  --void:#03060e;--deep:#060c1a;
+  --glass:rgba(6,12,26,0.75);--surface:rgba(255,255,255,0.03);
+  --border:rgba(255,255,255,0.07);--border-t:rgba(11,191,184,0.25);
+  --t1:#FFFFFF;--t2:#DCE8F8;--t3:#8BA8C8;--t4:rgba(139,168,200,0.5);
+  --teal:#0BBFB8;--teal-l:#40DDD6;--teal-d:#078880;
+  --sky:#38A8E8;--gold:#D4A83C;--green:#34C97A;
+  --max:1160px;
+}
+body{background:var(--void);color:var(--t2);font-family:'Outfit',sans-serif;font-weight:400;overflow-x:hidden;-webkit-font-smoothing:antialiased;cursor:none}
+#cosmos{position:fixed;inset:0;z-index:0;pointer-events:none}
+.vignette{position:fixed;inset:0;z-index:1;pointer-events:none;
+  background:radial-gradient(ellipse 110% 100% at 50% 0%,transparent 30%,rgba(3,6,14,0.7) 100%),
+             radial-gradient(ellipse 55% 100% at 0% 50%,rgba(3,6,14,0.45) 0%,transparent 55%),
+             radial-gradient(ellipse 55% 100% at 100% 50%,rgba(3,6,14,0.45) 0%,transparent 55%)}
+#cdot{position:fixed;z-index:9999;width:5px;height:5px;background:var(--teal);border-radius:50%;pointer-events:none;transform:translate(-50%,-50%)}
+#cring{position:fixed;z-index:9998;width:28px;height:28px;border:1px solid rgba(11,191,184,0.42);border-radius:50%;pointer-events:none;transform:translate(-50%,-50%);transition:width .2s,height .2s,border-color .2s}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:200;height:62px;display:flex;align-items:center;justify-content:space-between;padding:0 clamp(1.5rem,4vw,3rem);background:linear-gradient(to bottom,rgba(3,6,14,.97),transparent);border-bottom:1px solid transparent;transition:border-color .3s,background .3s}
+nav.solid{border-color:var(--border);background:rgba(3,6,14,.97)}
+.nav-logo{display:flex;align-items:center;gap:.7rem;text-decoration:none}
+.nav-mark{width:32px;height:32px;background:linear-gradient(135deg,var(--teal),var(--sky));border-radius:8px;display:flex;align-items:center;justify-content:center;font-family:'DM Mono',monospace;font-size:.68rem;font-weight:700;color:white}
+.nav-name{font-family:'DM Mono',monospace;font-size:.66rem;letter-spacing:.22em;text-transform:uppercase;color:var(--teal)}
+.nav-sub{font-family:'DM Mono',monospace;font-size:.48rem;letter-spacing:.12em;color:var(--t4)}
+.nav-links{display:flex;align-items:center;gap:.15rem}
+.nl{font-family:'DM Mono',monospace;font-size:.54rem;letter-spacing:.14em;text-transform:uppercase;color:var(--t3);text-decoration:none;padding:.38rem .75rem;border-radius:3px;transition:color .2s,background .2s}
+.nl:hover{color:var(--t1);background:var(--surface)}
+.nl-cta{font-family:'DM Mono',monospace;font-size:.54rem;letter-spacing:.16em;text-transform:uppercase;color:var(--void);background:var(--teal);padding:.45rem 1.15rem;border-radius:3px;text-decoration:none;margin-left:.5rem;transition:background .2s}
+.nl-cta:hover{background:var(--teal-l)}
+
+/* HERO — CSS animations on content that's already visible */
+.hero{position:relative;z-index:10;min-height:100vh;display:flex;align-items:center;padding:7rem clamp(1.5rem,5vw,4rem) 5rem}
+.hero-bg{position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse 75% 90% at 12% 50%,rgba(4,8,20,.75) 0%,transparent 70%),radial-gradient(ellipse 55% 55% at 50% 50%,rgba(4,8,20,.35) 0%,transparent 80%)}
+.hero-content{position:relative;z-index:1;max-width:680px}
+
+.hero-kicker{display:inline-flex;align-items:center;gap:.7rem;font-family:'DM Mono',monospace;font-size:.56rem;letter-spacing:.28em;text-transform:uppercase;color:var(--teal);margin-bottom:1.75rem;animation:fadeUp .7s .1s ease both}
+.hero-kicker::before{content:'●';font-size:.35rem;animation:blink 2s infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+
+.hero-h1{font-family:'Playfair Display',serif;font-weight:700;font-size:clamp(3rem,7vw,6.5rem);line-height:.95;letter-spacing:-.025em;color:var(--t1);margin-bottom:1.4rem;text-shadow:0 4px 40px rgba(0,0,0,.45);animation:fadeUp 1s .3s cubic-bezier(.16,1,.3,1) both}
+.hero-h1 em{font-style:italic;background:linear-gradient(135deg,var(--teal),var(--sky),var(--teal-l));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+
+.hero-desc{font-size:clamp(.95rem,1.8vw,1.12rem);color:var(--t2);font-weight:300;line-height:1.78;max-width:520px;margin-bottom:2.25rem;text-shadow:0 2px 16px rgba(0,0,0,.35);animation:fadeUp .9s .55s ease both}
+
+.trust-pill{display:inline-flex;align-items:center;gap:.85rem;background:rgba(11,191,184,.07);border:1px solid var(--border-t);border-radius:4px;padding:.85rem 1.25rem;margin-bottom:2.25rem;width:fit-content;animation:fadeUp .8s .75s ease both}
+.trust-badge{font-family:'DM Mono',monospace;font-size:.5rem;letter-spacing:.16em;text-transform:uppercase;color:var(--void);background:var(--teal);padding:.2rem .55rem;border-radius:3px;white-space:nowrap}
+.trust-text{font-size:.84rem;color:var(--t3);font-weight:300;line-height:1.4}
+.trust-text strong{color:var(--t1);font-weight:500}
+.hero-btns{display:flex;gap:.9rem;flex-wrap:wrap;animation:fadeUp .8s .95s ease both}
+
+.btn-primary{display:inline-block;text-decoration:none;font-family:'DM Mono',monospace;font-size:.58rem;letter-spacing:.2em;text-transform:uppercase;color:var(--void);background:linear-gradient(135deg,var(--teal),var(--sky));padding:1rem 2.1rem;border-radius:3px;transition:opacity .2s,transform .2s}
+.btn-primary:hover{opacity:.88;transform:translateY(-2px)}
+.btn-secondary{display:inline-block;text-decoration:none;font-family:'DM Mono',monospace;font-size:.58rem;letter-spacing:.2em;text-transform:uppercase;color:var(--t2);border:1px solid var(--border);padding:1rem 2.1rem;border-radius:3px;transition:color .25s,border-color .25s,transform .2s}
+.btn-secondary:hover{color:var(--teal);border-color:var(--border-t);transform:translateY(-2px)}
+
+.hero-stats{position:absolute;right:clamp(2rem,6vw,8rem);top:50%;transform:translateY(-50%);display:flex;flex-direction:column;gap:1rem;z-index:1;animation:fadeUp .9s 1.1s ease both}
+.stat-card{background:var(--glass);border:1px solid var(--border);border-radius:4px;padding:1.5rem 1.75rem;text-align:center;min-width:138px;backdrop-filter:blur(16px);position:relative;overflow:hidden}
+.stat-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--teal),var(--sky))}
+.stat-n{font-family:'Playfair Display',serif;font-weight:700;font-size:2.2rem;color:var(--t1);line-height:1}
+.stat-n .u{font-size:.7em;color:var(--teal)}
+.stat-l{font-family:'DM Mono',monospace;font-size:.44rem;letter-spacing:.18em;text-transform:uppercase;color:var(--t4);margin-top:.35rem}
+
+/* DIVIDER */
+.hr{position:relative;z-index:10;height:1px;background:var(--border)}
+.hr::after{content:'';position:absolute;top:0;left:50%;transform:translateX(-50%);width:100px;height:1px;background:linear-gradient(90deg,transparent,var(--teal),transparent)}
+
+/* SECTION WRAPPERS */
+.sec{position:relative;z-index:10;padding:clamp(4rem,8vw,7rem) clamp(1.5rem,4vw,3rem);max-width:var(--max);margin:0 auto}
+.sec-dark{position:relative;z-index:10;background:rgba(6,12,26,.65);backdrop-filter:blur(8px);border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
+.sec-dark-inner{max-width:var(--max);margin:0 auto;padding:clamp(4rem,8vw,7rem) clamp(1.5rem,4vw,3rem)}
+
+.eyebrow{font-family:'DM Mono',monospace;font-size:.52rem;letter-spacing:.28em;text-transform:uppercase;color:var(--teal);margin-bottom:1rem;display:flex;align-items:center;gap:.65rem}
+.eyebrow::before{content:'';width:18px;height:1px;background:var(--teal)}
+.sec-h{font-family:'Playfair Display',serif;font-weight:700;font-size:clamp(2.2rem,4.5vw,4.2rem);line-height:1.02;letter-spacing:-.02em;color:var(--t1);text-shadow:0 2px 24px rgba(0,0,0,.35)}
+.sec-h em{font-style:italic;color:var(--teal)}
+.sec-p{font-size:clamp(.88rem,1.6vw,1.02rem);color:var(--t3);line-height:1.82;max-width:460px;font-weight:300;margin-top:.85rem}
+
+/* IDENTITY */
+.id-grid{display:grid;grid-template-columns:1fr 1fr;gap:5rem;align-items:center}
+.id-quote{font-family:'Playfair Display',serif;font-weight:400;font-style:italic;font-size:clamp(1.5rem,3vw,2.6rem);line-height:1.35;color:var(--t1);text-shadow:0 2px 24px rgba(0,0,0,.4)}
+.id-quote em{font-style:normal;font-weight:700;color:var(--teal)}
+.id-attr{font-family:'DM Mono',monospace;font-size:.54rem;letter-spacing:.18em;text-transform:uppercase;color:var(--t4);margin-top:1.35rem}
+.facts{display:flex;flex-direction:column;gap:1.1rem}
+.fact{background:var(--glass);border:1px solid var(--border);border-radius:4px;padding:1.35rem 1.6rem;backdrop-filter:blur(12px);display:flex;align-items:flex-start;gap:.9rem;transition:border-color .3s}
+.fact:hover{border-color:var(--border-t)}
+.fact-icon{font-size:1.3rem;flex-shrink:0}
+.fact-title{font-size:.92rem;font-weight:600;color:var(--t1);margin-bottom:.26rem}
+.fact-desc{font-size:.82rem;color:var(--t3);line-height:1.65;font-weight:300}
+
+/* FEATURES */
+.feat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border);border:1px solid var(--border);border-radius:4px;overflow:hidden;margin-top:3rem}
+.feat{background:var(--deep);padding:2.1rem 1.85rem;transition:background .3s;position:relative;overflow:hidden}
+.feat:hover{background:rgba(11,30,56,.98)}
+.feat::after{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--teal),var(--sky));transform:scaleX(0);transform-origin:left;transition:transform .4s ease}
+.feat:hover::after{transform:scaleX(1)}
+.feat-icon{font-size:1.35rem;margin-bottom:.85rem}
+.feat-title{font-size:.96rem;font-weight:600;color:var(--t1);margin-bottom:.42rem}
+.feat-desc{font-size:.85rem;color:var(--t3);line-height:1.72;font-weight:300}
+.feat-tag{display:inline-block;margin-top:.65rem;font-family:'DM Mono',monospace;font-size:.45rem;letter-spacing:.15em;text-transform:uppercase;color:var(--teal);border:1px solid var(--border-t);padding:.16rem .5rem;border-radius:3px}
+
+/* PROOF */
+.proof-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.35rem;margin-top:3rem}
+.proof-card{background:var(--glass);border:1px solid var(--border);border-radius:4px;padding:1.85rem 1.7rem;backdrop-filter:blur(12px);transition:border-color .3s}
+.proof-card:hover{border-color:var(--border-t)}
+.proof-stars{color:var(--gold);font-size:.86rem;margin-bottom:.88rem;letter-spacing:.1em}
+.proof-text{font-size:.88rem;color:var(--t2);line-height:1.72;font-weight:300;margin-bottom:1.15rem;font-style:italic}
+.proof-author{display:flex;align-items:center;gap:.68rem}
+.proof-av{width:33px;height:33px;border-radius:50%;background:linear-gradient(135deg,var(--teal-d),var(--sky));display:flex;align-items:center;justify-content:center;font-family:'DM Mono',monospace;font-size:.58rem;font-weight:700;color:white}
+.proof-name{font-size:.77rem;font-weight:500;color:var(--t1)}
+.proof-role{font-family:'DM Mono',monospace;font-size:.47rem;letter-spacing:.12em;text-transform:uppercase;color:var(--t4)}
+
+/* COMMUNITY */
+.com-grid{display:grid;grid-template-columns:1fr 1fr;gap:5rem;align-items:center;margin-top:3rem}
+.com-text p{font-size:clamp(.88rem,1.7vw,1.03rem);color:var(--t2);line-height:1.82;font-weight:300;margin-bottom:1.15rem}
+.com-text p strong{color:var(--t1);font-weight:500}
+.ctags{display:flex;flex-wrap:wrap;gap:.52rem;margin-top:1.2rem}
+.ctag{font-family:'DM Mono',monospace;font-size:.48rem;letter-spacing:.14em;text-transform:uppercase;color:var(--t3);border:1px solid var(--border);padding:.25rem .7rem;border-radius:99px}
+.feed-card{background:var(--glass);border:1px solid var(--border);border-radius:4px;padding:1.8rem;backdrop-filter:blur(12px);position:relative;overflow:hidden}
+.feed-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--teal),var(--sky),var(--gold))}
+.feed-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:.95rem}
+.feed-title{font-size:.77rem;font-weight:600;color:var(--t1)}
+.live-badge{display:flex;align-items:center;gap:.36rem;font-family:'DM Mono',monospace;font-size:.43rem;letter-spacing:.14em;text-transform:uppercase;color:var(--green)}
+.live-dot{width:6px;height:6px;background:var(--green);border-radius:50%;animation:blink 1.5s infinite}
+.feed-items{display:flex;flex-direction:column;gap:.75rem}
+.fi{display:flex;align-items:flex-start;gap:.75rem;padding:.75rem;border-radius:3px;background:rgba(255,255,255,.025);border:1px solid var(--border);transition:border-color .3s}
+.fi:hover{border-color:var(--border-t)}
+.fi-av{width:27px;height:27px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-family:'DM Mono',monospace;font-size:.46rem;font-weight:700;color:white}
+.av-t{background:linear-gradient(135deg,var(--teal-d),var(--teal))}
+.av-s{background:linear-gradient(135deg,var(--sky),#1E6FB8)}
+.av-g{background:linear-gradient(135deg,var(--gold),#9A6A10)}
+.av-gr{background:linear-gradient(135deg,var(--green),#1A8844)}
+.fi-msg{font-size:.77rem;color:var(--t2);line-height:1.5}
+.fi-meta{font-family:'DM Mono',monospace;font-size:.43rem;letter-spacing:.1em;color:var(--t4);margin-top:.26rem}
+
+/* VISION */
+.vision{position:relative;z-index:10;padding:clamp(4rem,8vw,7rem) clamp(1.5rem,4vw,3rem);text-align:center;overflow:hidden}
+.vision-glow{position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse 70% 60% at 50% 50%,rgba(6,12,26,.78) 0%,transparent 85%),radial-gradient(ellipse 55% 45% at 50% 50%,rgba(11,191,184,.045) 0%,transparent 60%)}
+.vision-tag{position:relative;z-index:1;display:inline-flex;align-items:center;gap:.7rem;font-family:'DM Mono',monospace;font-size:.52rem;letter-spacing:.28em;text-transform:uppercase;color:var(--gold);margin-bottom:1.85rem;background:rgba(212,168,60,.07);border:1px solid rgba(212,168,60,.22);padding:.43rem 1rem;border-radius:99px}
+.vision-h{position:relative;z-index:1;font-family:'Playfair Display',serif;font-weight:700;font-size:clamp(2rem,4.5vw,4.2rem);line-height:1.05;letter-spacing:-.02em;color:var(--t1);max-width:800px;margin:0 auto 1.4rem;text-shadow:0 4px 40px rgba(0,0,0,.45)}
+.vision-h em{font-style:italic;color:var(--gold)}
+.vision-p{position:relative;z-index:1;font-size:clamp(.93rem,1.8vw,1.1rem);color:var(--t3);line-height:1.82;max-width:580px;margin:0 auto 2.75rem;font-weight:300}
+.pillars{position:relative;z-index:1;display:flex;justify-content:center;gap:1rem;flex-wrap:wrap}
+.pill{background:var(--glass);border:1px solid var(--border);border-radius:4px;padding:1.2rem 1.4rem;backdrop-filter:blur(12px);text-align:center;min-width:144px;transition:border-color .3s,background .3s}
+.pill:hover{border-color:var(--border-t);background:rgba(11,191,184,.04)}
+.pill-icon{font-size:1.2rem;margin-bottom:.42rem}
+.pill-name{font-size:.82rem;font-weight:600;color:var(--t1);margin-bottom:.2rem}
+.pill-status{font-family:'DM Mono',monospace;font-size:.43rem;letter-spacing:.14em;text-transform:uppercase}
+.s-live{color:var(--green)}.s-build{color:var(--gold)}.s-coming{color:var(--t4)}
+
+/* FOUNDER */
+.founder-grid{display:grid;grid-template-columns:295px 1fr;gap:5rem;align-items:start}
+.founder-card{background:var(--glass);border:1px solid var(--border);border-radius:4px;padding:2.1rem;backdrop-filter:blur(16px);position:relative;overflow:hidden}
+.founder-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--teal),var(--sky))}
+.fc-init{font-family:'Playfair Display',serif;font-size:3.5rem;font-weight:700;color:rgba(11,191,184,.1);margin-bottom:1.1rem;line-height:1}
+.fc-name{font-family:'Playfair Display',serif;font-weight:600;font-size:1.45rem;color:var(--t1);margin-bottom:.26rem}
+.fc-role{font-family:'DM Mono',monospace;font-size:.5rem;letter-spacing:.18em;text-transform:uppercase;color:var(--teal);margin-bottom:1.3rem}
+.fc-creds{display:flex;flex-direction:column;gap:.42rem}
+.fc-cred{font-family:'DM Mono',monospace;font-size:.52rem;letter-spacing:.05em;color:var(--t4);display:flex;align-items:flex-start;gap:.58rem}
+.fc-dot{color:var(--teal);flex-shrink:0;font-size:.42rem;margin-top:.12em}
+.founder-h{font-family:'Playfair Display',serif;font-weight:700;font-size:clamp(1.8rem,3.5vw,2.9rem);color:var(--t1);line-height:1.1;margin-bottom:1.35rem}
+.founder-h em{font-style:italic;color:var(--teal)}
+.founder-bio{font-size:.97rem;color:var(--t2);line-height:1.85;font-weight:300;margin-bottom:1.1rem}
+.founder-bio strong{color:var(--t1);font-weight:500}
+.founder-mission{background:rgba(11,191,184,.06);border:1px solid var(--border-t);border-radius:4px;padding:1.4rem;margin-top:1.8rem}
+.fm-text{font-family:'Playfair Display',serif;font-style:italic;font-size:.98rem;color:var(--t2);line-height:1.7}
+.fm-attr{font-family:'DM Mono',monospace;font-size:.47rem;letter-spacing:.18em;text-transform:uppercase;color:var(--teal);margin-top:.68rem}
+
+/* PRICING */
+.price-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1.35rem;margin-top:3rem}
+.plan{background:var(--glass);border:1px solid var(--border);border-radius:4px;padding:1.85rem 1.65rem;backdrop-filter:blur(14px);position:relative;overflow:hidden;transition:border-color .3s,transform .3s}
+.plan:hover{transform:translateY(-4px)}
+.plan.hot{border-color:var(--border-t)}
+.plan.hot::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--teal),var(--sky))}
+.plan-badge{font-family:'DM Mono',monospace;font-size:.44rem;letter-spacing:.18em;text-transform:uppercase;color:var(--void);background:var(--teal);padding:.18rem .56rem;border-radius:3px;display:inline-block;margin-bottom:.88rem}
+.plan-name{font-family:'Playfair Display',serif;font-weight:600;font-size:1.22rem;color:var(--t1);margin-bottom:.42rem}
+.plan-price{font-family:'Playfair Display',serif;font-size:2.3rem;font-weight:700;color:var(--t1);line-height:1;margin-bottom:.2rem}
+.plan-price .per{font-size:.86rem;color:var(--t4);font-weight:300;font-family:'Outfit',sans-serif}
+.plan-price.fp{font-size:1.7rem;color:var(--teal)}
+.plan-price.cp{font-size:1.5rem;color:var(--t3)}
+.plan-desc{font-size:.79rem;color:var(--t4);margin-bottom:1.35rem;font-weight:300;line-height:1.5}
+.plan-feats{display:flex;flex-direction:column;gap:.48rem;margin-bottom:1.6rem}
+.pf{display:flex;align-items:flex-start;gap:.52rem;font-size:.8rem;color:var(--t3);line-height:1.4}
+.ck{color:var(--teal);flex-shrink:0;font-size:.66rem;margin-top:.18em}
+.xx{color:var(--t4);flex-shrink:0;font-size:.66rem;margin-top:.18em}
+.pf-dim{color:var(--t4)}
+.plan-cta{display:block;text-align:center;text-decoration:none;font-family:'DM Mono',monospace;font-size:.54rem;letter-spacing:.18em;text-transform:uppercase;padding:.8rem;border-radius:3px;transition:all .2s}
+.cta-fill{background:var(--teal);color:var(--void)}.cta-fill:hover{background:var(--teal-l)}
+.cta-line{border:1px solid var(--border);color:var(--t3)}.cta-line:hover{border-color:var(--border-t);color:var(--teal)}
+
+/* FINAL CTA */
+.cta-wrap{max-width:700px;margin:0 auto;background:var(--glass);border:1px solid var(--border);border-radius:4px;padding:clamp(3rem,6vw,5rem);text-align:center;backdrop-filter:blur(20px);position:relative;overflow:hidden}
+.cta-wrap::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--teal),var(--sky),var(--gold))}
+.cta-glow{position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse 80% 50% at 50% -10%,rgba(11,191,184,.065) 0%,transparent 60%)}
+.cta-ey{position:relative;z-index:1;font-family:'DM Mono',monospace;font-size:.52rem;letter-spacing:.28em;text-transform:uppercase;color:var(--teal);margin-bottom:1.2rem}
+.cta-h{position:relative;z-index:1;font-family:'Playfair Display',serif;font-weight:700;font-size:clamp(2rem,4vw,3.4rem);color:var(--t1);line-height:1.1;margin-bottom:.88rem;text-shadow:0 2px 24px rgba(0,0,0,.3)}
+.cta-h em{font-style:italic;color:var(--teal)}
+.cta-p{position:relative;z-index:1;font-size:.92rem;color:var(--t3);line-height:1.75;margin-bottom:2rem;font-weight:300}
+.cta-form{position:relative;z-index:1;display:flex;border:1px solid var(--border);border-radius:3px;overflow:hidden;max-width:430px;margin:0 auto;transition:border-color .3s}
+.cta-form:focus-within{border-color:rgba(11,191,184,.42)}
+.cta-in{flex:1;background:transparent;border:none;color:var(--t1);font-family:'DM Mono',monospace;font-size:.68rem;letter-spacing:.06em;padding:.9rem 1.1rem;outline:none}
+.cta-in::placeholder{color:var(--t4)}
+.cta-btn{background:linear-gradient(135deg,var(--teal),var(--sky));color:var(--void);border:none;font-family:'DM Mono',monospace;font-size:.54rem;letter-spacing:.18em;text-transform:uppercase;padding:.9rem 1.2rem;cursor:pointer;white-space:nowrap;transition:opacity .2s}
+.cta-btn:hover{opacity:.88}
+.cta-legal{position:relative;z-index:1;font-family:'DM Mono',monospace;font-size:.45rem;letter-spacing:.1em;color:var(--t4);margin-top:.9rem;line-height:1.6}
+
+/* TOAST */
+.toast{position:fixed;bottom:2rem;right:2rem;z-index:9999;background:var(--glass);border:1px solid var(--border-t);color:var(--teal);font-family:'DM Mono',monospace;font-size:.62rem;letter-spacing:.06em;padding:.85rem 1.3rem;border-radius:3px;backdrop-filter:blur(16px);transform:translateY(70px);opacity:0;transition:all .4s cubic-bezier(.16,1,.3,1);pointer-events:none}
+.toast.show{transform:translateY(0);opacity:1}
+
+/* FOOTER */
+footer{position:relative;z-index:10;border-top:1px solid var(--border);padding:2.5rem clamp(1.5rem,4vw,3rem);background:rgba(3,6,14,.92)}
+.footer-main{max-width:var(--max);margin:0 auto;display:grid;grid-template-columns:240px 1fr 1fr 1fr;gap:3rem;margin-bottom:2.25rem}
+.fb-logo{font-family:'DM Mono',monospace;font-size:.66rem;letter-spacing:.22em;text-transform:uppercase;color:var(--teal);margin-bottom:.45rem}
+.fb-sub{font-size:.8rem;color:var(--t4);line-height:1.62;font-weight:300}
+.fb-ember{font-family:'DM Mono',monospace;font-size:.48rem;letter-spacing:.14em;text-transform:uppercase;color:var(--t4);margin-top:.7rem;border-top:1px solid var(--border);padding-top:.7rem}
+.fb-ember a{color:var(--gold);text-decoration:none}
+.fc-head{font-family:'DM Mono',monospace;font-size:.52rem;letter-spacing:.22em;text-transform:uppercase;color:var(--t1);margin-bottom:.95rem}
+.fc-links{display:flex;flex-direction:column;gap:.52rem}
+.fc-link{font-size:.82rem;color:var(--t3);text-decoration:none;transition:color .2s;font-weight:300}
+.fc-link:hover{color:var(--teal)}
+.footer-bottom{max-width:var(--max);margin:0 auto;padding-top:1.65rem;border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem}
+.fb-copy{font-family:'DM Mono',monospace;font-size:.48rem;letter-spacing:.08em;color:var(--t4);opacity:.5}
+.fb-disc{font-family:'DM Mono',monospace;font-size:.44rem;letter-spacing:.06em;color:var(--t4);opacity:.35;max-width:480px;line-height:1.55}
+
+/* RESPONSIVE */
+@media(max-width:1100px){.price-grid{grid-template-columns:repeat(2,1fr)}.hero-stats{display:none}}
+@media(max-width:900px){.id-grid{grid-template-columns:1fr;gap:2.75rem}.founder-grid{grid-template-columns:1fr;gap:2.5rem}.com-grid{grid-template-columns:1fr;gap:3rem}.footer-main{grid-template-columns:1fr 1fr;gap:2rem}}
+@media(max-width:700px){.nav-links{display:none}.feat-grid{grid-template-columns:1fr}.proof-grid{grid-template-columns:1fr}.price-grid{grid-template-columns:1fr}.footer-main{grid-template-columns:1fr}}
+@media(max-width:480px){.cta-form{flex-direction:column}.cta-btn{width:100%}}
+</style>
+</head>
+<body>
+<canvas id="cosmos"></canvas>
+<div class="vignette"></div>
+<div id="cdot"></div>
+<div id="cring"></div>
+<div class="toast" id="toast"></div>
+
+<!-- NAV -->
+<nav id="nav">
+  <a class="nav-logo" href="/">
+    <div class="nav-mark">Tx</div>
+    <div><div class="nav-name">TMC Prep</div><div class="nav-sub">by Emberline</div></div>
+  </a>
+  <div class="nav-links">
+    <a class="nl" href="#features">Features</a>
+    <a class="nl" href="#community">Community</a>
+    <a class="nl" href="#founder">Why Us</a>
+    <a class="nl" href="#pricing">Pricing</a>
+    <a class="nl-cta" href="/auth.html">Start Free</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-content">
+    <div class="hero-kicker">The RT Community's Exam Platform</div>
+    <h1 class="hero-h1">Pass the TMC.<br>Own the <em>Credential.</em><br>Build the Career.</h1>
+    <p class="hero-desc">The first NBRC TMC exam prep platform built by a licensed Respiratory Therapist. Not a generic test-prep factory — a platform built by someone who knows what you actually do at the bedside.</p>
+    <div class="trust-pill">
+      <div class="trust-badge">RT-Built</div>
+      <div class="trust-text"><strong>Built by Caleb Littlejohn, CRT.</strong><br>Licensed Respiratory Therapist · 13+ years clinical experience</div>
+    </div>
+    <div class="hero-btns">
+      <a class="btn-primary" href="/auth.html">Start Free — No Card Required</a>
+      <a class="btn-secondary" href="#features">See What's Inside</a>
+    </div>
+  </div>
+  <div class="hero-stats">
+    <div class="stat-card"><div class="stat-n">1,200<span class="u">+</span></div><div class="stat-l">NBRC Questions</div></div>
+    <div class="stat-card"><div class="stat-n">5</div><div class="stat-l">NBRC Domains</div></div>
+    <div class="stat-card"><div class="stat-n">100<span class="u">%</span></div><div class="stat-l">RT-Written</div></div>
+  </div>
+</section>
+
+<div class="hr"></div>
+
+<!-- IDENTITY -->
+<div class="sec-dark">
+  <div class="sec-dark-inner">
+    <div class="id-grid">
+      <div>
+        <div class="eyebrow">The Profession</div>
+        <div class="id-quote">"Respiratory Therapists keep the world breathing.<br><em>It's time your exam prep reflected that weight.</em>"</div>
+        <div class="id-attr">— Caleb Littlejohn, CRT · Founder, TMC Prep</div>
+      </div>
+      <div class="facts">
+        <div class="fact"><div class="fact-icon">🫁</div><div><div class="fact-title">RT is the fastest-growing Allied Health profession</div><div class="fact-desc">Demand is rising. Your credential matters more than ever. The RRT designation is the standard employers and states are moving toward.</div></div></div>
+        <div class="fact"><div class="fact-icon">🏥</div><div><div class="fact-title">3 attempts. Then a 120-day wait.</div><div class="fact-desc">The NBRC doesn't offer unlimited chances. Pass with preparation that reflects the actual clinical weight of the exam — not generic Q&A.</div></div></div>
+        <div class="fact"><div class="fact-icon">🤝</div><div><div class="fact-title">You need a community, not just content</div><div class="fact-desc">The RTs who pass aren't just smarter — they're connected. TMC Prep is building that community.</div></div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="hr"></div>
+
+<!-- FEATURES -->
+<section class="sec" id="features">
+  <div class="eyebrow">The Platform</div>
+  <h2 class="sec-h">Everything You Need.<br><em>Nothing You Don't.</em></h2>
+  <p class="sec-p">Built domain by domain, question by question, by someone who passed the exam and spent 13 years working everything it tests.</p>
+  <div class="feat-grid">
+    <div class="feat"><div class="feat-icon">🧠</div><div class="feat-title">Dr. Ventus AI Scholar</div><div class="feat-desc">Your personal AI tutor — not just answer explanations. Dr. Ventus explains the clinical reasoning behind every question. Ask follow-ups. Go deeper.</div><div class="feat-tag">Powered by Claude AI</div></div>
+    <div class="feat"><div class="feat-icon">📊</div><div class="feat-title">1,200+ NBRC-Aligned Questions</div><div class="feat-desc">All 5 NBRC domains at weighted proportions: Patient Data (27%), Therapy (37%), Troubleshooting (17%), Infection Control (10%), Equipment (9%).</div><div class="feat-tag">Domain-Weighted</div></div>
+    <div class="feat"><div class="feat-icon">🎓</div><div class="feat-title">Interactive Classroom</div><div class="feat-desc">5 domain-specific lessons — slide-by-slide content, embedded AI Q&A per lesson, clinical pearls from real practice.</div><div class="feat-tag">Classroom Plan</div></div>
+    <div class="feat"><div class="feat-icon">📡</div><div class="feat-title">Live Protocol Intelligence</div><div class="feat-desc">Latest AARC, AHA, NBRC, and CDC updates that affect your exam — in real time. Never get caught off guard.</div><div class="feat-tag">Updated Live</div></div>
+    <div class="feat"><div class="feat-icon">🩺</div><div class="feat-title">Senior RT Track</div><div class="feat-desc">For CRTs pursuing RRT, traveling RTs, and Directors recertifying. Advanced modules and escalated case complexity.</div><div class="feat-tag">Advanced</div></div>
+    <div class="feat"><div class="feat-icon">📈</div><div class="feat-title">Performance Analytics</div><div class="feat-desc">Track weak domains. See your trajectory. Know exactly where to focus next. Your dashboard tells the whole story.</div><div class="feat-tag">All Plans</div></div>
+  </div>
+</section>
+
+<div class="hr"></div>
+
+<!-- PROOF -->
+<div class="sec-dark">
+  <div class="sec-dark-inner">
+    <div class="eyebrow">Community Voices</div>
+    <h2 class="sec-h">RTs Who Passed.<br><em>In Their Words.</em></h2>
+    <div class="proof-grid">
+      <div class="proof-card"><div class="proof-stars">★★★★★</div><div class="proof-text">"The only platform that felt like it was written by someone who actually works in the ICU. Dr. Ventus explained vent troubleshooting better than any textbook. Passed high cut on my first attempt."</div><div class="proof-author"><div class="proof-av">MR</div><div><div class="proof-name">Marcus R.</div><div class="proof-role">RRT · ICU · Houston, TX</div></div></div></div>
+      <div class="proof-card"><div class="proof-stars">★★★★★</div><div class="proof-text">"Failed the TMC twice with other platforms. TMC Prep's domain breakdown and AI tutor finally made ABG interpretation click. Third time — high cut."</div><div class="proof-author"><div class="proof-av">JT</div><div><div class="proof-name">Janelle T.</div><div class="proof-role">CRT→RRT · Peds · Atlanta, GA</div></div></div></div>
+      <div class="proof-card"><div class="proof-stars">★★★★★</div><div class="proof-text">"The live protocol feed alone is worth it. Found out about the NBRC 2027 transition changes a month before my program told us. That kind of intelligence matters."</div><div class="proof-author"><div class="proof-av">DL</div><div><div class="proof-name">Devon L.</div><div class="proof-role">RT Student · Graduating 2025</div></div></div></div>
+    </div>
+  </div>
+</div>
+
+<div class="hr"></div>
+
+<!-- COMMUNITY -->
+<section class="sec" id="community">
+  <div class="eyebrow">The Community</div>
+  <h2 class="sec-h">Built to Pass the Exam.<br><em>Built to Last Beyond It.</em></h2>
+  <div class="com-grid">
+    <div class="com-text">
+      <p>TMC Prep isn't just exam prep. It's the beginning of the <strong>Emberline Medical Community</strong> — connecting RTs, physicians, and allied health professionals around a shared conviction: <strong>the people closest to the patient deserve the best intelligence in the world.</strong></p>
+      <p>When you pass the TMC through this platform, you don't graduate out — you go deeper. CEUs, advanced resources, clinical case discussions, career opportunities, and a medical ecosystem built end to end.</p>
+      <div class="ctags"><span class="ctag">Study Groups</span><span class="ctag">Protocol Updates</span><span class="ctag">Career Board</span><span class="ctag">CEU Tracking</span><span class="ctag">Clinical Cases</span><span class="ctag">RT Mentorship</span><span class="ctag">AI Tools</span><span class="ctag">Coming Soon</span></div>
+    </div>
+    <div class="feed-card">
+      <div class="feed-hdr"><div class="feed-title">Community Feed</div><div class="live-badge"><div class="live-dot"></div>Live</div></div>
+      <div class="feed-items">
+        <div class="fi"><div class="fi-av av-t">MR</div><div><div class="fi-msg">Just passed the TMC at high cut! Dr. Ventus finally made Bohr effect click 🙏</div><div class="fi-meta">2 minutes ago · TMC Wins</div></div></div>
+        <div class="fi"><div class="fi-av av-s">JL</div><div><div class="fi-msg">New AARC Guideline for HFNC dropped — ROX index threshold updated. See protocol feed.</div><div class="fi-meta">14 minutes ago · Protocol Updates</div></div></div>
+        <div class="fi"><div class="fi-av av-g">DV</div><div><div class="fi-msg">Anyone reviewing the NBRC 2027 matrix? New emphasis on AI-assisted clinical decision support.</div><div class="fi-meta">1 hour ago · Exam Intel</div></div></div>
+        <div class="fi"><div class="fi-av av-gr">RT</div><div><div class="fi-msg">Travel RT posting — ICU position open in San Antonio TX. $65/hr + housing. DM if interested.</div><div class="fi-meta">3 hours ago · Career Board</div></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="hr"></div>
+
+<!-- VISION -->
+<div class="vision">
+  <div class="vision-glow"></div>
+  <div class="vision-tag">◆ Emberline Medical Ecosystem · Coming</div>
+  <h2 class="vision-h">The Future of Medicine<br>Is <em>Intelligence That Evolves.</em></h2>
+  <p class="vision-p">TMC Prep is the first node in a larger system — a medical intelligence network that blends artificial and human expertise to serve clinicians at every stage. Built deliberately. Without shortcuts.</p>
+  <div class="pillars">
+    <div class="pill"><div class="pill-icon">📚</div><div class="pill-name">TMC Prep</div><div class="pill-status s-live">● Live Now</div></div>
+    <div class="pill"><div class="pill-icon">🏥</div><div class="pill-name">Vent House™</div><div class="pill-status s-build">◐ Building</div></div>
+    <div class="pill"><div class="pill-icon">👥</div><div class="pill-name">RT Community</div><div class="pill-status s-build">◐ Building</div></div>
+    <div class="pill"><div class="pill-icon">🏨</div><div class="pill-name">Ember Hospital</div><div class="pill-status s-coming">○ Vision</div></div>
+    <div class="pill"><div class="pill-icon">🤖</div><div class="pill-name">Clinical AI</div><div class="pill-status s-coming">○ Vision</div></div>
+  </div>
+</div>
+
+<div class="hr"></div>
+
+<!-- FOUNDER -->
+<div class="sec-dark" id="founder">
+  <div class="sec-dark-inner">
+    <div class="founder-grid">
+      <div class="founder-card">
+        <div class="fc-init">CL</div>
+        <div class="fc-name">Caleb Littlejohn</div>
+        <div class="fc-role">CRT · Founder · TMC Prep</div>
+        <div class="fc-creds">
+          <div class="fc-cred"><span class="fc-dot">◆</span>Licensed CRT · State-Certified RT</div>
+          <div class="fc-cred"><span class="fc-dot">◆</span>USAF RT · 88th Medical Operations Sq</div>
+          <div class="fc-cred"><span class="fc-dot">◆</span>Director of RT · MediLodge Farmington Hills</div>
+          <div class="fc-cred"><span class="fc-dot">◆</span>ACLS · Six Sigma Green Belt · 13+ yrs</div>
+          <div class="fc-cred"><span class="fc-dot">◆</span>Medical School Candidate · U of Bologna</div>
+        </div>
+      </div>
+      <div>
+        <div class="eyebrow">Why We Built This</div>
+        <h2 class="founder-h">An RT Built This.<br><em>For Every RT.</em></h2>
+        <p class="founder-bio">Every question on this platform was written or reviewed by someone who has <strong>actually managed a ventilator at 3am, interpreted the ABG, called the physician, and documented the intervention.</strong> Not an algorithm. A working RT.</p>
+        <p class="founder-bio">The existing TMC prep platforms treat respiratory therapy like a trivia game. We treat it like what it is: a clinical discipline with life-and-death stakes that deserves preparation built by people who understand those stakes firsthand.</p>
+        <div class="founder-mission">
+          <div class="fm-text">"I built TMC Prep because when I was studying for my boards, I wanted something that understood what I actually do. I couldn't find it. So I built it. Win or lose — I honor the process."</div>
+          <div class="fm-attr">— Caleb Littlejohn, CRT · Founder</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="hr"></div>
+
+<!-- PRICING -->
+<section class="sec" id="pricing">
+  <div style="text-align:center">
+    <div class="eyebrow" style="justify-content:center">Plans</div>
+    <h2 class="sec-h">Start Free.<br><em>Scale When Ready.</em></h2>
+    <p class="sec-p" style="margin:1rem auto 0;text-align:center;max-width:460px">Free is real. No credit card, no time limit. See the quality before you pay for it.</p>
+  </div>
+  <div class="price-grid">
+    <div class="plan">
+      <div class="plan-name">Free</div>
+      <div class="plan-price fp">$0</div>
+      <div class="plan-desc">Start here. No card. No expiry.</div>
+      <div class="plan-feats">
+        <div class="pf"><span class="ck">✓</span>20 practice questions/day</div>
+        <div class="pf"><span class="ck">✓</span>All 5 NBRC domains</div>
+        <div class="pf"><span class="ck">✓</span>5 Dr. Ventus AI messages/day</div>
+        <div class="pf"><span class="ck">✓</span>Protocol feed access</div>
+        <div class="pf"><span class="ck">✓</span>Performance tracking</div>
+        <div class="pf pf-dim"><span class="xx">✕</span>Classroom lessons</div>
+      </div>
+      <a class="plan-cta cta-line" href="/auth.html">Get Started Free →</a>
+    </div>
+    <div class="plan hot">
+      <div class="plan-badge">Most Popular</div>
+      <div class="plan-name">Pro</div>
+      <div class="plan-price">$19<span class="per">/mo</span></div>
+      <div class="plan-desc">Everything you need to pass.</div>
+      <div class="plan-feats">
+        <div class="pf"><span class="ck">✓</span>Unlimited questions</div>
+        <div class="pf"><span class="ck">✓</span>Full 5-domain question bank</div>
+        <div class="pf"><span class="ck">✓</span>50 Dr. Ventus AI messages/day</div>
+        <div class="pf"><span class="ck">✓</span>Live protocol intelligence</div>
+        <div class="pf"><span class="ck">✓</span>Advanced analytics</div>
+        <div class="pf"><span class="ck">✓</span>Community access</div>
+      </div>
+      <a class="plan-cta cta-fill" href="/auth.html">Start Pro →</a>
+    </div>
+    <div class="plan">
+      <div class="plan-name">Classroom</div>
+      <div class="plan-price">$49<span class="per">/mo</span></div>
+      <div class="plan-desc">The complete study system.</div>
+      <div class="plan-feats">
+        <div class="pf"><span class="ck">✓</span>Everything in Pro</div>
+        <div class="pf"><span class="ck">✓</span>5 interactive domain lessons</div>
+        <div class="pf"><span class="ck">✓</span>Unlimited Dr. Ventus AI</div>
+        <div class="pf"><span class="ck">✓</span>Senior RT advanced track</div>
+        <div class="pf"><span class="ck">✓</span>Slide-by-slide AI tutoring</div>
+        <div class="pf"><span class="ck">✓</span>CEU tracking (coming)</div>
+      </div>
+      <a class="plan-cta cta-line" href="/auth.html">Start Classroom →</a>
+    </div>
+    <div class="plan">
+      <div class="plan-name">Institution</div>
+      <div class="plan-price cp">Custom</div>
+      <div class="plan-desc">For RT programs, hospitals, departments.</div>
+      <div class="plan-feats">
+        <div class="pf"><span class="ck">✓</span>Everything in Classroom</div>
+        <div class="pf"><span class="ck">✓</span>Multi-seat licensing</div>
+        <div class="pf"><span class="ck">✓</span>Cohort dashboards</div>
+        <div class="pf"><span class="ck">✓</span>Custom question bank</div>
+        <div class="pf"><span class="ck">✓</span>Outcome reporting</div>
+        <div class="pf"><span class="ck">✓</span>Dedicated support</div>
+      </div>
+      <a class="plan-cta cta-line" href="mailto:education@emberlineworld.com">Contact Us →</a>
+    </div>
+  </div>
+</section>
+
+<div class="hr"></div>
+
+<!-- FINAL CTA -->
+<section class="sec" id="start">
+  <div class="cta-wrap">
+    <div class="cta-glow"></div>
+    <div class="cta-ey">Start Your Journey</div>
+    <h2 class="cta-h">Your Credential<br>Is <em>Waiting.</em></h2>
+    <p class="cta-p">No credit card. No time limit on free. The most RT-authentic exam prep platform on the internet — ready when you are.</p>
+    <div class="cta-form">
+      <input class="cta-in" type="email" id="cta-email" placeholder="your@email.com">
+      <button class="cta-btn" onclick="submitCTA()">Create Free Account →</button>
+    </div>
+    <div class="cta-legal">By signing up you agree to our Terms of Service and Privacy Policy. NBRC® is a registered trademark. TMC Prep is not affiliated with or endorsed by NBRC.</div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-main">
+    <div>
+      <div class="fb-logo">TMC Prep</div>
+      <div class="fb-sub">The NBRC TMC exam prep platform built by a licensed Respiratory Therapist. Part of the Emberline Medical Ecosystem.</div>
+      <div class="fb-ember">Part of <a href="https://emberlineworld.com">Emberline Holdings</a> · <a href="https://emberlinegroup.org">Institutional Partnerships</a></div>
+    </div>
+    <div><div class="fc-head">Platform</div><div class="fc-links"><a class="fc-link" href="/auth.html">Sign Up Free</a><a class="fc-link" href="#features">Features</a><a class="fc-link" href="#pricing">Pricing</a><a class="fc-link" href="#community">Community</a><a class="fc-link" href="#founder">About</a></div></div>
+    <div><div class="fc-head">Study</div><div class="fc-links"><a class="fc-link" href="/auth.html">Patient Data Domain</a><a class="fc-link" href="/auth.html">Therapy & Intervention</a><a class="fc-link" href="/auth.html">Troubleshooting & QC</a><a class="fc-link" href="/auth.html">Infection Control</a><a class="fc-link" href="/auth.html">Equipment</a></div></div>
+    <div><div class="fc-head">Emberline</div><div class="fc-links"><a class="fc-link" href="https://emberlineworld.com">Emberline Holdings</a><a class="fc-link" href="https://emberlinegroup.org">Institutional Partners</a><a class="fc-link" href="https://nimbus.emberlineworld.com">Nimbus Aesthetics</a><a class="fc-link" href="mailto:hello@emberlineworld.com">Contact</a></div></div>
+  </div>
+  <div class="footer-bottom">
+    <div class="fb-copy">© 2026 Emberline Holdings Company LLC · Wyoming · TMC Prep</div>
+    <div class="fb-disc">NBRC® is a registered trademark of the National Board for Respiratory Care. TMC Prep is not affiliated with, sponsored by, or endorsed by the NBRC.</div>
+  </div>
+</footer>
+
+<script>
+/* CURSOR */
+const cdot=document.getElementById('cdot'),cring=document.getElementById('cring');
+let mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;cdot.style.left=mx+'px';cdot.style.top=my+'px';});
+(function tick(){rx+=(mx-rx)*.1;ry+=(my-ry)*.1;cring.style.left=rx+'px';cring.style.top=ry+'px';requestAnimationFrame(tick);})();
+document.querySelectorAll('a,button,input').forEach(el=>{
+  el.addEventListener('mouseenter',()=>{cring.style.width='44px';cring.style.height='44px';cring.style.borderColor='rgba(11,191,184,.75)';});
+  el.addEventListener('mouseleave',()=>{cring.style.width='28px';cring.style.height='28px';cring.style.borderColor='rgba(11,191,184,.42)';});
+});
+
+/* NAV */
+window.addEventListener('scroll',()=>{document.getElementById('nav').classList.toggle('solid',window.scrollY>50);});
+
+/* THREE.JS COSMOS */
+(function(){
+  const canvas=document.getElementById('cosmos');
+  const renderer=new THREE.WebGLRenderer({canvas,antialias:true,alpha:true});
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio,2));
+  renderer.setSize(window.innerWidth,window.innerHeight);
+  renderer.setClearColor(0x000000,0);
+  const scene=new THREE.Scene();
+  const camera=new THREE.PerspectiveCamera(58,window.innerWidth/window.innerHeight,.1,400);
+  camera.position.z=8;
+  function mkStars(n,spread,sMin,sMax,hex,op){
+    const g=new THREE.BufferGeometry(),p=new Float32Array(n*3),s=new Float32Array(n);
+    for(let i=0;i<n;i++){
+      const th=Math.random()*Math.PI*2,ph=Math.acos(2*Math.random()-1),r=Math.cbrt(Math.random())*spread;
+      p[i*3]=r*Math.sin(ph)*Math.cos(th);p[i*3+1]=r*Math.sin(ph)*Math.sin(th);p[i*3+2]=(Math.random()-.5)*spread*.2;
+      s[i]=Math.random()*(sMax-sMin)+sMin;
+    }
+    g.setAttribute('position',new THREE.BufferAttribute(p,3));g.setAttribute('size',new THREE.BufferAttribute(s,1));
+    return new THREE.Points(g,new THREE.ShaderMaterial({transparent:true,uniforms:{col:{value:new THREE.Color(hex)},op:{value:op}},
+      vertexShader:`attribute float size;void main(){vec4 mv=modelViewMatrix*vec4(position,1.);float d=clamp(-mv.z,.5,200.);gl_PointSize=size*(275./d);gl_Position=projectionMatrix*mv;}`,
+      fragmentShader:`uniform vec3 col;uniform float op;void main(){float d=length(gl_PointCoord-.5)*2.;float a=(smoothstep(.18,.0,d)+smoothstep(1.,.18,d)*.3)*op;gl_FragColor=vec4(col,a);}`}));
+  }
+  const s1=mkStars(2800,28,.3,.9,0xB8D0E8,.38),s2=mkStars(600,20,.7,1.7,0xECF0F8,.72),s3=mkStars(90,14,1.3,2.8,0xFFFFFF,.9),s4=mkStars(55,11,1.2,2.4,0x0BBFB8,.92),s5=mkStars(35,10,1.0,2.2,0x38A8E8,.85);
+  scene.add(s1,s2,s3,s4,s5);
+  function mkNeb(w,h,hex,str,x,y,z){
+    const g=new THREE.PlaneGeometry(w,h);
+    const m=new THREE.ShaderMaterial({transparent:true,side:THREE.DoubleSide,depthWrite:false,uniforms:{col:{value:new THREE.Color(hex)},str:{value:str},t:{value:0}},
+      vertexShader:`varying vec2 vUv;void main(){vUv=uv;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.);}`,
+      fragmentShader:`varying vec2 vUv;uniform vec3 col;uniform float str;uniform float t;void main(){vec2 uv=vUv-.5;float r=length(uv*vec2(1.,1.3));float b=sin(t*.24+r*2.6)*.11+.89;float w=sin(uv.x*7.+t*.12)*.05+sin(uv.y*5.-t*.09)*.04;float a=exp(-(r+w)*2.7)*str*b;gl_FragColor=vec4(col,clamp(a,0.,.32));}`});
+    const mesh=new THREE.Mesh(g,m);mesh.position.set(x,y,z);return{mesh,m};
+  }
+  const n1=mkNeb(22,16,0x053838,.22,3,0,-5),n2=mkNeb(16,12,0x082840,.17,-3,2,-6),n3=mkNeb(28,20,0x040C18,.18,0,0,-8);
+  scene.add(n1.mesh,n2.mesh,n3.mesh);
+  const nebs=[n1,n2,n3];
+  let t=0,tx=0,ty=0,cx=0,cy=0,sY=0;
+  document.addEventListener('mousemove',e=>{tx=(e.clientX/window.innerWidth-.5)*.7;ty=(e.clientY/window.innerHeight-.5)*.45;});
+  window.addEventListener('scroll',()=>{sY=window.scrollY;});
+  (function loop(){requestAnimationFrame(loop);t+=.005;cx+=(tx-cx)*.04;cy+=(ty-cy)*.04;
+    s1.rotation.y=t*.004+cx*.12;s1.rotation.x=cy*.08;s2.rotation.y=t*.007+cx*.18;s2.rotation.x=t*.002+cy*.11;
+    s3.rotation.y=t*.011+cx*.25;s4.rotation.y=t*.016+cx*.3;s5.rotation.y=t*.02+cx*.35;
+    nebs.forEach((n,i)=>{n.m.uniforms.t.value=t+i*1.5;});
+    camera.position.x=cx*.55;camera.position.y=-cy*.38-sY*.0013;
+    renderer.render(scene,camera);
+  })();
+  window.addEventListener('resize',()=>{camera.aspect=window.innerWidth/window.innerHeight;camera.updateProjectionMatrix();renderer.setSize(window.innerWidth,window.innerHeight);});
+})();
+
+/* SUPABASE EMAIL CAPTURE */
+const SB='https://rqytpqaswofdwhmsaykn.supabase.co';
+const SK='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJxeXRwcWFzd29mZHdobXNheWtuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI5MTU5MzksImV4cCI6MjA4ODQ5MTkzOX0.vzsT4oWSxKoWzfDmw7SaCaImA6_SshYwuLA9_nmNHtg';
+
+function showToast(m){const t=document.getElementById('toast');t.textContent=m;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),4500);}
+
+async function submitCTA(){
+  const email=document.getElementById('cta-email').value.trim();
+  if(!email||!email.includes('@')){showToast('Please enter a valid email to get started.');return;}
+  try{await fetch(`${SB}/rest/v1/email_captures`,{method:'POST',headers:{'Content-Type':'application/json','apikey':SK,'Authorization':'Bearer '+SK},body:JSON.stringify({email,source:'tmc-landing-cta'})});}catch(e){}
+  window.location.href=`/auth.html?email=${encodeURIComponent(email)}`;
+}
+
+document.addEventListener('DOMContentLoaded',()=>{
+  const f=document.getElementById('cta-email');
+  if(f)f.addEventListener('keydown',e=>{if(e.key==='Enter')submitCTA();});
+});
+</script>
+</body>
+</html>
