@@ -1,0 +1,1378 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>TMC Prep — Platform</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Outfit:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<style>
+/* ══ RESET ══════════════════════════════════════ */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+
+/* ══ DESIGN TOKENS (locked from tmc-index.html) ════ */
+:root{
+  --void:#03060e;
+  --deep:#060c1a;
+  --surface:rgba(255,255,255,0.032);
+  --glass:rgba(6,12,26,0.75);
+  --border:rgba(255,255,255,0.07);
+  --t1:#FFFFFF;
+  --t2:#DCE8F8;
+  --t3:#8BA8C8;
+  --t4:rgba(139,168,200,0.5);
+  --teal:#0BBFB8;
+  --teal-l:#40DDD6;
+  --teal-d:#078880;
+  --sky:#38A8E8;
+  --gold:#D4A83C;
+  --ember:#E8622A;
+  --green:#34C97A;
+  --teal-border:rgba(11,191,184,0.25);
+  --max:1180px;
+  --nav-h:60px;
+}
+
+/* ══ BASE ══════════════════════════════════════ */
+html{scroll-behavior:smooth}
+body{background:var(--void);color:var(--t2);font-family:'Outfit',sans-serif;font-weight:400;overflow-x:hidden;-webkit-font-smoothing:antialiased;cursor:none;min-height:100vh}
+h1,h2,h3,h4{font-family:'Playfair Display',serif;color:var(--t1);font-weight:600;line-height:1.2}
+code,pre,.mono{font-family:'DM Mono',monospace}
+a{color:inherit;text-decoration:none}
+button{cursor:none;font-family:'Outfit',sans-serif}
+input,textarea,select{font-family:'Outfit',sans-serif;cursor:none}
+
+/* ══ COSMOS ══════════════════════════════════ */
+#cosmos{position:fixed;inset:0;z-index:0;pointer-events:none}
+
+/* ══ CURSOR ══════════════════════════════════ */
+#cdot{position:fixed;z-index:9999;width:5px;height:5px;background:var(--teal);border-radius:50%;pointer-events:none;transform:translate(-50%,-50%)}
+#cring{position:fixed;z-index:9998;width:28px;height:28px;border:1px solid rgba(11,191,184,0.42);border-radius:50%;pointer-events:none;transform:translate(-50%,-50%);transition:width .2s,height .2s,border-color .2s}
+
+/* ══ LAYOUT SHELL ════════════════════════════ */
+#shell{position:relative;z-index:1;display:flex;flex-direction:column;min-height:100vh}
+
+/* ══ TOPBAR ══════════════════════════════════ */
+#topbar{position:fixed;top:0;left:0;right:0;height:var(--nav-h);z-index:800;background:rgba(3,6,14,0.88);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 1.5rem;gap:1rem}
+#topbar .brand{font-family:'Playfair Display',serif;font-size:1.1rem;color:var(--t1);font-weight:600;letter-spacing:.01em;display:flex;align-items:center;gap:.5rem}
+#topbar .brand span{color:var(--teal)}
+#topbar .plan-badge{font-family:'DM Mono',monospace;font-size:.65rem;padding:.2rem .55rem;border-radius:3px;border:1px solid var(--teal-border);color:var(--teal);text-transform:uppercase;letter-spacing:.08em}
+#topbar .spacer{flex:1}
+#topbar .user-info{font-size:.78rem;color:var(--t3);display:flex;align-items:center;gap:.75rem}
+#topbar .q-count{font-family:'DM Mono',monospace;font-size:.72rem;color:var(--teal);border:1px solid var(--teal-border);border-radius:3px;padding:.15rem .5rem}
+#signout-btn{font-size:.75rem;color:var(--t4);border:none;background:none;padding:.25rem .5rem;border-radius:3px;transition:color .2s}
+#signout-btn:hover{color:var(--t2)}
+
+/* ══ NAV RAIL ════════════════════════════════ */
+#rail{position:fixed;top:var(--nav-h);left:0;width:200px;height:calc(100vh - var(--nav-h));z-index:700;background:rgba(3,6,14,0.72);backdrop-filter:blur(16px);border-right:1px solid var(--border);padding:1.25rem .75rem;display:flex;flex-direction:column;gap:.25rem}
+.nav-item{display:flex;align-items:center;gap:.65rem;padding:.6rem .85rem;border-radius:4px;font-size:.83rem;color:var(--t3);border:1px solid transparent;transition:all .2s;white-space:nowrap;overflow:hidden}
+.nav-item svg{flex-shrink:0;opacity:.7}
+.nav-item:hover{background:var(--surface);color:var(--t2);border-color:var(--border)}
+.nav-item.active{background:rgba(11,191,184,0.08);border-color:var(--teal-border);color:var(--teal)}
+.nav-item.active svg{opacity:1}
+.nav-ventus{border-color:rgba(11,191,184,0.15)!important;color:var(--teal)!important;background:rgba(11,191,184,0.05)!important}
+.nav-ventus svg{opacity:1!important}
+.nav-classroom{border-color:rgba(56,168,232,0.15)!important;color:var(--sky)!important;background:rgba(56,168,232,0.04)!important}
+.nav-classroom svg{opacity:1!important}
+.nav-section{font-family:'DM Mono',monospace;font-size:.6rem;text-transform:uppercase;letter-spacing:.1em;color:var(--t4);padding:.5rem .85rem .25rem;margin-top:.5rem}
+
+/* ══ MAIN CONTENT ════════════════════════════ */
+#main{margin-left:200px;padding-top:var(--nav-h);min-height:100vh}
+.page{display:none;padding:2rem 2.5rem;max-width:1100px}
+.page.active{display:block}
+
+/* ══ GLASS CARD ══════════════════════════════ */
+.card{background:var(--glass);border:1px solid var(--border);border-radius:4px;backdrop-filter:blur(16px);padding:1.5rem 1.75rem;position:relative;overflow:hidden}
+.card::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(11,191,184,.03) 0%,transparent 50%);pointer-events:none}
+.card-sm{padding:1rem 1.25rem}
+.card-lg{padding:2rem 2.25rem}
+
+/* ══ PAGE HEADER ═════════════════════════════ */
+.page-header{margin-bottom:2rem}
+.page-header h2{font-size:1.75rem;margin-bottom:.4rem}
+.page-header p{color:var(--t3);font-size:.9rem}
+.page-header .accent{display:inline-block;width:32px;height:2px;background:var(--teal);margin-bottom:.75rem;border-radius:1px}
+
+/* ══ DASHBOARD ═══════════════════════════════ */
+.dash-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-bottom:1.5rem}
+.kpi{background:var(--glass);border:1px solid var(--border);border-radius:4px;padding:1.1rem 1.25rem;backdrop-filter:blur(12px)}
+.kpi .label{font-family:'DM Mono',monospace;font-size:.62rem;text-transform:uppercase;letter-spacing:.1em;color:var(--t4);margin-bottom:.4rem}
+.kpi .val{font-size:1.8rem;font-weight:600;color:var(--t1);line-height:1;font-family:'Playfair Display',serif}
+.kpi .sub{font-size:.72rem;color:var(--t3);margin-top:.3rem}
+.kpi.teal{border-color:var(--teal-border)}
+.kpi.teal .val{color:var(--teal)}
+
+.domain-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:.75rem;margin-bottom:1.5rem}
+.domain-card{background:var(--glass);border:1px solid var(--border);border-radius:4px;padding:1rem;backdrop-filter:blur(12px);cursor:none;transition:all .2s}
+.domain-card:hover{border-color:var(--teal-border);background:rgba(11,191,184,0.04)}
+.domain-card .d-name{font-size:.75rem;font-weight:500;color:var(--t2);margin-bottom:.5rem}
+.domain-card .d-bar{height:3px;background:var(--border);border-radius:2px;overflow:hidden;margin-bottom:.35rem}
+.domain-card .d-fill{height:100%;background:var(--teal);border-radius:2px;transition:width .6s ease}
+.domain-card .d-pct{font-family:'DM Mono',monospace;font-size:.65rem;color:var(--teal)}
+
+.recent-activity{background:var(--glass);border:1px solid var(--border);border-radius:4px;backdrop-filter:blur(12px);padding:1.25rem}
+.activity-row{display:flex;align-items:center;gap:1rem;padding:.6rem 0;border-bottom:1px solid var(--border);font-size:.8rem}
+.activity-row:last-child{border-bottom:none}
+.activity-row .ar-dot{width:6px;height:6px;border-radius:50%;background:var(--teal);flex-shrink:0}
+.activity-row .ar-label{flex:1;color:var(--t2)}
+.activity-row .ar-time{color:var(--t4);font-family:'DM Mono',monospace;font-size:.65rem}
+
+/* ══ PRACTICE ════════════════════════════════ */
+.q-toolbar{display:flex;align-items:center;gap:.75rem;margin-bottom:1.25rem;flex-wrap:wrap}
+.q-toolbar select,.q-toolbar .btn-sm{font-size:.78rem;padding:.4rem .75rem;border-radius:3px;border:1px solid var(--border);background:var(--glass);color:var(--t2);backdrop-filter:blur(12px);outline:none;transition:border-color .2s}
+.q-toolbar select:hover,.q-toolbar select:focus{border-color:var(--teal-border)}
+.q-toolbar .spacer{flex:1}
+
+.question-card{background:var(--glass);border:1px solid var(--border);border-radius:4px;backdrop-filter:blur(16px);padding:2rem;margin-bottom:1rem}
+.q-meta{display:flex;gap:.75rem;margin-bottom:1.25rem;flex-wrap:wrap}
+.q-badge{font-family:'DM Mono',monospace;font-size:.62rem;padding:.2rem .55rem;border-radius:3px;border:1px solid var(--border);color:var(--t3);text-transform:uppercase;letter-spacing:.06em}
+.q-badge.domain{border-color:var(--teal-border);color:var(--teal)}
+.q-text{font-size:1.05rem;color:var(--t1);line-height:1.65;margin-bottom:1.75rem}
+.options{display:flex;flex-direction:column;gap:.65rem}
+.option{display:flex;align-items:flex-start;gap:.85rem;padding:.9rem 1.1rem;border:1px solid var(--border);border-radius:4px;cursor:none;transition:all .2s;background:rgba(6,12,26,0.5)}
+.option:hover:not(.locked){border-color:var(--teal-border);background:rgba(11,191,184,0.04)}
+.option.selected{border-color:var(--teal);background:rgba(11,191,184,0.08)}
+.option.correct{border-color:var(--green);background:rgba(52,201,122,0.08)}
+.option.incorrect{border-color:var(--ember);background:rgba(232,98,42,0.08)}
+.option-letter{font-family:'DM Mono',monospace;font-size:.75rem;color:var(--teal);font-weight:500;min-width:18px;margin-top:.08rem}
+.option-text{font-size:.88rem;color:var(--t2);line-height:1.5}
+.option.correct .option-letter{color:var(--green)}
+.option.incorrect .option-letter{color:var(--ember)}
+
+.q-actions{display:flex;gap:.75rem;margin-top:1.25rem}
+.explanation-card{background:rgba(11,191,184,0.04);border:1px solid var(--teal-border);border-radius:4px;padding:1.25rem 1.5rem;margin-top:1rem;display:none}
+.explanation-card.visible{display:block}
+.exp-head{font-family:'DM Mono',monospace;font-size:.65rem;text-transform:uppercase;letter-spacing:.1em;color:var(--teal);margin-bottom:.6rem}
+.exp-text{font-size:.85rem;color:var(--t2);line-height:1.6}
+.clinical-pearl{background:rgba(212,168,60,0.06);border:1px solid rgba(212,168,60,0.2);border-radius:3px;padding:.75rem 1rem;margin-top:.75rem}
+.pearl-head{font-family:'DM Mono',monospace;font-size:.6rem;text-transform:uppercase;letter-spacing:.1em;color:var(--gold);margin-bottom:.4rem}
+.pearl-text{font-size:.82rem;color:var(--t2);line-height:1.5}
+
+.q-nav{display:flex;justify-content:space-between;align-items:center;margin-top:1rem}
+.q-progress{font-family:'DM Mono',monospace;font-size:.72rem;color:var(--t3)}
+
+/* ══ CLASSROOM ═══════════════════════════════ */
+.class-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-bottom:1.5rem}
+.class-card{background:var(--glass);border:1px solid var(--border);border-radius:4px;backdrop-filter:blur(12px);padding:1.5rem;cursor:none;transition:all .2s;position:relative;overflow:hidden}
+.class-card::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:var(--teal);transform:scaleX(0);transform-origin:left;transition:transform .3s}
+.class-card:hover{border-color:var(--teal-border);transform:translateY(-2px)}
+.class-card:hover::after{transform:scaleX(1)}
+.class-card .cc-icon{width:36px;height:36px;border-radius:4px;background:rgba(11,191,184,0.1);border:1px solid var(--teal-border);display:flex;align-items:center;justify-content:center;margin-bottom:1rem}
+.class-card h3{font-size:1rem;margin-bottom:.4rem}
+.class-card p{font-size:.78rem;color:var(--t3);line-height:1.5;margin-bottom:.85rem}
+.class-card .cc-meta{display:flex;gap:.75rem}
+.class-card .cc-tag{font-family:'DM Mono',monospace;font-size:.6rem;color:var(--teal);border:1px solid var(--teal-border);border-radius:3px;padding:.15rem .45rem;text-transform:uppercase;letter-spacing:.06em}
+.lock-overlay{position:absolute;inset:0;background:rgba(3,6,14,0.72);backdrop-filter:blur(2px);display:flex;align-items:center;justify-content:center;z-index:5;border-radius:4px}
+.lock-overlay svg{opacity:.35}
+
+/* ══ DR. VENTUS ══════════════════════════════ */
+.ventus-shell{display:grid;grid-template-columns:280px 1fr;gap:1rem;height:calc(100vh - var(--nav-h) - 6rem)}
+.ventus-sidebar{background:var(--glass);border:1px solid var(--border);border-radius:4px;backdrop-filter:blur(16px);padding:1.25rem;display:flex;flex-direction:column;gap:.75rem;overflow-y:auto}
+.ventus-avatar{width:56px;height:56px;border-radius:50%;border:2px solid var(--teal-border);margin:0 auto .5rem;overflow:hidden;background:rgba(11,191,184,0.1);display:flex;align-items:center;justify-content:center}
+.ventus-name{text-align:center;font-family:'Playfair Display',serif;font-size:1rem;color:var(--t1);margin-bottom:.1rem}
+.ventus-title{text-align:center;font-family:'DM Mono',monospace;font-size:.6rem;color:var(--teal);text-transform:uppercase;letter-spacing:.1em}
+.ventus-divider{height:1px;background:var(--border);margin:.25rem 0}
+.quick-prompt{font-size:.75rem;color:var(--t3);padding:.55rem .75rem;border:1px solid var(--border);border-radius:3px;cursor:none;transition:all .2s;line-height:1.4}
+.quick-prompt:hover{border-color:var(--teal-border);color:var(--t2);background:rgba(11,191,184,0.04)}
+
+.chat-shell{background:var(--glass);border:1px solid var(--border);border-radius:4px;backdrop-filter:blur(16px);display:flex;flex-direction:column;overflow:hidden}
+.chat-messages{flex:1;overflow-y:auto;padding:1.25rem;display:flex;flex-direction:column;gap:.85rem}
+.chat-messages::-webkit-scrollbar{width:4px}
+.chat-messages::-webkit-scrollbar-track{background:transparent}
+.chat-messages::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px}
+.msg{max-width:80%;display:flex;flex-direction:column;gap:.3rem}
+.msg.user{align-self:flex-end;align-items:flex-end}
+.msg.assistant{align-self:flex-start;align-items:flex-start}
+.msg-bubble{padding:.75rem 1rem;border-radius:4px;font-size:.85rem;line-height:1.6}
+.msg.user .msg-bubble{background:rgba(11,191,184,0.12);border:1px solid var(--teal-border);color:var(--t2)}
+.msg.assistant .msg-bubble{background:var(--surface);border:1px solid var(--border);color:var(--t2)}
+.msg-label{font-family:'DM Mono',monospace;font-size:.6rem;color:var(--t4);text-transform:uppercase;letter-spacing:.08em}
+.typing-indicator{display:flex;gap:4px;padding:.75rem 1rem;background:var(--surface);border:1px solid var(--border);border-radius:4px;width:fit-content}
+.typing-indicator span{width:5px;height:5px;border-radius:50%;background:var(--teal);opacity:.5;animation:blink 1.2s infinite}
+.typing-indicator span:nth-child(2){animation-delay:.2s}
+.typing-indicator span:nth-child(3){animation-delay:.4s}
+@keyframes blink{0%,100%{opacity:.2}50%{opacity:.9}}
+
+.chat-input-row{display:flex;gap:.5rem;padding:1rem;border-top:1px solid var(--border)}
+.chat-input-row textarea{flex:1;background:rgba(6,12,26,0.6);border:1px solid var(--border);border-radius:3px;padding:.7rem .9rem;font-size:.85rem;color:var(--t2);resize:none;height:44px;outline:none;transition:border-color .2s;line-height:1.5}
+.chat-input-row textarea:focus{border-color:var(--teal-border)}
+.chat-input-row textarea::placeholder{color:var(--t4)}
+
+/* ══ PROTOCOLS ═══════════════════════════════ */
+/* Protocol Ticker — the live heartbeat */
+.proto-ticker-wrap{overflow:hidden;border:1px solid var(--teal-border);border-radius:4px;background:rgba(11,191,184,0.04);padding:.55rem 0;margin-bottom:1.5rem;position:relative}
+.proto-ticker-wrap::before,.proto-ticker-wrap::after{content:'';position:absolute;top:0;bottom:0;width:40px;z-index:2;pointer-events:none}
+.proto-ticker-wrap::before{left:0;background:linear-gradient(90deg,rgba(3,6,14,0.95),transparent)}
+.proto-ticker-wrap::after{right:0;background:linear-gradient(270deg,rgba(3,6,14,0.95),transparent)}
+.proto-ticker-label{position:absolute;left:12px;top:50%;transform:translateY(-50%);font-family:'DM Mono',monospace;font-size:.58rem;text-transform:uppercase;letter-spacing:.12em;color:var(--teal);z-index:3;background:rgba(3,6,14,0.9);padding:.1rem .4rem;border-radius:2px}
+.proto-ticker-track{display:flex;gap:0;white-space:nowrap;animation:ticker 45s linear infinite}
+@keyframes ticker{0%{transform:translateX(0%)}100%{transform:translateX(-50%)}}
+.proto-ticker-track:hover{animation-play-state:paused}
+.ticker-item{display:inline-flex;align-items:center;gap:.4rem;padding:0 1.75rem;font-size:.72rem;color:var(--t3)}
+.ticker-item .t-dot{width:4px;height:4px;border-radius:50%;background:var(--teal);opacity:.7;flex-shrink:0}
+.ticker-item .t-org{font-family:'DM Mono',monospace;font-size:.62rem;color:var(--teal);opacity:.8}
+.ticker-item .t-date{font-family:'DM Mono',monospace;font-size:.6rem;color:var(--t4)}
+
+.proto-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem}
+.proto-card{background:var(--glass);border:1px solid var(--border);border-radius:4px;backdrop-filter:blur(12px);padding:1.25rem;transition:all .2s;cursor:none}
+.proto-card:hover{border-color:var(--teal-border)}
+.proto-card .pc-head{display:flex;align-items:center;gap:.6rem;margin-bottom:.75rem}
+.proto-card .pc-icon{width:28px;height:28px;border-radius:3px;background:rgba(11,191,184,0.08);border:1px solid var(--teal-border);display:flex;align-items:center;justify-content:center}
+.proto-card h3{font-size:.9rem;color:var(--t1)}
+.proto-card .pc-src{font-family:'DM Mono',monospace;font-size:.58rem;color:var(--teal);text-transform:uppercase;letter-spacing:.08em;margin-bottom:.5rem}
+.proto-card p{font-size:.78rem;color:var(--t3);line-height:1.5}
+.proto-tag{display:inline-flex;font-family:'DM Mono',monospace;font-size:.58rem;padding:.15rem .45rem;border-radius:3px;margin-top:.65rem;margin-right:.35rem;border:1px solid var(--border);color:var(--t4);text-transform:uppercase;letter-spacing:.06em}
+
+/* ══ PRICING ═════════════════════════════════ */
+.pricing-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-bottom:2rem}
+.plan-card{background:var(--glass);border:1px solid var(--border);border-radius:4px;backdrop-filter:blur(14px);padding:1.75rem 1.5rem;transition:all .2s;position:relative;overflow:hidden}
+.plan-card.featured{border-color:var(--teal-border);background:rgba(11,191,184,0.04)}
+.plan-card.featured::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--teal),transparent)}
+.plan-card.institution{border-color:rgba(212,168,60,0.3);background:rgba(212,168,60,0.03)}
+.plan-card.institution::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--gold),transparent)}
+.plan-name{font-family:'DM Mono',monospace;font-size:.65rem;text-transform:uppercase;letter-spacing:.1em;color:var(--t4);margin-bottom:.6rem}
+.plan-name.teal{color:var(--teal)}
+.plan-name.gold{color:var(--gold)}
+.plan-price{font-size:2rem;font-family:'Playfair Display',serif;color:var(--t1);line-height:1;margin-bottom:.25rem}
+.plan-price sub{font-size:.65rem;font-family:'Outfit',sans-serif;color:var(--t3);vertical-align:baseline}
+.plan-period{font-size:.72rem;color:var(--t3);margin-bottom:1.1rem}
+.plan-features{list-style:none;display:flex;flex-direction:column;gap:.5rem;margin-bottom:1.5rem}
+.plan-features li{font-size:.78rem;color:var(--t3);display:flex;align-items:flex-start;gap:.5rem;line-height:1.4}
+.plan-features li::before{content:'→';color:var(--teal);font-family:'DM Mono',monospace;font-size:.7rem;flex-shrink:0;margin-top:.05rem}
+.plan-features li.gold-feat::before{color:var(--gold)}
+
+/* ══ BUTTONS ═════════════════════════════════ */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:.4rem;padding:.65rem 1.35rem;border-radius:3px;font-size:.82rem;font-weight:500;border:1px solid transparent;transition:all .2s;white-space:nowrap;position:relative;overflow:hidden}
+.btn-primary{background:var(--teal);color:#000;border-color:var(--teal)}
+.btn-primary:hover{background:var(--teal-l);border-color:var(--teal-l)}
+.btn-outline{background:transparent;color:var(--teal);border-color:var(--teal-border)}
+.btn-outline:hover{background:rgba(11,191,184,0.08);border-color:var(--teal)}
+.btn-ghost{background:transparent;color:var(--t3);border-color:var(--border)}
+.btn-ghost:hover{color:var(--t2);border-color:rgba(255,255,255,0.14)}
+.btn-gold{background:transparent;color:var(--gold);border-color:rgba(212,168,60,0.3)}
+.btn-gold:hover{background:rgba(212,168,60,0.08);border-color:var(--gold)}
+.btn-sm{padding:.4rem .85rem;font-size:.76rem}
+.btn-full{width:100%}
+.btn:disabled{opacity:.4}
+
+/* ══ TOAST ═══════════════════════════════════ */
+#toast{position:fixed;bottom:1.5rem;left:50%;transform:translateX(-50%) translateY(80px);background:var(--glass);border:1px solid var(--teal-border);border-radius:4px;padding:.75rem 1.5rem;font-size:.82rem;color:var(--t2);backdrop-filter:blur(20px);z-index:9000;transition:transform .3s ease;white-space:nowrap}
+#toast.show{transform:translateX(-50%) translateY(0)}
+#toast.error{border-color:rgba(232,98,42,0.4);color:var(--ember)}
+
+/* ══ MODAL ═══════════════════════════════════ */
+.modal-overlay{position:fixed;inset:0;z-index:8000;background:rgba(3,6,14,0.8);backdrop-filter:blur(8px);display:none;align-items:center;justify-content:center;padding:1.5rem}
+.modal-overlay.open{display:flex}
+.modal{background:var(--deep);border:1px solid var(--border);border-radius:4px;padding:2rem;max-width:480px;width:100%;position:relative}
+.modal h3{margin-bottom:.5rem}
+.modal p{font-size:.85rem;color:var(--t3);margin-bottom:1.25rem;line-height:1.6}
+.modal-close{position:absolute;top:1rem;right:1rem;background:none;border:none;color:var(--t4);font-size:1.2rem;padding:.25rem}
+.modal-close:hover{color:var(--t2)}
+.form-group{margin-bottom:1rem}
+.form-group label{display:block;font-family:'DM Mono',monospace;font-size:.62rem;text-transform:uppercase;letter-spacing:.08em;color:var(--t4);margin-bottom:.4rem}
+.form-group input,.form-group textarea,.form-group select{width:100%;background:rgba(6,12,26,0.8);border:1px solid var(--border);border-radius:3px;padding:.65rem .85rem;font-size:.85rem;color:var(--t2);outline:none;transition:border-color .2s}
+.form-group input:focus,.form-group textarea:focus{border-color:var(--teal-border)}
+
+/* ══ SCORE SUMMARY ═══════════════════════════ */
+.score-card{background:var(--glass);border:1px solid var(--teal-border);border-radius:4px;backdrop-filter:blur(16px);padding:2rem;text-align:center;margin-bottom:1.5rem}
+.score-big{font-size:3.5rem;font-family:'Playfair Display',serif;color:var(--teal);line-height:1}
+.score-label{font-family:'DM Mono',monospace;font-size:.65rem;text-transform:uppercase;letter-spacing:.1em;color:var(--t4);margin-top:.4rem}
+
+/* ══ UPGRADE GATE ════════════════════════════ */
+.upgrade-gate{background:var(--glass);border:1px solid var(--border);border-radius:4px;backdrop-filter:blur(16px);padding:3rem 2rem;text-align:center}
+.upgrade-gate h3{margin-bottom:.6rem}
+.upgrade-gate p{color:var(--t3);font-size:.85rem;margin-bottom:1.5rem;max-width:380px;margin-left:auto;margin-right:auto}
+
+/* ══ ANIMATIONS ══════════════════════════════ */
+@keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+.fade-up{animation:fadeUp .3s ease both}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}
+.pulse{animation:pulse 2s ease infinite}
+
+/* ══ SCROLLBAR ═══════════════════════════════ */
+::-webkit-scrollbar{width:4px;height:4px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.08);border-radius:2px}
+::-webkit-scrollbar-thumb:hover{background:rgba(11,191,184,0.3)}
+
+/* ══ RESPONSIVE ══════════════════════════════ */
+@media(max-width:900px){
+  #rail{display:none}
+  #main{margin-left:0}
+  .dash-grid{grid-template-columns:repeat(2,1fr)}
+  .domain-grid{grid-template-columns:repeat(3,1fr)}
+  .pricing-grid{grid-template-columns:repeat(2,1fr)}
+  .proto-grid{grid-template-columns:repeat(2,1fr)}
+  .class-grid{grid-template-columns:repeat(2,1fr)}
+  .ventus-shell{grid-template-columns:1fr;height:auto}
+  .ventus-sidebar{display:none}
+}
+@media(max-width:600px){
+  .dash-grid,.domain-grid,.pricing-grid,.proto-grid,.class-grid{grid-template-columns:1fr}
+  .page{padding:1.25rem}
+}
+</style>
+</head>
+<body>
+
+<!-- Cosmos canvas -->
+<canvas id="cosmos"></canvas>
+
+<!-- Custom cursor -->
+<div id="cdot"></div>
+<div id="cring"></div>
+
+<!-- Toast -->
+<div id="toast"></div>
+
+<!-- Waitlist Modal -->
+<div id="waitlist-modal" class="modal-overlay">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('waitlist-modal')">✕</button>
+    <h3>Join the Waitlist</h3>
+    <p>We're onboarding new members soon. Reserve your spot now and you'll be first to access full platform features.</p>
+    <div class="form-group"><label>Full Name</label><input id="wl-name" type="text" placeholder="Your full name"></div>
+    <div class="form-group"><label>Email</label><input id="wl-email" type="email" placeholder="your@email.com"></div>
+    <div class="form-group"><label>Plan Interest</label>
+      <select id="wl-plan">
+        <option value="pro">Pro — $19/mo</option>
+        <option value="classroom">Classroom — $49/mo</option>
+      </select>
+    </div>
+    <button class="btn btn-primary btn-full" onclick="submitWaitlist()">Reserve My Spot</button>
+  </div>
+</div>
+
+<!-- Institution Inquiry Modal -->
+<div id="institution-modal" class="modal-overlay">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('institution-modal')">✕</button>
+    <h3>Institution Inquiry</h3>
+    <p>Set up TMC Prep for your entire RT program. Custom pricing, admin dashboard, progress tracking, and curriculum alignment.</p>
+    <div class="form-group"><label>Contact Name</label><input id="inst-name" type="text" placeholder="Your name"></div>
+    <div class="form-group"><label>Email</label><input id="inst-email" type="email" placeholder="institutional email"></div>
+    <div class="form-group"><label>Institution Name</label><input id="inst-inst" type="text" placeholder="College/Hospital/Program name"></div>
+    <div class="form-group"><label>Number of RT Students/Staff</label><input id="inst-count" type="number" placeholder="e.g. 45" min="1"></div>
+    <div class="form-group"><label>Tell us about your program</label><textarea id="inst-msg" rows="3" placeholder="What are you looking to accomplish with TMC Prep?"></textarea></div>
+    <button class="btn btn-gold btn-full" onclick="submitInstitution()">Submit Inquiry</button>
+  </div>
+</div>
+
+<!-- Shell -->
+<div id="shell">
+
+<!-- Topbar -->
+<nav id="topbar">
+  <div class="brand">TMC<span>Prep</span></div>
+  <span id="plan-badge" class="plan-badge">Free</span>
+  <div class="spacer"></div>
+  <div class="user-info">
+    <span id="q-remaining" class="q-count">— Q</span>
+    <span id="user-email-display">—</span>
+    <button id="signout-btn" onclick="signOut()">Sign out</button>
+  </div>
+</nav>
+
+<!-- Rail -->
+<nav id="rail">
+  <div class="nav-section">Study</div>
+  <a class="nav-item active" data-page="dashboard" onclick="goTo('dashboard')">
+    <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><rect x="1" y="1" width="6" height="6" rx="1" stroke="currentColor" stroke-width="1.4"/><rect x="9" y="1" width="6" height="6" rx="1" stroke="currentColor" stroke-width="1.4"/><rect x="1" y="9" width="6" height="6" rx="1" stroke="currentColor" stroke-width="1.4"/><rect x="9" y="9" width="6" height="6" rx="1" stroke="currentColor" stroke-width="1.4"/></svg>
+    Dashboard
+  </a>
+  <!-- DR. VENTUS — elevated, second position, premium differentiator -->
+  <a class="nav-item nav-ventus" data-page="ventus" onclick="goTo('ventus')">
+    <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="6.5" stroke="currentColor" stroke-width="1.4"/><path d="M5.5 9.5S6.5 11 8 11s2.5-1.5 2.5-1.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/><circle cx="6" cy="7" r=".8" fill="currentColor"/><circle cx="10" cy="7" r=".8" fill="currentColor"/></svg>
+    Dr. Ventus
+  </a>
+  <a class="nav-item" data-page="practice" onclick="goTo('practice')">
+    <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M2 8h12M8 2v12" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
+    Practice
+  </a>
+  <!-- CLASSROOM — educational arm, featured -->
+  <a class="nav-item nav-classroom" data-page="classroom" onclick="goTo('classroom')">
+    <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><rect x="1" y="3" width="14" height="10" rx="1.5" stroke="currentColor" stroke-width="1.4"/><path d="M5 13v1.5M11 13v1.5M3 13h10" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
+    Classroom
+  </a>
+  <a class="nav-item" data-page="seasonal" onclick="goTo('seasonal')">
+    <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M8 1L10 6H15L11 9.5L12.5 14.5L8 11.5L3.5 14.5L5 9.5L1 6H6Z" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/></svg>
+    Seasonal RTs
+  </a>
+  <div class="nav-section">Reference</div>
+  <a class="nav-item" data-page="protocols" onclick="goTo('protocols')">
+    <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M3 2h10a1 1 0 011 1v10a1 1 0 01-1 1H3a1 1 0 01-1-1V3a1 1 0 011-1z" stroke="currentColor" stroke-width="1.4"/><path d="M5 6h6M5 9h4" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
+    Protocols
+  </a>
+  <div class="nav-section">Account</div>
+  <a class="nav-item" data-page="pricing" onclick="goTo('pricing')">
+    <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M8 1.5v13M5 4.5h4.5a2 2 0 010 4H6a2 2 0 000 4H11" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
+    Upgrade
+  </a>
+</nav>
+
+<!-- Main -->
+<div id="main">
+
+<!-- ── DASHBOARD ────────────────────────── -->
+<div id="page-dashboard" class="page active">
+  <div class="page-header fade-up">
+    <div class="accent"></div>
+    <h2 id="dash-greeting">Welcome back</h2>
+    <p>Your TMC exam performance overview</p>
+  </div>
+
+  <div class="dash-grid fade-up">
+    <div class="kpi teal">
+      <div class="label">Questions Answered</div>
+      <div class="val" id="kpi-answered">0</div>
+      <div class="sub">Total answered</div>
+    </div>
+    <div class="kpi">
+      <div class="label">Accuracy</div>
+      <div class="val" id="kpi-accuracy">—</div>
+      <div class="sub">Overall correct %</div>
+    </div>
+    <div class="kpi">
+      <div class="label">Questions Left</div>
+      <div class="val" id="kpi-remaining">—</div>
+      <div class="sub">In your plan</div>
+    </div>
+    <div class="kpi">
+      <div class="label">Exam Readiness</div>
+      <div class="val" id="kpi-readiness">—</div>
+      <div class="sub">Based on performance</div>
+    </div>
+  </div>
+
+  <div class="page-header" style="margin-bottom:1rem">
+    <h3 style="font-size:1rem;font-family:'DM Mono',monospace;font-weight:400;color:var(--t3);text-transform:uppercase;letter-spacing:.08em">NBRC Domain Performance</h3>
+  </div>
+  <div class="domain-grid fade-up" id="domain-grid">
+    <!-- filled by JS -->
+  </div>
+
+  <div class="card fade-up" id="recent-activity">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem">
+      <h3 style="font-size:1rem">Recent Activity</h3>
+      <button class="btn btn-sm btn-outline" onclick="goTo('practice')">Start Practice →</button>
+    </div>
+    <div id="activity-list">
+      <div class="activity-row"><div class="ar-dot"></div><div class="ar-label" style="color:var(--t4)">No activity yet — start practicing to see results here</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ── PRACTICE ────────────────────────── -->
+<div id="page-practice" class="page">
+  <div class="page-header fade-up">
+    <div class="accent"></div>
+    <h2>Practice Questions</h2>
+    <p>NBRC-aligned multiple choice questions across all five domains</p>
+  </div>
+
+  <div id="quiz-setup" class="fade-up">
+    <div class="q-toolbar">
+      <select id="domain-filter" onchange="loadQuestion()">
+        <option value="">All Domains</option>
+        <option value="Patient Data Evaluation">Patient Data Evaluation</option>
+        <option value="Troubleshooting & Quality Control">Troubleshooting & QC</option>
+        <option value="Equipment Management">Equipment Management</option>
+        <option value="Therapeutic Procedures">Therapeutic Procedures</option>
+        <option value="Infection Control">Infection Control</option>
+      </select>
+      <select id="difficulty-filter" onchange="loadQuestion()">
+        <option value="">All Difficulty</option>
+        <option value="easy">Easy</option>
+        <option value="medium">Medium</option>
+        <option value="hard">Hard</option>
+      </select>
+      <div class="spacer"></div>
+      <button class="btn btn-sm btn-ghost" onclick="shuffleQuestion()">Shuffle</button>
+      <button class="btn btn-sm btn-primary" onclick="startFreshSession()">New Session</button>
+    </div>
+
+    <div id="question-area">
+      <!-- filled by JS -->
+    </div>
+  </div>
+
+  <div id="session-summary" style="display:none">
+    <!-- score summary shown at end of session -->
+  </div>
+</div>
+
+<!-- ── CLASSROOM ────────────────────────── -->
+<div id="page-classroom" class="page">
+  <div class="page-header fade-up">
+    <div class="accent"></div>
+    <h2>Classroom</h2>
+    <p>Emberline's educational arm — structured domain modules built by a licensed CRT for the NBRC TMC exam</p>
+  </div>
+
+  <!-- CLASSROOM HERO BANNER -->
+  <div class="card card-lg fade-up" style="background:linear-gradient(135deg,rgba(56,168,232,0.08),rgba(11,191,184,0.06));border-color:rgba(56,168,232,0.25);margin-bottom:1.5rem;position:relative;overflow:hidden">
+    <div style="position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--sky),var(--teal),transparent)"></div>
+    <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem">
+      <div>
+        <div style="font-family:'DM Mono',monospace;font-size:.6rem;text-transform:uppercase;letter-spacing:.12em;color:var(--sky);margin-bottom:.4rem">Emberline Education</div>
+        <h3 style="font-size:1.3rem;margin-bottom:.4rem">5 NBRC Domains. Fully Mapped.</h3>
+        <p style="font-size:.85rem;color:var(--t3);max-width:520px;line-height:1.6">Every module maps directly to the NBRC content outline. Video-style lessons, clinical walkthroughs, and AI-powered review — built for working RTs who don't have time for filler.</p>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:.5rem;align-items:flex-end;flex-shrink:0">
+        <div style="font-family:'DM Mono',monospace;font-size:.65rem;color:var(--sky);text-align:right">260+ Questions</div>
+        <div style="font-family:'DM Mono',monospace;font-size:.65rem;color:var(--teal);text-align:right">6 Core Modules</div>
+        <button class="btn btn-outline btn-sm" onclick="goTo('ventus')" style="border-color:rgba(56,168,232,0.3);color:var(--sky)">Ask Dr. Ventus →</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="classroom-content"></div>
+</div>
+
+<!-- ── DR. VENTUS ─────────────────────── -->
+<div id="page-ventus" class="page">
+  <div class="page-header fade-up">
+    <div class="accent" style="background:var(--teal)"></div>
+    <div style="display:flex;align-items:center;gap:.75rem;margin-bottom:.4rem">
+      <h2 style="margin:0">Dr. Ventus</h2>
+      <span style="font-family:'DM Mono',monospace;font-size:.62rem;padding:.2rem .6rem;border-radius:3px;background:rgba(11,191,184,0.1);border:1px solid var(--teal-border);color:var(--teal);text-transform:uppercase;letter-spacing:.1em">AI Mentor</span>
+    </div>
+    <p>Your board-certified AI clinical mentor. Trained on NBRC content, AARC guidelines, and real RT clinical reasoning — available 24/7.</p>
+  </div>
+
+  <!-- VENTUS HERO CALLOUT -->
+  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:.75rem;margin-bottom:1.5rem" class="fade-up">
+    <div class="card card-sm" style="text-align:center;border-color:var(--teal-border)">
+      <div style="font-size:1.4rem;font-family:'Playfair Display',serif;color:var(--teal);line-height:1">∞</div>
+      <div style="font-family:'DM Mono',monospace;font-size:.6rem;color:var(--t4);text-transform:uppercase;letter-spacing:.08em;margin-top:.25rem">Pro/Classroom</div>
+      <div style="font-size:.75rem;color:var(--t3);margin-top:.2rem">Unlimited questions</div>
+    </div>
+    <div class="card card-sm" style="text-align:center">
+      <div style="font-size:1.4rem;font-family:'Playfair Display',serif;color:var(--t1);line-height:1">24/7</div>
+      <div style="font-family:'DM Mono',monospace;font-size:.6rem;color:var(--t4);text-transform:uppercase;letter-spacing:.08em;margin-top:.25rem">Always Available</div>
+      <div style="font-size:.75rem;color:var(--t3);margin-top:.2rem">No office hours</div>
+    </div>
+    <div class="card card-sm" style="text-align:center">
+      <div style="font-size:1.4rem;font-family:'Playfair Display',serif;color:var(--sky);line-height:1">RT</div>
+      <div style="font-family:'DM Mono',monospace;font-size:.6rem;color:var(--t4);text-transform:uppercase;letter-spacing:.08em;margin-top:.25rem">Specialized</div>
+      <div style="font-size:.75rem;color:var(--t3);margin-top:.2rem">NBRC + clinical focus</div>
+    </div>
+  </div>
+
+  <div class="ventus-shell fade-up">
+    <div class="ventus-sidebar">
+      <div class="ventus-avatar">
+        <svg width="28" height="28" viewBox="0 0 28 28" fill="none"><circle cx="14" cy="10" r="5" stroke="#0BBFB8" stroke-width="1.5"/><path d="M6 24c0-4.418 3.582-8 8-8s8 3.582 8 8" stroke="#0BBFB8" stroke-width="1.5" stroke-linecap="round"/></svg>
+      </div>
+      <div class="ventus-name">Dr. Ventus</div>
+      <div class="ventus-title">AI Clinical Mentor</div>
+      <div class="ventus-divider"></div>
+      <div style="font-family:'DM Mono',monospace;font-size:.58rem;text-transform:uppercase;letter-spacing:.1em;color:var(--t4);margin-bottom:.25rem">Quick Prompts</div>
+      <div class="quick-prompt" onclick="ventusPrompt('Explain the difference between CWD and WOB in ventilated patients')">CWD vs WOB in ventilated patients</div>
+      <div class="quick-prompt" onclick="ventusPrompt('Walk me through ARDS management stepwise from diagnosis to advanced ventilation')">ARDS management stepwise</div>
+      <div class="quick-prompt" onclick="ventusPrompt('What are the NBRC TMC cutoff scores and how is the exam scored?')">TMC exam scoring & cutoffs</div>
+      <div class="quick-prompt" onclick="ventusPrompt('Explain neuromuscular failure thresholds for weaning criteria — NIF, MIP, VC thresholds')">Neuromuscular failure thresholds</div>
+      <div class="quick-prompt" onclick="ventusPrompt('What is the toxicity monitoring protocol for inhaled nitric oxide — methemoglobin, NO2 levels?')">iNO toxicity monitoring</div>
+      <div class="quick-prompt" onclick="ventusPrompt('Compare SIMV, AC/VC, and PRVC modes — pros, cons, and clinical use cases')">SIMV vs AC vs PRVC modes</div>
+      <div class="quick-prompt" onclick="ventusPrompt('How do I interpret a complete PFT report including DLCO, FVC, FEV1, and flow-volume loop?')">Full PFT interpretation</div>
+      <div class="quick-prompt" onclick="ventusPrompt('Quiz me on 5 NBRC-style practice questions on patient data evaluation domain')">Quiz me — Patient Data domain</div>
+    </div>
+
+    <div class="chat-shell">
+      <div class="chat-messages" id="ventus-messages">
+        <div class="msg assistant fade-up">
+          <div class="msg-label">Dr. Ventus</div>
+          <div class="msg-bubble">Welcome. I'm Dr. Ventus — your AI clinical mentor for respiratory therapy and the TMC exam. I can explain concepts, work through patient scenarios, interpret labs and PFTs, quiz you on domains, or help you reason through clinical decisions. What would you like to explore?</div>
+        </div>
+      </div>
+      <div class="chat-input-row">
+        <textarea id="ventus-input" placeholder="Ask Dr. Ventus anything..." rows="1" onkeydown="ventusKeydown(event)"></textarea>
+        <button class="btn btn-primary btn-sm" onclick="sendVentus()">Send</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── SEASONAL RTs ─────────────────────── -->
+<div id="page-seasonal" class="page">
+  <div class="page-header fade-up">
+    <div class="accent" style="background:var(--gold)"></div>
+    <h2>Seasonal RTs</h2>
+    <p>For experienced clinicians returning to bedside or preparing for a license reactivation, travel assignment, or credentialing update.</p>
+  </div>
+
+  <!-- HERO CARD -->
+  <div class="card card-lg fade-up" style="background:linear-gradient(135deg,rgba(212,168,60,0.07),rgba(11,191,184,0.04));border-color:rgba(212,168,60,0.25);margin-bottom:1.5rem;position:relative;overflow:hidden">
+    <div style="position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--gold),var(--teal),transparent)"></div>
+    <div style="display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:1.25rem">
+      <div style="flex:1;min-width:260px">
+        <div style="font-family:'DM Mono',monospace;font-size:.6rem;text-transform:uppercase;letter-spacing:.12em;color:var(--gold);margin-bottom:.5rem">Returning to Practice</div>
+        <h3 style="font-size:1.25rem;margin-bottom:.6rem">You know more than you think.</h3>
+        <p style="font-size:.85rem;color:var(--t3);line-height:1.65;margin-bottom:1rem">Clinical experience doesn't expire — but licensing timelines do. Whether you've been in administration, out of the field, or transitioning from travel to staff, TMC Prep's Seasonal RT track gives you a targeted refresh on what the NBRC tests, not a full re-education.</p>
+        <div style="display:flex;gap:.75rem;flex-wrap:wrap">
+          <button class="btn btn-gold btn-sm" onclick="goTo('practice')">Start Practice →</button>
+          <button class="btn btn-outline btn-sm" onclick="ventusPrompt('I am an experienced RT returning to practice after time away. What areas should I prioritize for the TMC exam?');goTo(\'ventus\')" style="border-color:rgba(212,168,60,0.3);color:var(--gold)">Ask Dr. Ventus →</button>
+        </div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:.6rem;min-width:160px">
+        <div class="card card-sm" style="border-color:rgba(212,168,60,0.2);text-align:center">
+          <div style="font-size:1.3rem;font-family:'Playfair Display',serif;color:var(--gold)">93</div>
+          <div style="font-family:'DM Mono',monospace;font-size:.58rem;color:var(--t4);text-transform:uppercase;letter-spacing:.08em">Active Questions</div>
+        </div>
+        <div class="card card-sm" style="text-align:center">
+          <div style="font-size:1.3rem;font-family:'Playfair Display',serif;color:var(--teal)">5</div>
+          <div style="font-family:'DM Mono',monospace;font-size:.58rem;color:var(--t4);text-transform:uppercase;letter-spacing:.08em">NBRC Domains</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PRIORITY AREAS -->
+  <div style="margin-bottom:1rem">
+    <div style="font-family:'DM Mono',monospace;font-size:.62rem;text-transform:uppercase;letter-spacing:.1em;color:var(--t4);margin-bottom:.75rem">High-Yield Focus Areas for Returning RTs</div>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:.75rem" id="seasonal-areas">
+      <div class="card card-sm" style="cursor:none;transition:all .2s" onclick="filterAndPractice('patient_data')">
+        <div style="font-family:'DM Mono',monospace;font-size:.6rem;text-transform:uppercase;letter-spacing:.08em;color:var(--gold);margin-bottom:.35rem">Domain 1</div>
+        <div style="font-size:.88rem;font-weight:500;color:var(--t1);margin-bottom:.3rem">Patient Data Evaluation</div>
+        <div style="font-size:.75rem;color:var(--t3)">ABGs, PFTs, hemodynamics — often the gap after time away</div>
+      </div>
+      <div class="card card-sm" style="cursor:none;transition:all .2s" onclick="filterAndPractice('troubleshooting')">
+        <div style="font-family:'DM Mono',monospace;font-size:.6rem;text-transform:uppercase;letter-spacing:.08em;color:var(--gold);margin-bottom:.35rem">Domain 2</div>
+        <div style="font-size:.88rem;font-weight:500;color:var(--t1);margin-bottom:.3rem">Troubleshooting & QC</div>
+        <div style="font-size:.75rem;color:var(--t3)">Vent alarms, circuit issues — equipment updates since you were last bedside</div>
+      </div>
+      <div class="card card-sm" style="cursor:none;transition:all .2s" onclick="filterAndPractice('therapy')">
+        <div style="font-family:'DM Mono',monospace;font-size:.6rem;text-transform:uppercase;letter-spacing:.08em;color:var(--gold);margin-bottom:.35rem">Domain 4</div>
+        <div style="font-size:.88rem;font-weight:500;color:var(--t1);margin-bottom:.3rem">Therapeutic Procedures</div>
+        <div style="font-size:.75rem;color:var(--t3)">Pharmacology updates, airway management, LPV protocols</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- UPGRADE CTA for seasonal pathway -->
+  <div class="card fade-up" style="border-color:rgba(212,168,60,0.2);background:rgba(212,168,60,0.03)">
+    <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem">
+      <div>
+        <div style="font-family:'DM Mono',monospace;font-size:.6rem;text-transform:uppercase;letter-spacing:.1em;color:var(--gold);margin-bottom:.3rem">Pro Plan — Built for Working Clinicians</div>
+        <p style="font-size:.82rem;color:var(--t3);line-height:1.6;max-width:480px">Unlimited practice questions, all 5 domain modules, and full Dr. Ventus AI access — so you can prep between shifts, not just on your day off.</p>
+      </div>
+      <button class="btn btn-gold" onclick="doCheckout('pro')">Get Pro — $19/mo →</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── PROTOCOLS ───────────────────────── -->
+<div id="page-protocols" class="page">
+  <div class="page-header fade-up">
+    <div class="accent"></div>
+    <h2>Protocols & Guidelines</h2>
+    <p>Current NBRC-referenced clinical protocols and AARC/AHA/ACC guidelines</p>
+  </div>
+
+  <!-- PROTOCOL TICKER — live heartbeat -->
+  <div class="proto-ticker-wrap fade-up">
+    <div class="proto-ticker-label">LIVE UPDATES</div>
+    <div class="proto-ticker-track" id="ticker-track">
+      <!-- items duplicated for infinite loop -->
+    </div>
+  </div>
+
+  <div class="proto-grid fade-up" id="proto-grid">
+    <!-- filled by JS -->
+  </div>
+</div>
+
+<!-- ── PRICING ─────────────────────────── -->
+<div id="page-pricing" class="page">
+  <div class="page-header fade-up">
+    <div class="accent"></div>
+    <h2>Plans & Pricing</h2>
+    <p>Invest in your board certification. One platform, built by RTs, for RTs.</p>
+  </div>
+
+  <div class="pricing-grid fade-up" id="pricing-grid"></div>
+
+  <div class="card fade-up" style="max-width:620px">
+    <h3 style="font-size:1rem;margin-bottom:.5rem">100% Exam Focused</h3>
+    <p style="font-size:.82rem;color:var(--t3);line-height:1.6">Every question, module, and protocol in TMC Prep maps directly to NBRC exam content specifications. Built by a licensed CRT with clinical and director-level experience.</p>
+  </div>
+</div>
+
+</div><!-- /main -->
+</div><!-- /shell -->
+
+<script>
+/* ══ SUPABASE ═══════════════════════════════ */
+const SB_URL='https://rqytpqaswofdwhmsaykn.supabase.co';
+const SB_ANON='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJxeXRwcWFzd29mZHdobXNheWtuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI5MTU5MzksImV4cCI6MjA4ODQ5MTkzOX0.vzsT4oWSxKoWzfDmw7SaCaImA6_SshYwuLA9_nmNHtg';
+const sb=supabase.createClient(SB_URL,SB_ANON);
+
+/* ══ STATE ══════════════════════════════════ */
+let USER=null,PROFILE=null;
+let QUESTIONS=[],CURRENT_Q=null,Q_IDX=0;
+let SESSION={correct:0,total:0,wrong:[]};
+let VENTUS_HISTORY=[];
+
+/* ══ BOOT ═══════════════════════════════════ */
+async function boot(){
+  const{data:{session},error}=await sb.auth.getSession();
+  if(!session){window.location.href='auth.html';return;}
+  USER=session.user;
+  await loadProfile();
+  renderTopbar();
+  renderDomainGrid();
+  renderClassroom();
+  renderProtocols();
+  renderPricing();
+  await loadQuestion();
+  checkCheckout();
+  initScrollReveal();
+}
+
+/* ══ PROFILE ════════════════════════════════ */
+async function loadProfile(){
+  const{data,error}=await sb.from('profiles').select('*').eq('id',USER.id).single();
+  if(data)PROFILE=data;
+  else PROFILE={plan:'free',questions_remaining:5,email:USER.email,full_name:''};
+}
+
+function renderTopbar(){
+  const plan=PROFILE?.plan||'free';
+  document.getElementById('plan-badge').textContent=plan.charAt(0).toUpperCase()+plan.slice(1);
+  document.getElementById('plan-badge').style.borderColor=plan==='founder'?'var(--gold)':(plan==='pro'||plan==='classroom')?'var(--teal-border)':'var(--border)';
+  document.getElementById('plan-badge').style.color=plan==='founder'?'var(--gold)':(plan==='pro'||plan==='classroom')?'var(--teal)':'var(--t4)';
+  const email=USER.email||'';
+  document.getElementById('user-email-display').textContent=email.length>22?email.slice(0,20)+'…':email;
+  const qr=PROFILE?.questions_remaining;
+  document.getElementById('q-remaining').textContent=(qr>=999000?'∞':qr||0)+' Q';
+  const firstName=(PROFILE?.full_name||email).split(' ')[0].split('@')[0];
+  const h=new Date().getHours();
+  const gr=h<12?'Good morning':'h<17'?'Good afternoon':'Good evening';
+  document.getElementById('dash-greeting').textContent=`${h<12?'Good morning':h<17?'Good afternoon':'Good evening'}, ${firstName}`;
+  const pl=PROFILE?.plan||'free';
+  document.getElementById('kpi-remaining').textContent=qr>=999000?'∞':qr||0;
+}
+
+/* ══ NAVIGATION ══════════════════════════════ */
+function goTo(page){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+  const pg=document.getElementById('page-'+page);
+  if(pg){pg.classList.add('active');pg.querySelectorAll('.fade-up').forEach((el,i)=>{el.style.animationDelay=i*.04+'s';});}
+  document.querySelectorAll(`[data-page="${page}"]`).forEach(n=>n.classList.add('active'));
+  window.scrollTo(0,0);
+}
+
+/* ══ DOMAIN GRID ════════════════════════════ */
+const DOMAINS=[
+  {name:'Patient Data Evaluation',key:'pde',pct:0},
+  {name:'Troubleshooting & QC',key:'tqc',pct:0},
+  {name:'Equipment Management',key:'em',pct:0},
+  {name:'Therapeutic Procedures',key:'tp',pct:0},
+  {name:'Infection Control',key:'ic',pct:0}
+];
+function renderDomainGrid(){
+  const g=document.getElementById('domain-grid');
+  g.innerHTML=DOMAINS.map(d=>`
+    <div class="domain-card" onclick="filterDomain('${d.name}')">
+      <div class="d-name">${d.name}</div>
+      <div class="d-bar"><div class="d-fill" style="width:${d.pct}%"></div></div>
+      <div class="d-pct">${d.pct}% mastery</div>
+    </div>`).join('');
+}
+function filterDomain(name){
+  document.getElementById('domain-filter').value=name;
+  goTo('practice');
+  loadQuestion();
+}
+
+/* ══ QUESTIONS ══════════════════════════════ */
+async function loadQuestion(){
+  const domain=document.getElementById('domain-filter')?.value||'';
+  const diff=document.getElementById('difficulty-filter')?.value||'';
+  let q=sb.from('questions').select('*').eq('is_active',true);
+  if(domain)q=q.eq('domain',domain);
+  if(diff)q=q.eq('difficulty',diff);
+  q=q.limit(50);
+  const{data,error}=await q;
+  if(error||!data||!data.length){
+    document.getElementById('question-area').innerHTML=`<div class="card" style="text-align:center;padding:2.5rem"><p style="color:var(--t3)">No questions found for this filter. <button class="btn btn-outline btn-sm" onclick="clearFilters()">Clear Filters</button></p></div>`;
+    return;
+  }
+  QUESTIONS=data.sort(()=>Math.random()-.5);
+  Q_IDX=0;
+  SESSION={correct:0,total:0,wrong:[]};
+  showQuestion();
+}
+function clearFilters(){
+  document.getElementById('domain-filter').value='';
+  document.getElementById('difficulty-filter').value='';
+  loadQuestion();
+}
+function shuffleQuestion(){
+  QUESTIONS=QUESTIONS.sort(()=>Math.random()-.5);
+  Q_IDX=0;
+  showQuestion();
+}
+function startFreshSession(){
+  SESSION={correct:0,total:0,wrong:[]};
+  document.getElementById('session-summary').style.display='none';
+  document.getElementById('quiz-setup').style.display='block';
+  loadQuestion();
+}
+function showQuestion(){
+  if(Q_IDX>=QUESTIONS.length){showSessionSummary();return;}
+  CURRENT_Q=QUESTIONS[Q_IDX];
+  const area=document.getElementById('question-area');
+  const diff=CURRENT_Q.difficulty||'medium';
+  const diffColor=diff==='easy'?'var(--green)':diff==='hard'?'var(--ember)':'var(--gold)';
+  area.innerHTML=`
+    <div class="question-card fade-up">
+      <div class="q-meta">
+        <span class="q-badge domain">${CURRENT_Q.domain||'General'}</span>
+        <span class="q-badge" style="color:${diffColor};border-color:${diffColor}40">${diff}</span>
+        ${CURRENT_Q.nbrc_category?`<span class="q-badge">${CURRENT_Q.nbrc_category}</span>`:''}
+      </div>
+      <div class="q-text">${CURRENT_Q.question}</div>
+      <div class="options" id="options">
+        ${['A','B','C','D'].map(l=>`
+          <div class="option" id="opt-${l}" onclick="selectOption('${l}')">
+            <span class="option-letter">${l}.</span>
+            <span class="option-text">${CURRENT_Q['option_'+l.toLowerCase()]||''}</span>
+          </div>`).join('')}
+      </div>
+      <div class="q-actions" id="q-actions">
+        <button class="btn btn-primary" id="submit-btn" onclick="submitAnswer()" disabled>Submit Answer</button>
+        <button class="btn btn-ghost" onclick="skipQuestion()">Skip</button>
+      </div>
+      <div class="explanation-card" id="explanation-card"></div>
+    </div>
+    <div class="q-nav">
+      <span class="q-progress">Question ${Q_IDX+1} of ${QUESTIONS.length} &nbsp;·&nbsp; ${SESSION.correct} correct</span>
+      <button class="btn btn-outline btn-sm" id="next-btn" onclick="nextQuestion()" style="display:none">Next Question →</button>
+    </div>`;
+}
+let SELECTED=null;
+function selectOption(letter){
+  if(document.getElementById('opt-A').classList.contains('locked'))return;
+  SELECTED=letter;
+  ['A','B','C','D'].forEach(l=>{
+    document.getElementById('opt-'+l).classList.remove('selected');
+  });
+  document.getElementById('opt-'+letter).classList.add('selected');
+  document.getElementById('submit-btn').disabled=false;
+}
+function submitAnswer(){
+  if(!SELECTED)return;
+  const correct=CURRENT_Q.correct_answer?.toUpperCase();
+  const isCorrect=SELECTED===correct;
+  SESSION.total++;
+  if(isCorrect)SESSION.correct++;
+  else SESSION.wrong.push({q:CURRENT_Q.question,selected:SELECTED,correct});
+  ['A','B','C','D'].forEach(l=>{
+    const el=document.getElementById('opt-'+l);
+    el.classList.add('locked');
+    el.onclick=null;
+    if(l===correct)el.classList.add('correct');
+    else if(l===SELECTED&&!isCorrect)el.classList.add('incorrect');
+  });
+  document.getElementById('submit-btn').style.display='none';
+  document.getElementById('next-btn').style.display='inline-flex';
+  const exp=document.getElementById('explanation-card');
+  exp.classList.add('visible');
+  exp.innerHTML=`
+    <div class="exp-head">${isCorrect?'✓ Correct':'✗ Incorrect — Correct answer: '+correct}</div>
+    <div class="exp-text">${CURRENT_Q.explanation||'No explanation available.'}</div>
+    ${CURRENT_Q.clinical_pearl?`<div class="clinical-pearl"><div class="pearl-head">🔬 Clinical Pearl</div><div class="pearl-text">${CURRENT_Q.clinical_pearl}</div></div>`:''}`;
+  updateKPIs();
+  deductQuestion();
+}
+function skipQuestion(){Q_IDX++;showQuestion();}
+function nextQuestion(){Q_IDX++;SELECTED=null;showQuestion();}
+async function deductQuestion(){
+  if(!PROFILE||PROFILE.plan==='founder')return;
+  if(PROFILE.questions_remaining<=0)return;
+  PROFILE.questions_remaining--;
+  document.getElementById('q-remaining').textContent=PROFILE.questions_remaining+' Q';
+  document.getElementById('kpi-remaining').textContent=PROFILE.questions_remaining;
+  await sb.from('profiles').update({questions_remaining:PROFILE.questions_remaining}).eq('id',USER.id);
+}
+function showSessionSummary(){
+  document.getElementById('quiz-setup').style.display='none';
+  const pct=SESSION.total>0?Math.round((SESSION.correct/SESSION.total)*100):0;
+  document.getElementById('session-summary').style.display='block';
+  document.getElementById('session-summary').innerHTML=`
+    <div class="score-card fade-up">
+      <div class="score-big">${pct}%</div>
+      <div class="score-label">Session Score — ${SESSION.correct} / ${SESSION.total} correct</div>
+    </div>
+    <div class="card fade-up" style="margin-bottom:1rem">
+      <h3 style="font-size:1rem;margin-bottom:.75rem">Performance Breakdown</h3>
+      <div style="display:flex;gap:1.5rem;flex-wrap:wrap">
+        <div><div style="font-family:'DM Mono',monospace;font-size:.62rem;color:var(--t4);text-transform:uppercase;letter-spacing:.08em;margin-bottom:.25rem">Correct</div><div style="font-size:1.5rem;color:var(--green);font-family:'Playfair Display',serif">${SESSION.correct}</div></div>
+        <div><div style="font-family:'DM Mono',monospace;font-size:.62rem;color:var(--t4);text-transform:uppercase;letter-spacing:.08em;margin-bottom:.25rem">Incorrect</div><div style="font-size:1.5rem;color:var(--ember);font-family:'Playfair Display',serif">${SESSION.total-SESSION.correct}</div></div>
+        <div><div style="font-family:'DM Mono',monospace;font-size:.62rem;color:var(--t4);text-transform:uppercase;letter-spacing:.08em;margin-bottom:.25rem">Questions</div><div style="font-size:1.5rem;color:var(--t1);font-family:'Playfair Display',serif">${SESSION.total}</div></div>
+      </div>
+    </div>
+    <div style="display:flex;gap:.75rem">
+      <button class="btn btn-primary" onclick="startFreshSession()">New Session</button>
+      <button class="btn btn-ghost" onclick="goTo('dashboard')">Back to Dashboard</button>
+    </div>`;
+  updateKPIs();
+}
+function updateKPIs(){
+  const pct=SESSION.total>0?Math.round((SESSION.correct/SESSION.total)*100):0;
+  document.getElementById('kpi-answered').textContent=SESSION.total;
+  document.getElementById('kpi-accuracy').textContent=SESSION.total>0?pct+'%':'—';
+  document.getElementById('kpi-readiness').textContent=pct>=70?'Ready':(pct>=50?'Progressing':'Needs Work');
+}
+
+/* ══ CLASSROOM ══════════════════════════════ */
+const MODULES=[
+  {title:'Patient Data Evaluation',desc:'ABG interpretation, PFTs, hemodynamic monitoring, chest X-ray analysis, and lab value integration.',tags:['NBRC Domain 1','95 Questions'],locked:false},
+  {title:'Troubleshooting & Quality Control',desc:'Ventilator alarms, circuit leaks, equipment calibration, and diagnostic problem-solving.',tags:['NBRC Domain 2','42 Questions'],locked:false},
+  {title:'Equipment Management',desc:'Oxygen delivery systems, aerosol therapy, airway adjuncts, and mechanical ventilators.',tags:['NBRC Domain 3','38 Questions'],locked:true},
+  {title:'Therapeutic Procedures',desc:'Bronchial hygiene, airway management, pharmacology, and mechanical ventilation strategies.',tags:['NBRC Domain 4','67 Questions'],locked:true},
+  {title:'Infection Control',desc:'Standard precautions, sterilization, nosocomial infection prevention, and CDC guidelines.',tags:['NBRC Domain 5','18 Questions'],locked:true},
+  {title:'Advanced Ventilation Mastery',desc:'ARDS net protocol, non-invasive ventilation, airway pressure release, and weaning strategies.',tags:['Advanced','Pro+'],locked:true}
+];
+function renderClassroom(){
+  const plan=PROFILE?.plan||'free';
+  const unlocked=plan==='founder'?99:(plan==='pro'||plan==='classroom')?6:2;
+  const content=document.getElementById('classroom-content');
+  content.innerHTML=`
+    <div class="class-grid fade-up">
+      ${MODULES.map((m,i)=>`
+        <div class="class-card ${i>=unlocked?'':''}">
+          <div class="cc-icon">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><rect x="2" y="2" width="12" height="12" rx="1.5" stroke="var(--teal)" stroke-width="1.3"/><path d="M5 8l2.5 2.5L11 5.5" stroke="var(--teal)" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          <h3>${m.title}</h3>
+          <p>${m.desc}</p>
+          <div class="cc-meta">${m.tags.map(t=>`<span class="cc-tag">${t}</span>`).join('')}</div>
+          ${i>=unlocked?`<div class="lock-overlay"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"><rect x="5" y="11" width="14" height="10" rx="2" stroke="var(--t3)" stroke-width="1.5"/><path d="M8 11V7a4 4 0 018 0v4" stroke="var(--t3)" stroke-width="1.5"/></svg></div>`:''}
+        </div>`).join('')}
+    </div>
+    ${unlocked<MODULES.length?`<div class="upgrade-gate fade-up"><h3>Unlock All 6 Modules</h3><p>Upgrade to Pro or Classroom to access all domain modules, advanced ventilation mastery, and complete study guides.</p><button class="btn btn-primary" onclick="goTo('pricing')">View Plans →</button></div>`:''}`;
+}
+
+/* ══ PROTOCOLS ══════════════════════════════ */
+const TICKER_ITEMS=[
+  {text:'AARC CPG: Surfactant Replacement Therapy — Updated indications and dosing guidance 2025',org:'AARC',date:'Jan 2025'},
+  {text:'AHA/ACC: Updated ACLS Algorithm — Modified epinephrine timing in cardiac arrest protocols',org:'AHA',date:'Feb 2025'},
+  {text:'NBRC: TMC Exam Blueprint Revision — New emphasis on ventilator graphics interpretation',org:'NBRC',date:'Mar 2025'},
+  {text:'AARC CPG: Incentive Spirometry — Evidence review supports selective perioperative use',org:'AARC',date:'Nov 2024'},
+  {text:'CDC: HAP/VAP Prevention Bundle — Updated central line and VAP prevention checklist',org:'CDC',date:'Dec 2024'},
+  {text:'AARC CPG: Oxygen Therapy in Adults — Updated SpO₂ targets for COPD and ARDS patients',org:'AARC',date:'Oct 2024'},
+  {text:'NIH NHLBI: ARDS Network — LPV protocol remains gold standard; updated driving pressure targets',org:'NIH',date:'Sep 2024'},
+  {text:'AARC CPG: Aerosol Drug Delivery — Updated guidance for vibrating mesh nebulizers during MV',org:'AARC',date:'Aug 2024'},
+  {text:'GOLD Report 2025 — Updated COPD staging and pharmacological management recommendations',org:'GOLD',date:'Jan 2025'},
+  {text:'AARC CPG: Prone Positioning — Strong recommendation maintained for moderate-severe ARDS',org:'AARC',date:'Jul 2024'},
+];
+const PROTO_CARDS=[
+  {title:'ARDS Network LPV Protocol',src:'NIH NHLBI',desc:'Lung protective ventilation: TV 6ml/kg IBW, plateau pressure ≤30 cmH₂O, PEEP/FiO₂ table. Daily spontaneous breathing trials when P/F >200.',tags:['Critical Care','MV','Evidence Level A']},
+  {title:'ACLS Cardiac Arrest Algorithm',src:'AHA 2024',desc:'CPR 30:2, early defibrillation, epinephrine 1mg q3-5min. Amiodarone 300mg for refractory VF/pVT. Post-arrest targeted temperature management.',tags:['Emergency','Pharmacology','Evidence Level A']},
+  {title:'COPD Exacerbation Management',src:'GOLD 2025',desc:'Short-acting bronchodilators, controlled O₂ (SpO₂ 88-92%), systemic corticosteroids, antibiotics if purulent sputum. Consider NIV for pH <7.35.',tags:['Pulmonary','NIV','Evidence Level A']},
+  {title:'Weaning & Extubation Protocol',src:'AARC CPG',desc:'Daily SAT + SBT. Pass criteria: RSBI <105, MIP ≤ -20, TV >5ml/kg, RR <35, SpO₂ ≥90% on FiO₂ ≤0.40, PEEP ≤8.',tags:['Ventilator','Weaning','Evidence Level B']},
+  {title:'VAP Prevention Bundle',src:'CDC / IHI',desc:'HOB 30-45°, daily sedation holds, oral care with CHX q4h, subglottic suctioning, hand hygiene compliance auditing.',tags:['Infection Control','Prevention']},
+  {title:'Asthma Status Management',src:'GINA 2024',desc:'SABA q20min x3, systemic steroids within 1hr, magnesium sulfate 2g IV for severe. Heliox if poor response. NIV or intubation for impending respiratory failure.',tags:['Pulmonary','Emergency','Pharmacology']},
+  {title:'Neonatal Resuscitation',src:'NRP 8th Ed.',desc:'Initial steps: warm, dry, stimulate. PPV if HR <100 or labored breathing. Intubate if no improvement. Epinephrine 0.01-0.03 mg/kg if HR <60 after 30s CPR.',tags:['Neonatal','Emergency']},
+  {title:'Prone Positioning Protocol',src:'AARC CPG 2024',desc:'Indicated for P/F <150 on LPV with FiO₂ ≥0.6. Minimum 16 hours per session. Continue until P/F >150 on FiO₂ ≤0.6 PEEP ≤10 for 4+ hours supine.',tags:['Critical Care','ARDS']},
+  {title:'iNO Administration Protocol',src:'FDA / ICU',desc:'Initiate at 20 ppm for PPHN or refractory hypoxemia. Monitor methemoglobin at 1hr, 4hr, and q24h. Wean by 5ppm q4h when FiO₂ <0.60. Rebound risk on abrupt discontinuation.',tags:['Pharmacology','Neonatal','Critical Care']},
+];
+function renderProtocols(){
+  // Build ticker
+  const track=document.getElementById('ticker-track');
+  // Double items for seamless infinite scroll
+  const allItems=[...TICKER_ITEMS,...TICKER_ITEMS];
+  track.innerHTML=allItems.map(item=>`
+    <span class="ticker-item">
+      <span class="t-dot"></span>
+      <span class="t-org">${item.org}</span>
+      <span>${item.text}</span>
+      <span class="t-date">${item.date}</span>
+    </span>`).join('');
+
+  // Build protocol cards
+  const grid=document.getElementById('proto-grid');
+  grid.innerHTML=PROTO_CARDS.map(p=>`
+    <div class="proto-card">
+      <div class="pc-head">
+        <div class="pc-icon">
+          <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M8 2v4M8 10v4M2 8h4M10 8h4" stroke="var(--teal)" stroke-width="1.4" stroke-linecap="round"/></svg>
+        </div>
+        <h3>${p.title}</h3>
+      </div>
+      <div class="pc-src">${p.src}</div>
+      <p>${p.desc}</p>
+      <div>${p.tags.map(t=>`<span class="proto-tag">${t}</span>`).join('')}</div>
+    </div>`).join('');
+}
+
+/* ══ PRICING ════════════════════════════════ */
+function renderPricing(){
+  const grid=document.getElementById('pricing-grid');
+  grid.innerHTML=`
+    <div class="plan-card">
+      <div class="plan-name">Free</div>
+      <div class="plan-price">$0<sub>/mo</sub></div>
+      <div class="plan-period">Forever free</div>
+      <ul class="plan-features">
+        <li>5 practice questions</li>
+        <li>2 domain modules</li>
+        <li>Protocol reference library</li>
+        <li>Limited Dr. Ventus access</li>
+      </ul>
+      <button class="btn btn-ghost btn-full" disabled>Current Plan</button>
+    </div>
+    <div class="plan-card featured">
+      <div class="plan-name teal">Pro</div>
+      <div class="plan-price">$19<sub>/mo</sub></div>
+      <div class="plan-period">Per month, cancel anytime</div>
+      <ul class="plan-features">
+        <li>Unlimited practice questions</li>
+        <li>All 5 NBRC domain modules</li>
+        <li>Full Dr. Ventus AI access</li>
+        <li>Protocol reference library</li>
+        <li>Performance analytics</li>
+        <li>Study streak tracking</li>
+      </ul>
+      <button class="btn btn-primary btn-full" onclick="doCheckout('pro')">Get Pro →</button>
+    </div>
+    <div class="plan-card">
+      <div class="plan-name teal">Classroom</div>
+      <div class="plan-price">$49<sub>/mo</sub></div>
+      <div class="plan-period">Per educator / program</div>
+      <ul class="plan-features">
+        <li>Everything in Pro</li>
+        <li>Up to 30 student seats</li>
+        <li>Class progress dashboard</li>
+        <li>Instructor question bank</li>
+        <li>Custom exam simulations</li>
+        <li>Email support</li>
+      </ul>
+      <button class="btn btn-outline btn-full" onclick="doCheckout('classroom')">Get Classroom →</button>
+    </div>
+    <div class="plan-card institution">
+      <div class="plan-name gold">Institution</div>
+      <div class="plan-price" style="color:var(--gold)">Custom</div>
+      <div class="plan-period">Volume pricing available</div>
+      <ul class="plan-features">
+        <li class="gold-feat">Everything in Classroom</li>
+        <li class="gold-feat">Unlimited student seats</li>
+        <li class="gold-feat">Admin analytics portal</li>
+        <li class="gold-feat">Curriculum alignment</li>
+        <li class="gold-feat">API integrations</li>
+        <li class="gold-feat">Dedicated success manager</li>
+      </ul>
+      <button class="btn btn-gold btn-full" onclick="openModal('institution-modal')">Contact Us →</button>
+    </div>`;
+}
+
+/* ══ STRIPE CHECKOUT ════════════════════════ */
+async function doCheckout(plan){
+  showToast('Opening checkout…');
+  try{
+    const{data:{session:sess}}=await sb.auth.getSession();
+    if(!sess){window.location.href='auth.html';return;}
+    const resp=await fetch(SB_URL+'/functions/v1/tmc-stripe',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({plan,email:USER.email})  // 'email' — matches edge function
+    });
+    if(!resp.ok){
+      const errText=await resp.text();
+      console.error('Stripe edge error:',errText);
+      showToast('Checkout error — please try again','error');
+      return;
+    }
+    const d=await resp.json();
+    if(d.url){
+      window.location.href=d.url;  // hard redirect — no waitlist fallback
+    } else if(d.error){
+      console.error('Stripe returned error:',d.error);
+      showToast('Payment unavailable — contact support','error');
+    } else {
+      showToast('Unexpected response — please try again','error');
+    }
+  }catch(e){
+    console.error('doCheckout exception:',e);
+    showToast('Connection error — please try again','error');
+  }
+}
+function captureWaitlist(plan){
+  document.getElementById('wl-plan').value=plan||'pro';
+  document.getElementById('wl-email').value=USER?.email||'';
+  openModal('waitlist-modal');
+}
+function checkCheckout(){
+  const p=new URLSearchParams(window.location.search);
+  if(p.get('checkout')==='success'){showToast('🎉 Payment successful — welcome aboard!');loadProfile().then(renderTopbar);window.history.replaceState({},'',window.location.pathname);}
+  else if(p.get('checkout')==='canceled'){showToast('Checkout canceled.');}
+}
+
+/* ══ WAITLIST ═══════════════════════════════ */
+async function submitWaitlist(){
+  const name=document.getElementById('wl-name').value.trim();
+  const email=document.getElementById('wl-email').value.trim();
+  const plan=document.getElementById('wl-plan').value;
+  if(!email){showToast('Email required','error');return;}
+  await sb.from('waitlist').insert({name,email,plan,source:'app'}).catch(()=>{});
+  closeModal('waitlist-modal');
+  showToast('You\'re on the list — we\'ll be in touch!');
+}
+
+/* ══ INSTITUTION INQUIRY ════════════════════ */
+async function submitInstitution(){
+  const contact_name=document.getElementById('inst-name').value.trim();
+  const contact_email=document.getElementById('inst-email').value.trim();
+  const institution_name=document.getElementById('inst-inst').value.trim();
+  const rt_count=parseInt(document.getElementById('inst-count').value)||0;
+  const message=document.getElementById('inst-msg').value.trim();
+  if(!contact_email||!institution_name){showToast('Please fill required fields','error');return;}
+  const{error}=await sb.from('institution_inquiries').insert({contact_name,contact_email,institution_name,rt_count,message,status:'new'});
+  closeModal('institution-modal');
+  showToast(error?'Submitted — we\'ll be in touch!':'Thank you — we\'ll contact you within 24 hours!');
+}
+
+/* ══ DR. VENTUS ══════════════════════════════ */
+function ventusPrompt(text){
+  document.getElementById('ventus-input').value=text;
+  sendVentus();
+}
+function ventusKeydown(e){
+  if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendVentus();}
+}
+async function sendVentus(){
+  const input=document.getElementById('ventus-input');
+  const text=input.value.trim();
+  if(!text)return;
+  input.value='';
+  input.style.height='44px';
+
+  // Plan gate
+  const plan=PROFILE?.plan||'free';
+  if(plan==='free'&&VENTUS_HISTORY.length>=8){
+    appendMsg('assistant','You\'ve reached the free tier Dr. Ventus limit. Upgrade to Pro for unlimited access.',true);
+    return;
+  }
+
+  appendMsg('user',text);
+  VENTUS_HISTORY.push({role:'user',content:text});
+
+  // Typing indicator
+  const typing=document.createElement('div');
+  typing.className='msg assistant fade-up';
+  typing.id='typing-indicator';
+  typing.innerHTML='<div class="msg-label">Dr. Ventus</div><div class="typing-indicator"><span></span><span></span><span></span></div>';
+  document.getElementById('ventus-messages').appendChild(typing);
+  scrollChat();
+
+  try{
+    const resp=await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({
+        model:'claude-sonnet-4-20250514',
+        max_tokens:1000,
+        system:`You are Dr. Ventus, a highly knowledgeable AI clinical mentor specializing in respiratory therapy, mechanical ventilation, and NBRC TMC exam preparation. You are concise, clinically precise, and always connect your answers to practical RT application and exam relevance. Format responses clearly — use short paragraphs or numbered steps when appropriate. Avoid generic disclaimers. Speak as a respected clinical educator who has worked at the bedside.`,
+        messages:VENTUS_HISTORY.slice(-20)  // keep last 20 turns max
+      })
+    });
+
+    document.getElementById('typing-indicator')?.remove();
+
+    if(!resp.ok){
+      const errBody=await resp.text();
+      console.error('Ventus API error:',resp.status,errBody);
+      appendMsg('assistant','I\'m having trouble connecting right now. Please try again in a moment.');
+      return;
+    }
+
+    const d=await resp.json();
+
+    // Robust response extraction
+    let reply='';
+    if(d.content&&Array.isArray(d.content)){
+      reply=d.content.filter(b=>b.type==='text').map(b=>b.text).join('').trim();
+    }
+    if(!reply&&d.error){
+      console.error('Ventus API returned error block:',d.error);
+      reply='I encountered an issue processing that. Please try again.';
+    }
+    if(!reply)reply='No response received — please try again.';
+
+    VENTUS_HISTORY.push({role:'assistant',content:reply});
+    appendMsg('assistant',reply);
+
+  }catch(e){
+    document.getElementById('typing-indicator')?.remove();
+    console.error('Ventus fetch exception:',e);
+    appendMsg('assistant','Connection issue. Check your internet and try again.');
+  }
+}
+function appendMsg(role,text,isWarning=false){
+  const msgs=document.getElementById('ventus-messages');
+  const div=document.createElement('div');
+  div.className=`msg ${role} fade-up`;
+  div.innerHTML=`
+    <div class="msg-label">${role==='user'?'You':'Dr. Ventus'}</div>
+    <div class="msg-bubble" style="${isWarning?'border-color:rgba(212,168,60,0.3);color:var(--gold)':''}">${text.replace(/\n/g,'<br>')}</div>`;
+  msgs.appendChild(div);
+  if(isWarning){
+    const btn=document.createElement('button');
+    btn.className='btn btn-outline btn-sm';
+    btn.style.marginTop='.5rem';
+    btn.textContent='Upgrade to Pro →';
+    btn.onclick=()=>goTo('pricing');
+    div.appendChild(btn);
+  }
+  scrollChat();
+}
+function scrollChat(){
+  const msgs=document.getElementById('ventus-messages');
+  msgs.scrollTop=msgs.scrollHeight;
+}
+
+function filterAndPractice(domain){
+  const map={patient_data:'Patient Data Evaluation',troubleshooting:'Troubleshooting & Quality Control',equipment:'Equipment Management',therapy:'Therapeutic Procedures',infection:'Infection Control'};
+  document.getElementById('domain-filter').value=map[domain]||'';
+  goTo('practice');
+  loadQuestion();
+}
+
+/* ══ MODAL HELPERS ══════════════════════════ */
+function openModal(id){document.getElementById(id).classList.add('open');}
+function closeModal(id){document.getElementById(id).classList.remove('open');}
+
+/* ══ TOAST ══════════════════════════════════ */
+let toastTimer=null;
+function showToast(msg,type=''){
+  const t=document.getElementById('toast');
+  t.textContent=msg;
+  t.className='show'+(type?' '+type:'');
+  clearTimeout(toastTimer);
+  toastTimer=setTimeout(()=>t.className='',3200);
+}
+
+/* ══ SIGN OUT ════════════════════════════════ */
+async function signOut(){
+  await sb.auth.signOut();
+  window.location.href='auth.html';
+}
+
+/* ══ SCROLL REVEAL ═══════════════════════════ */
+function initScrollReveal(){
+  if(!window.IntersectionObserver)return;
+  const obs=new IntersectionObserver(entries=>{
+    entries.forEach(e=>{if(e.isIntersecting){e.target.style.opacity='1';e.target.style.transform='translateY(0)';}});
+  },{threshold:.08});
+  document.querySelectorAll('.fade-up').forEach(el=>{
+    el.style.opacity='0';el.style.transform='translateY(12px)';el.style.transition='opacity .4s ease,transform .4s ease';
+    obs.observe(el);
+  });
+}
+
+/* ══ THREE.JS — TEAL MEDICAL COSMOS ══════════ */
+/* THREE.JS — TEAL MEDICAL COSMOS */
+(function(){
+  const canvas=document.getElementById('cosmos');
+  const renderer=new THREE.WebGLRenderer({canvas,antialias:true,alpha:true});
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio,2));
+  renderer.setSize(window.innerWidth,window.innerHeight);
+  renderer.setClearColor(0x000000,0);
+  const scene=new THREE.Scene();
+  const camera=new THREE.PerspectiveCamera(58,window.innerWidth/window.innerHeight,.1,400);
+  camera.position.z=8;
+
+  function mkStars(n,spread,sMin,sMax,hex,op){
+    const g=new THREE.BufferGeometry();
+    const p=new Float32Array(n*3),s=new Float32Array(n);
+    for(let i=0;i<n;i++){
+      const th=Math.random()*Math.PI*2,ph=Math.acos(2*Math.random()-1);
+      const r=Math.cbrt(Math.random())*spread;
+      p[i*3]=r*Math.sin(ph)*Math.cos(th);p[i*3+1]=r*Math.sin(ph)*Math.sin(th);p[i*3+2]=(Math.random()-.5)*spread*.2;
+      s[i]=Math.random()*(sMax-sMin)+sMin;
+    }
+    g.setAttribute('position',new THREE.BufferAttribute(p,3));
+    g.setAttribute('size',new THREE.BufferAttribute(s,1));
+    return new THREE.Points(g,new THREE.ShaderMaterial({transparent:true,
+      uniforms:{col:{value:new THREE.Color(hex)},op:{value:op}},
+      vertexShader:`attribute float size;void main(){vec4 mv=modelViewMatrix*vec4(position,1.);float d=clamp(-mv.z,.5,200.);gl_PointSize=size*(275./d);gl_Position=projectionMatrix*mv;}`,
+      fragmentShader:`uniform vec3 col;uniform float op;void main(){vec2 uv=gl_PointCoord-.5;float d=length(uv)*2.;float c=smoothstep(.18,.0,d);float h=smoothstep(1.,.18,d)*.3;float a=(c+h)*op;vec3 cc=mix(col*.85,col*1.15,c);gl_FragColor=vec4(cc,a);}`
+    }));
+  }
+
+  const s1=mkStars(2800,28,.3,.9,0xB8D0E8,.38);
+  const s2=mkStars(600,20,.7,1.7,0xECF0F8,.72);
+  const s3=mkStars(90,14,1.3,2.8,0xFFFFFF,.9);
+  const s4=mkStars(55,11,1.2,2.4,0x0BBFB8,.92);
+  const s5=mkStars(35,10,1.0,2.2,0x38A8E8,.85);
+  scene.add(s1,s2,s3,s4,s5);
+
+  function mkNeb(w,h,hex,str,x,y,z,rx,ry){
+    const g=new THREE.PlaneGeometry(w,h);
+    const m=new THREE.ShaderMaterial({transparent:true,side:THREE.DoubleSide,depthWrite:false,
+      uniforms:{col:{value:new THREE.Color(hex)},str:{value:str},t:{value:0}},
+      vertexShader:`varying vec2 vUv;void main(){vUv=uv;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.);}`,
+      fragmentShader:`varying vec2 vUv;uniform vec3 col;uniform float str;uniform float t;void main(){vec2 uv=vUv-.5;float r=length(uv*vec2(1.,1.3));float b=sin(t*.24+r*2.6)*.11+.89;float w=sin(uv.x*7.+t*.12)*.05+sin(uv.y*5.-t*.09)*.04;float a=exp(-(r+w)*2.7)*str*b;float c=exp(-r*7.)*str*.4;gl_FragColor=vec4(col,clamp(a+c,0.,.34));}`
+    });
+    const mesh=new THREE.Mesh(g,m);
+    mesh.position.set(x,y,z);mesh.rotation.x=rx;mesh.rotation.y=ry;
+    return{mesh,m};
+  }
+
+  const n1=mkNeb(22,16,0x053838,.22,3,0,-5,.12,-.08);
+  const n2=mkNeb(16,12,0x082840,.17,-3,2,-6,-.1,.16);
+  const n3=mkNeb(14,11,0x043022,.14,-2,-2,-7,.08,.1);
+  const n4=mkNeb(28,20,0x040C18,.2,0,0,-8,0,0);
+  const n5=mkNeb(20,14,0x061820,.12,0,0,-9,0,0);
+  scene.add(n1.mesh,n2.mesh,n3.mesh,n4.mesh,n5.mesh);
+  const nebs=[n1,n2,n3,n4,n5];
+
+  function mkRing(r,op,hex,rx,ry){
+    const g=new THREE.TorusGeometry(r,.002,2,280);
+    const m=new THREE.MeshBasicMaterial({color:new THREE.Color(hex),transparent:true,opacity:op});
+    const mesh=new THREE.Mesh(g,m);mesh.rotation.x=rx;mesh.rotation.y=ry;return mesh;
+  }
+  const r1=mkRing(5.8,.1,0x0BBFB8,Math.PI*.35,0);
+  const r2=mkRing(8,.055,0x38A8E8,Math.PI*.5,Math.PI*.12);
+  scene.add(r1,r2);
+
+  let tx=0,ty=0,cx=0,cy=0,sY=0;
+  document.addEventListener('mousemove',e=>{tx=(e.clientX/window.innerWidth-.5)*.7;ty=(e.clientY/window.innerHeight-.5)*.45;});
+  window.addEventListener('scroll',()=>{sY=window.scrollY;});
+
+  let t=0;
+  (function loop(){
+    requestAnimationFrame(loop);t+=.005;
+    cx+=(tx-cx)*.04;cy+=(ty-cy)*.04;
+    s1.rotation.y=t*.004+cx*.12;s1.rotation.x=cy*.08;
+    s2.rotation.y=t*.007+cx*.18;s2.rotation.x=t*.002+cy*.11;
+    s3.rotation.y=t*.011+cx*.25;s3.rotation.x=t*.004+cy*.15;
+    s4.rotation.y=t*.016+cx*.3;s5.rotation.y=t*.02+cx*.35;
+    nebs.forEach((n,i)=>{n.m.uniforms.t.value=t+i*1.5;});
+    n1.mesh.rotation.z=t*.006;n2.mesh.rotation.z=-t*.004;
+    r1.rotation.z=t*.018;r1.material.opacity=.07+Math.sin(t*.38)*.035;
+    r2.rotation.z=-t*.011;
+    camera.position.x=cx*.55;camera.position.y=-cy*.38-sY*.0013;
+    renderer.render(scene,camera);
+  })();
+
+  window.addEventListener('resize',()=>{camera.aspect=window.innerWidth/window.innerHeight;camera.updateProjectionMatrix();renderer.setSize(window.innerWidth,window.innerHeight);});
+})();
+
+/* ══ CURSOR ══════════════════════════════════ */
+const cdot=document.getElementById('cdot'),cring=document.getElementById('cring');
+let mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;cdot.style.left=mx+'px';cdot.style.top=my+'px';});
+(function tick(){rx+=(mx-rx)*.1;ry+=(my-ry)*.1;cring.style.left=rx+'px';cring.style.top=ry+'px';requestAnimationFrame(tick);})();
+
+/* ══ BOOT ════════════════════════════════════ */
+document.addEventListener('DOMContentLoaded',boot);
+</script>
+</body>
+</html>
